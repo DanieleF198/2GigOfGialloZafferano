@@ -1,0 +1,18 @@
+:~ value(pesce,V1).[-V1@2, V1]
+:~ value(verdure_e_ortaggi,V1).[-V1@1, V1]
+:~ value(uova,V1).[V1@3, V1]
+:~ category(4), value(carne,V1).[-V1@4, V1]
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Pre-processing                          : 0.002s
+%% Hypothesis Space Generation             : 0.504s
+%% Conflict analysis                       : 25.689s
+%%   - Brave Orders                        : 25.689s
+%% Counterexample search                   : 6.645s
+%%   - CDOEs                               : 4.054s
+%%   - CDPIs                               : 2.588s
+%% Hypothesis Search                       : 671.351s
+%% Propagation                             : 67.399s
+%%   - CDOEs                               : 67.399s
+%% Total                                   : 772.195s
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

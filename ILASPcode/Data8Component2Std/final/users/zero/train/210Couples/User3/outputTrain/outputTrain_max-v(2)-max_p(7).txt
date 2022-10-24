@@ -1,0 +1,21 @@
+:~ value(frittura,V1).[1@2, V1]
+:~ category(3).[-1@6]
+:~ value(forno,V1).[-V1@4, V1]
+:~ value(erbe_spezie_e_condimenti,V1).[-V1@3, V1]
+:~ value(uova,V1).[-V1@1, V1]
+:~ category(3), value(erbe_spezie_e_condimenti,V1).[V1@5, V1]
+:~ category(3), value(pesce,V1).[-V1@7, V1]
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Pre-processing                          : 0.002s
+%% Hypothesis Space Generation             : 0.37s
+%% Conflict analysis                       : 56.308s
+%%   - Brave Orders                        : 56.308s
+%% Counterexample search                   : 11.57s
+%%   - CDOEs                               : 7.089s
+%%   - CDPIs                               : 4.482s
+%% Hypothesis Search                       : 56455.4s
+%% Propagation                             : 147.564s
+%%   - CDOEs                               : 147.564s
+%% Total                                   : 56672.4s
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

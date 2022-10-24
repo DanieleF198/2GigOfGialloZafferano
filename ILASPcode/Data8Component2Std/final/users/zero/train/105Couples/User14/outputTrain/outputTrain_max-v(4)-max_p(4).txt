@@ -1,0 +1,18 @@
+:~ value(forno,V1).[-V1@2, V1]
+:~ value(verdure_e_ortaggi,V1).[-1@1, V1]
+:~ value(uova,V1).[-1@4, V1]
+:~ value(farinacei,V1).[-V1@3, V1]
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Pre-processing                          : 0.002s
+%% Hypothesis Space Generation             : 0.507s
+%% Conflict analysis                       : 23.518s
+%%   - Brave Orders                        : 23.518s
+%% Counterexample search                   : 6.124s
+%%   - CDOEs                               : 3.751s
+%%   - CDPIs                               : 2.368s
+%% Hypothesis Search                       : 1201.54s
+%% Propagation                             : 64.016s
+%%   - CDOEs                               : 64.016s
+%% Total                                   : 1296.28s
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

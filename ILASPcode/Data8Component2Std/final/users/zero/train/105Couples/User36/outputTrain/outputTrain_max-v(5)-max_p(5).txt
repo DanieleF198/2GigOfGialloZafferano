@@ -1,0 +1,19 @@
+:~ value(funghi_e_tartufi,V1).[1@4, V1]
+:~ category(5).[-1@2]
+:~ value(carne,V1).[V1@1, V1]
+:~ category(4), value(verdure_e_ortaggi,V1).[1@5, V1]
+:~ category(4), value(carne,V1).[-V1@3, V1]
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Pre-processing                          : 0.002s
+%% Hypothesis Space Generation             : 0.894s
+%% Conflict analysis                       : 31.792s
+%%   - Brave Orders                        : 31.792s
+%% Counterexample search                   : 6.825s
+%%   - CDOEs                               : 4.09s
+%%   - CDPIs                               : 2.733s
+%% Hypothesis Search                       : 2203.39s
+%% Propagation                             : 87.809s
+%%   - CDOEs                               : 87.809s
+%% Total                                   : 2331.46s
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

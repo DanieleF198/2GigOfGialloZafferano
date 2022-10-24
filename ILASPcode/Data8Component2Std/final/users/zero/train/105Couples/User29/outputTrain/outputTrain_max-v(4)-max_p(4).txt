@@ -1,0 +1,18 @@
+:~ value(farinacei,V1).[-V1@1, V1]
+:~ category(4).[1@4]
+:~ value(verdure_e_ortaggi,V1).[1@3, V1]
+:~ category(3), value(verdure_e_ortaggi,V1).[-V1@2, V1]
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Pre-processing                          : 0.002s
+%% Hypothesis Space Generation             : 0.501s
+%% Conflict analysis                       : 20.097s
+%%   - Brave Orders                        : 20.097s
+%% Counterexample search                   : 5.274s
+%%   - CDOEs                               : 3.265s
+%%   - CDPIs                               : 2.013s
+%% Hypothesis Search                       : 282.177s
+%% Propagation                             : 54.184s
+%%   - CDOEs                               : 54.184s
+%% Total                                   : 362.788s
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

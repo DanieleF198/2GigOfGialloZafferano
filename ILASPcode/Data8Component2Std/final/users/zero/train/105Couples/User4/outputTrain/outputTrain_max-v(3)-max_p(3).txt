@@ -1,0 +1,17 @@
+:~ value(verdure_e_ortaggi,V1).[-V1@1, V1]
+:~ category(4).[-1@2]
+:~ value(uova,V1).[V1@3, V1]
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Pre-processing                          : 0.002s
+%% Hypothesis Space Generation             : 0.291s
+%% Conflict analysis                       : 18.929s
+%%   - Brave Orders                        : 18.929s
+%% Counterexample search                   : 6.135s
+%%   - CDOEs                               : 3.811s
+%%   - CDPIs                               : 2.332s
+%% Hypothesis Search                       : 105.661s
+%% Propagation                             : 51.877s
+%%   - CDOEs                               : 51.877s
+%% Total                                   : 183.331s
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

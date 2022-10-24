@@ -1,0 +1,18 @@
+:~ value(erbe_spezie_e_condimenti,V1).[1@4, V1]
+:~ category(3).[1@9]
+:~ value(farinacei,V1).[-V1@8, V1]
+:~ category(3), value(verdure_e_ortaggi,V1).[-1@7, V1]
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Pre-processing                          : 0.002s
+%% Hypothesis Space Generation             : 0.449s
+%% Conflict analysis                       : 53.598s
+%%   - Brave Orders                        : 53.598s
+%% Counterexample search                   : 8.972s
+%%   - CDOEs                               : 5.363s
+%%   - CDPIs                               : 3.606s
+%% Hypothesis Search                       : 9132.93s
+%% Propagation                             : 138.971s
+%%   - CDOEs                               : 138.971s
+%% Total                                   : 9336.39s
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

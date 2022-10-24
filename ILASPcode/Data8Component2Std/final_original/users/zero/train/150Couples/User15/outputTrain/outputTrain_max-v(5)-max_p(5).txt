@@ -1,0 +1,19 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Pre-processing                          : 0.072s
+%% Hypothesis Space Generation             : 0.474s
+%% Conflict analysis                       : 25.704s
+%%   - Brave Orders                        : 25.704s
+%% Counterexample search                   : 3.073s
+%%   - CDOEs                               : 2.353s
+%%   - CDPIs                               : 0.723s
+%% Hypothesis Search                       : 123468s
+%% Propagation                             : 70.324s
+%%   - CDOEs                               : 70.324s
+%% Total                                   : 123568s
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+:~ value(uova,V1).[-V1@2, V1]
+:~ category(3).[1@4]
+:~ value(frittura,V1).[-V1@1, V1]
+:~ value(farinacei,V1), category(3).[-V1@3, V1]
+:~ value(verdure_e_ortaggi,V1), category(4).[-1@5, V1]
+

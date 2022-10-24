@@ -1,0 +1,18 @@
+:~ value(carne,V1).[V1@2, V1]
+:~ category(5).[-1@1]
+:~ category(4), value(carne,V1).[-V1@3, V1]
+:~ category(4), value(verdure_e_ortaggi,V1).[V1@4, V1]
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Pre-processing                          : 0.002s
+%% Hypothesis Space Generation             : 0.5s
+%% Conflict analysis                       : 30.248s
+%%   - Brave Orders                        : 30.248s
+%% Counterexample search                   : 7.879s
+%%   - CDOEs                               : 4.716s
+%%   - CDPIs                               : 3.164s
+%% Hypothesis Search                       : 905.668s
+%% Propagation                             : 77.303s
+%%   - CDOEs                               : 77.303s
+%% Total                                   : 1022.25s
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

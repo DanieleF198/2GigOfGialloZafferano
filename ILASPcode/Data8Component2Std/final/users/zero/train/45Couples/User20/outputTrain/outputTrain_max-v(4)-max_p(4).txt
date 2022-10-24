@@ -1,0 +1,18 @@
+:~ value(pesce,V1).[1@2, V1]
+:~ category(1).[1@4]
+:~ value(erbe_spezie_e_condimenti,V1).[V1@1, V1]
+:~ value(forno,V1).[-V1@3, V1]
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Pre-processing                          : 0.001s
+%% Hypothesis Space Generation             : 0.508s
+%% Conflict analysis                       : 7.956s
+%%   - Brave Orders                        : 7.956s
+%% Counterexample search                   : 1.75s
+%%   - CDOEs                               : 0.94s
+%%   - CDPIs                               : 0.807s
+%% Hypothesis Search                       : 10.983s
+%% Propagation                             : 19.574s
+%%   - CDOEs                               : 19.574s
+%% Total                                   : 41.216s
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

@@ -1,0 +1,1 @@
+ILASP --version=4 ./User7/trainFiles/train_max-v\(5\)-max_p\(5\).las > ./User7/outputTrain/outputTrain_max-v\(5\)-max_p\(5\).txt;

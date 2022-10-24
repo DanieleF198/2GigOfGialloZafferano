@@ -1,0 +1,19 @@
+:~ value(pasta,V1).[-1@4, V1]
+:~ value(erbe_spezie_e_condimenti,V1).[V1@1, V1]
+:~ value(erbe_spezie_e_condimenti,V1).[-1@3, V1]
+:~ value(forno,V1).[1@2, V1]
+:~ value(funghi_e_tartufi,V1).[-1@5, V1]
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Pre-processing                          : 0.002s
+%% Hypothesis Space Generation             : 0.9s
+%% Conflict analysis                       : 33.104s
+%%   - Brave Orders                        : 33.104s
+%% Counterexample search                   : 7.244s
+%%   - CDOEs                               : 4.387s
+%%   - CDPIs                               : 2.856s
+%% Hypothesis Search                       : 3109.04s
+%% Propagation                             : 86.259s
+%%   - CDOEs                               : 86.259s
+%% Total                                   : 3237.32s
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

@@ -1,0 +1,18 @@
+:~ value(pesce,V1).[-V1@2, V1]
+:~ category(1).[-1@4]
+:~ value(farinacei,V1).[-V1@1, V1]
+:~ value(pesce,V1).[1@3, V1]
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Pre-processing                          : 0.001s
+%% Hypothesis Space Generation             : 0.506s
+%% Conflict analysis                       : 9.337s
+%%   - Brave Orders                        : 9.337s
+%% Counterexample search                   : 2.022s
+%%   - CDOEs                               : 1.089s
+%%   - CDPIs                               : 0.934s
+%% Hypothesis Search                       : 15.417s
+%% Propagation                             : 22.097s
+%%   - CDOEs                               : 22.097s
+%% Total                                   : 49.868s
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
