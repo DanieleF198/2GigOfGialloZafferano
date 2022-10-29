@@ -6,6 +6,7 @@ import pandas as pd
 from sklearn.decomposition import PCA
 from sklearn import preprocessing, decomposition
 from sklearn.preprocessing import OneHotEncoder
+from sklearn.neighbors import KNeighborsClassifier
 from sklearn.svm import SVC
 from sklearn.metrics import classification_report
 from sklearn.model_selection import StratifiedKFold
@@ -308,8 +309,10 @@ for i, answer in enumerate(food_couple):
 #                 food_effective_couple[i, j, even] = feature
 #                 even += 2
 
-kernels = ['linear', 'poly', 'rbf', 'sigmoid']
-cValues = [0.01, 1, 100]
+ks = [1, 5, 20, 40]
+ps = [1, 2]
+weights = ["uniform", "distance"]
+leaf_sizes = [10, 30, 50]
 
 # reverting couple to be of the form "A is/is not/equal preferred than B"
 for i, user in enumerate(food_effective_couple):
@@ -400,87 +403,90 @@ if int(inputVar) != 1 and int(inputVar) != 2:
 
 if int(inputVar) == 1:
 
-    betterResults = np.zeros((half*2, 10), dtype="float32")
-    for k, row in enumerate(food_effective_couple_zeros):
-        # if k >= half:
+    for user_id, row in enumerate(food_effective_couple_zeros):
+        # if user_id >= half:
         #     break
-        if k == 0:
-            print("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ User number: " + str(k) + " ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~")
-        else:
-            if k < 10:
-                print("\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ User number: " + str(k) + " ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~")
-            else:
-                print("\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ User number: " + str(k) + " ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~")
-        X = food_effective_couple_zeros[k]
-        Y = couple_label_zeros[k]
-        final_values_acc = np.zeros((4,3), dtype='float32') # matrix of values of accuracy
-        std_of_final_values_acc = np.zeros((4,3), dtype='float32')
-        final_values_prec = np.zeros((4,3), dtype='float32') # matrix of values of precision
-        std_of_final_values_prec = np.zeros((4,3), dtype='float32')
-        final_values_rec = np.zeros((4,3), dtype='float32') # matrix of values of recall
-        std_of_final_values_rec = np.zeros((4,3), dtype='float32')
-        final_values_f1s = np.zeros((4,3), dtype='float32') # matrix of values of f1score
-        std_of_final_values_f1s = np.zeros((4,3), dtype='float32')
-        for kernel_index, kernel_type in enumerate(kernels):
-            for cValue_index, cValue in enumerate(cValues):
+        # if user_id == 0:
+        #     print("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ User number: " + str(user_id) + " ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~")
+        # else:
+        #     if user_id < 10:
+        #         print("\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ User number: " + str(user_id) + " ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~")
+        #     else:
+        #         print("\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ User number: " + str(user_id) + " ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~")
+        X = food_effective_couple_zeros[user_id]
+        Y = couple_label_zeros[user_id]
+        final_values_acc = np.zeros((2,2,4,3), dtype='float32') # matrix of values of accuracy
+        std_of_final_values_acc = np.zeros((2,2,4,3), dtype='float32')
+        final_values_prec = np.zeros((2,2,4,3), dtype='float32') # matrix of values of precision
+        std_of_final_values_prec = np.zeros((2,2,4,3), dtype='float32')
+        final_values_rec = np.zeros((2,2,4,3), dtype='float32') # matrix of values of recall
+        std_of_final_values_rec = np.zeros((2,2,4,3), dtype='float32')
+        final_values_f1s = np.zeros((2,2,4,3), dtype='float32') # matrix of values of f1score
+        std_of_final_values_f1s = np.zeros((2,2,4,3), dtype='float32')
+        for p_index, p in enumerate(ps):
+            for weight_index, weight in enumerate(weights):
+                for k_index, k in enumerate(ks):
+                    for leaf_size_index, leaf_size in enumerate(leaf_sizes):
 
-                accuracy = []
-                precision = []
-                recall = []
-                f1score = []
+                        accuracy = []
+                        precision = []
+                        recall = []
+                        f1score = []
 
-                kfold = StratifiedKFold(n_splits=5, shuffle=True, random_state=42)
+                        kfold = StratifiedKFold(n_splits=5, shuffle=True, random_state=42)
 
-                for train, test in kfold.split(X, Y):
-                    x_train, y_train = X[train], Y[train]
-                    x_test, y_test = X[test], Y[test]
-                    clf = SVC(kernel=kernel_type, class_weight='balanced', C=cValue)
-                    clf.fit(x_train, y_train)
-                    predict = clf.predict(x_test)
-                    numbers = re.findall('[0-9]\.[0-9][0-9]', classification_report(y_test, predict))
-                    if len(numbers) < 16: #case where there is no "zero" label
-                        for i, number in enumerate(numbers):
-                            number = float(number)
-                            if i == 6:
-                                accuracy.append(number)
-                            if i == 10:
-                                precision.append(number)
-                            if i == 11:
-                                recall.append(number)
-                            if i == 12:
-                                f1score.append(number)
-                    else:
-                        for i, number in enumerate(numbers):
-                            number = float(number)
-                            if i == 9:
-                                accuracy.append(number)
-                            if i == 13:
-                                precision.append(number)
-                            if i == 14:
-                                recall.append(number)
-                            if i == 15:
-                                f1score.append(number)
+                        for train, test in kfold.split(X, Y):
+                            x_train, y_train = X[train], Y[train]
+                            x_test, y_test = X[test], Y[test]
+                            clf = KNeighborsClassifier(n_neighbors=k, leaf_size=leaf_size, weights=weight, p=p)
+                            clf.fit(x_train, y_train)
+                            predict = clf.predict(x_test)
+                            numbers = re.findall('[0-9]\.[0-9][0-9]', classification_report(y_test, predict))
+                            if len(numbers) < 16: #case where there is no "zero" label
+                                for i, number in enumerate(numbers):
+                                    number = float(number)
+                                    if i == 6:
+                                        accuracy.append(number)
+                                    if i == 10:
+                                        precision.append(number)
+                                    if i == 11:
+                                        recall.append(number)
+                                    if i == 12:
+                                        f1score.append(number)
+                            else:
+                                for i, number in enumerate(numbers):
+                                    number = float(number)
+                                    if i == 9:
+                                        accuracy.append(number)
+                                    if i == 13:
+                                        precision.append(number)
+                                    if i == 14:
+                                        recall.append(number)
+                                    if i == 15:
+                                        f1score.append(number)
 
-                mn_acc = np.mean(accuracy)
-                std_acc = np.std(accuracy)
-                mn_prec = np.mean(precision)
-                std_prec = np.std(precision)
-                mn_rec = np.mean(recall)
-                std_rec = np.std(recall)
-                mn_f1s = np.mean(f1score)
-                std_f1s = np.std(f1score)
+                        mn_acc = np.mean(accuracy)
+                        std_acc = np.std(accuracy)
+                        mn_prec = np.mean(precision)
+                        std_prec = np.std(precision)
+                        mn_rec = np.mean(recall)
+                        std_rec = np.std(recall)
+                        mn_f1s = np.mean(f1score)
+                        std_f1s = np.std(f1score)
 
-                final_values_acc[kernel_index, cValue_index] = mn_acc
-                std_of_final_values_acc[kernel_index, cValue_index] = std_acc
-                final_values_prec[kernel_index, cValue_index] = mn_prec
-                std_of_final_values_prec[kernel_index, cValue_index] = std_prec
-                final_values_rec[kernel_index, cValue_index] = mn_rec
-                std_of_final_values_rec[kernel_index, cValue_index] = std_rec
-                final_values_f1s[kernel_index, cValue_index] = mn_f1s
-                std_of_final_values_f1s[kernel_index, cValue_index] = std_f1s
+                        final_values_acc[p_index, weight_index, k_index, leaf_size_index] = mn_acc
+                        std_of_final_values_acc[p_index, weight_index, k_index, leaf_size_index] = std_acc
+                        final_values_prec[p_index, weight_index, k_index, leaf_size_index] = mn_prec
+                        std_of_final_values_prec[p_index, weight_index, k_index, leaf_size_index] = std_prec
+                        final_values_rec[p_index, weight_index, k_index, leaf_size_index] = mn_rec
+                        std_of_final_values_rec[p_index, weight_index, k_index, leaf_size_index] = std_rec
+                        final_values_f1s[p_index, weight_index, k_index, leaf_size_index] = mn_f1s
+                        std_of_final_values_f1s[p_index, weight_index, k_index, leaf_size_index] = std_f1s
 
-        better_kernel = ""
-        better_C = 0
+        better_k = 0
+        better_p = 0
+        better_weight = ""
+        better_leaf_size = 0
         better_mean_acc = 0
         better_std_acc = 0
         better_mean_prec = 0
@@ -489,136 +495,37 @@ if int(inputVar) == 1:
         better_std_rec = 0
         better_mean_f1s = 0
         better_std_f1s = 0
-        for kernel_index, kernel_type in enumerate(kernels):
-            upper_index, upper_value = max(enumerate(final_values_acc[kernel_index]), key=operator.itemgetter(1))
-            min_index, min_value = min(enumerate(final_values_acc[kernel_index]), key=operator.itemgetter(1))
-            lower_index, lower_value = 0, 0
-            for index_to_find in [0,1,2]:
-                if index_to_find != min_index and index_to_find != upper_index:
-                    lower_index = index_to_find
-                    lower_value = final_values_acc[kernel_index, lower_index]
-                    break
-            deep = 0
-            print(kernel_type + " kernel:")
-            print("Lower C = " + str(cValues[lower_index]) +", mean accuracy: " + str(lower_value) + " (+/-" + str(std_of_final_values_acc[kernel_index, lower_index]) + ")")
-            print("Upper C = " + str(cValues[upper_index]) + ", mean accuracy: " + str(upper_value) + " (+/-" + str(std_of_final_values_acc[kernel_index, upper_index]) + ")")
-            print("|_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-|")
-            c_relative_upper = np.log10(cValues[upper_index])
-            c_relative_lower = np.log10(cValues[lower_index])
-            c_mid_value = (c_relative_upper + c_relative_lower) / 2
-            if upper_value > better_mean_acc:
-                better_mean_acc = upper_value
-                better_std_acc = std_of_final_values_acc[kernel_index, upper_index]
-                better_mean_prec = final_values_prec[kernel_index, upper_index]
-                better_std_prec = std_of_final_values_prec[kernel_index, upper_index]
-                better_mean_rec = final_values_rec[kernel_index, upper_index]
-                better_std_rec = std_of_final_values_rec[kernel_index, upper_index]
-                better_mean_f1s = final_values_f1s[kernel_index, upper_index]
-                better_std_f1s = std_of_final_values_f1s[kernel_index, upper_index]
-                better_kernel = kernel_type
-                better_C = pow(10, np.log10(cValues[upper_index]))
-            while deep < 10:
-                accuracy = []
-                precision = []
-                recall = []
-                f1score = []
 
-                kfold = StratifiedKFold(n_splits=5, shuffle=True)
+        for p_index, p in enumerate(ps):
+            for weight_index, weight in enumerate(weights):
+                for k_index, k in enumerate(ks):
+                    for leaf_size_index, leaf_size in enumerate(leaf_sizes):
+                        if final_values_acc[p_index, weight_index, k_index, leaf_size_index] > better_mean_acc:
+                            better_mean_acc = final_values_acc[p_index, weight_index, k_index, leaf_size_index]
+                            better_std_acc = std_of_final_values_acc[p_index, weight_index, k_index, leaf_size_index]
+                            better_mean_prec = final_values_prec[p_index, weight_index, k_index, leaf_size_index]
+                            better_std_prec = std_of_final_values_prec[p_index, weight_index, k_index, leaf_size_index]
+                            better_mean_rec = final_values_rec[p_index, weight_index, k_index, leaf_size_index]
+                            better_std_rec = std_of_final_values_rec[p_index, weight_index, k_index, leaf_size_index]
+                            better_mean_f1s = final_values_f1s[p_index, weight_index, k_index, leaf_size_index]
+                            better_std_f1s = std_of_final_values_f1s[p_index, weight_index, k_index, leaf_size_index]
+                            better_k = k
+                            better_p = p
+                            better_weight = weight
+                            better_leaf_size = leaf_size
 
-                for train, test in kfold.split(X, Y):
-                    x_train, y_train = X[train], Y[train]
-                    x_test, y_test = X[test], Y[test]
-                    clf = SVC(kernel=kernel_type, class_weight='balanced', C=pow(10, c_mid_value))
-                    clf.fit(x_train, y_train)
-                    predict = clf.predict(x_test)
-                    numbers = re.findall('[0-9]\.[0-9][0-9]', classification_report(y_test, predict))
-                    if len(numbers) < 16: #case where there is no "zero" label
-                        for i, number in enumerate(numbers):
-                            number = float(number)
-                            if i == 6:
-                                accuracy.append(number)
-                            if i == 10:
-                                precision.append(number)
-                            if i == 11:
-                                recall.append(number)
-                            if i == 12:
-                                f1score.append(number)
-                    else:
-                        for i, number in enumerate(numbers):
-                            number = float(number)
-                            if i == 9:
-                                accuracy.append(number)
-                            if i == 13:
-                                precision.append(number)
-                            if i == 14:
-                                recall.append(number)
-                            if i == 15:
-                                f1score.append(number)
-
-                mn_acc = np.mean(accuracy)
-                std_acc = np.std(accuracy)
-                mn_prec = np.mean(precision)
-                std_prec = np.std(precision)
-                mn_rec = np.mean(recall)
-                std_rec = np.std(recall)
-                mn_f1s = np.mean(f1score)
-                std_f1s = np.std(f1score)
-
-                print("C = " + str(pow(10, c_mid_value)) + ", mean accuracy: " + str(mn_acc) + " (+/-" + str(std_acc) + ")")
-                if mn_acc >= upper_value:
-                    lower_value = upper_value
-                    c_relative_lower = c_relative_upper
-                    upper_value = mn_acc
-                    c_relative_upper = c_mid_value
-                    if c_relative_upper == c_relative_lower:
-                        break
-                    c_mid_value = (c_relative_upper + c_relative_lower) / 2
-                elif mn_acc >= lower_value:
-                    lower_value = mn_acc
-                    c_relative_lower = c_mid_value
-                    c_mid_value = (c_relative_upper + c_relative_lower) / 2
-                else:
-                    c_mid_value = (c_relative_upper + c_relative_lower) / 2
-                deep += 1
-                if mn_acc > better_mean_acc:
-                    better_mean_acc = mn_acc
-                    better_std_acc = std_acc
-                    better_mean_prec = mn_prec
-                    better_std_prec = std_prec
-                    better_mean_rec = mn_rec
-                    better_std_rec = std_rec
-                    better_mean_f1s = mn_f1s
-                    better_std_f1s = std_f1s
-                    better_kernel = kernel_type
-                    better_C = pow(10, c_mid_value)
-            print("\n")
-        if better_kernel == "linear":
-            betterResults[k] = [0, better_C, better_mean_acc, better_std_acc, better_mean_prec, better_std_prec, better_mean_rec, better_std_rec, better_mean_f1s, better_std_f1s]
-        elif better_kernel == "poly":
-            betterResults[k] = [1, better_C, better_mean_acc, better_std_acc, better_mean_prec, better_std_prec, better_mean_rec, better_std_rec, better_mean_f1s, better_std_f1s]
-        elif better_kernel == "rbf":
-            betterResults[k] = [2, better_C, better_mean_acc, better_std_acc, better_mean_prec, better_std_prec, better_mean_rec, better_std_rec, better_mean_f1s, better_std_f1s]
-        else:
-            betterResults[k] = [3, better_C, better_mean_acc, better_std_acc, better_mean_prec, better_std_prec, better_mean_rec, better_std_rec, better_mean_f1s, better_std_f1s]
-
-    for i, row in enumerate(betterResults):
-        if row[0] == 0:
-            print("linear kernel: C = " + str(row[1]) + ", mean accuracy: " + str(row[2]) + " (+/- " + str(row[3]) + "), mean precision: " + str(row[4]) + " (+/- " + str(row[5]) + "),  mean recall: " + str(row[6]) + " (+/- " + str(row[7]) + "),  mean f1score: " + str(row[8]) + " (+/- " + str(row[9]) + "),")
-        elif row[0] == 1:
-            print("poly kernel: C = " + str(row[1]) + ", mean accuracy: " + str(row[2]) + " (+/- " + str(row[3]) + "), mean precision: " + str(row[4]) + " (+/- " + str(row[5]) + "),  mean recall: " + str(row[6]) + " (+/- " + str(row[7]) + "),  mean f1score: " + str(row[8]) + " (+/- " + str(row[9]) + "),")
-        elif row[0] == 2:
-            print("rbf kernel: C = " + str(row[1]) + ", mean accuracy: " + str(row[2]) + " (+/- " + str(row[3]) + "), mean precision: " + str(row[4]) + " (+/- " + str(row[5]) + "),  mean recall: " + str(row[6]) + " (+/- " + str(row[7]) + "),  mean f1score: " + str(row[8]) + " (+/- " + str(row[9]) + "),")
-        else:
-            print("sigmoid kernel: C = " + str(row[1]) + ", mean accuracy: " + str(row[2]) + " (+/- " + str(row[3]) + "), mean precision: " + str(row[4]) + " (+/- " + str(row[5]) + "),  mean recall: " + str(row[6]) + " (+/- " + str(row[7]) + "),  mean f1score: " + str(row[8]) + " (+/- " + str(row[9]) + "),")
+        print("USER" + str(user_id) + "; n_neighbors = " + str(better_k) + "; leaf_size = " + str(better_leaf_size) + "; weight = " + better_weight + "; p = " + str(better_p) + ", mean accuracy: " + str(better_mean_acc) + " (+/- " + str(better_std_acc) + "), mean precision: " + str(better_mean_prec) + " (+/- " + str(better_std_prec) + "),  mean recall: " + str(better_mean_rec) + " (+/- " + str(better_std_rec) + "),  mean f1score: " + str(better_mean_f1s) + " (+/- " + str(better_std_f1s) + "),")
 
 else:
-    kernel= "linear"
-    cValue = 32
+    n_neighbor = 20
+    p = 1
+    weight = "distance"
+    leaf_size = 20
     mean_of_the_mean_acc = 0
     mean_of_the_mean_prec = 0
     mean_of_the_mean_rec = 0
     mean_of_the_mean_f1s = 0
-    print("variable: " + str(kernel) + " kernel, C = " + str(cValue))
+    print("variable: k = " + str(n_neighbor) + ", p = " + str(p) + ", weight = " + weight + "leaf_size = " + str(leaf_size))
     for k, row in enumerate(food_effective_couple_zeros):
         # if k < half:
         #     continue
@@ -633,7 +540,7 @@ else:
         for train, test in kfold.split(X, Y):
             x_train, y_train = X[train], Y[train]
             x_test, y_test = X[test], Y[test]
-            clf = SVC(kernel=kernel, class_weight='balanced', C=cValue)
+            clf = KNeighborsClassifier(n_neighbors=n_neighbor, weights=weight, p=p, leaf_size=leaf_size)
             clf.fit(x_train, y_train)
             predict = clf.predict(x_test)
             numbers = re.findall('[0-9]\.[0-9][0-9]', classification_report(y_test, predict))
