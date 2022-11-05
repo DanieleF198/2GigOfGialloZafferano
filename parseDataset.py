@@ -6,7 +6,7 @@ import csv
 
 listOfData = []
 
-with open('./dataset_100/NewDataset_100.csv', newline='', encoding='utf-8') as csvFile:
+with open('./dataset_100/NewDataset.csv', newline='', encoding='utf-8') as csvFile:
     csvReader = csv.reader(csvFile, delimiter=';', quotechar='|')
     for row in csvReader:
         listOfData.append(list(row))
@@ -82,7 +82,7 @@ for index_row, row in enumerate(listOfData):
             if element == '':
                 continue
             else:
-                for i in range(0, 136):
+                for i in range(0, 135):
                     if element == ingredientsIds[i]:
                         list_of_ingredients_of_food[i] = int(row[index_element+1])
         if index_element in preparationsIdPositions:

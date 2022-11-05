@@ -101,6 +101,8 @@ for dirname, _, filenames in os.walk('./Answers_dataset/'):
             second_ordered_subset = second_ordered_subset.append(temp_second)
             third_ordered_subset = third_ordered_subset.append(temp_third)
 
+# COMMENTED TO NOT OVERWRITE
+
 # new_filename1 = "Ordinamento1.csv"
 # new_filename2 = "Ordinamento2.csv"
 # new_filename3 = "Ordinamento3.csv"
@@ -198,6 +200,8 @@ for i, row in enumerate(ordTotale):
 
 # ricette = np.sort(ricette)
 print(ricette)
+
+# COMMENTED TO NOT OVERWRITE
 
 # output_coppie = "./Ordinamenti/dataset_coppie.txt"
 # f = open(output_coppie)

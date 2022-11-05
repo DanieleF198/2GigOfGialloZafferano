@@ -168,121 +168,6 @@ pca.fit(final_data)
 # apply pca on data in pandas_dataframe
 pca_data = pca.transform(final_data)
 
-# WARNING: the next big commented part was used to plots some result when pca = PCA() (so before understand that we use 17 components).
-# to not rewrite the results, leave this part commented.
-#
-# # prepare output files
-# fnameOutput = os.path.join('./PCAdata/eigenValues.txt')
-# fnameOutput2 = os.path.join('./PCAdata/explained_variance_ratio.txt')
-# # print eigenvalue on first output file:
-# temp = 0
-# for element in pca.explained_variance_:
-#     temp += element
-# temp /= 52
-#
-# f = open(fnameOutput)
-# sys.stdout = open(fnameOutput, 'w')
-# print("EigenValues")
-# for i, element in enumerate(pca.explained_variance_):
-#     j = i + 1
-#     if j > 9:
-#         if(element>temp):
-#             print("PC" + str(j) + ": " + str(element) + " ~ ")
-#         else:
-#             print("PC" + str(j) + ": " + str(element))
-#     else:
-#         if (element > temp):
-#             print("PC" + str(j) + " : " + str(element) + " ~ ")
-#         else:
-#             print("PC" + str(j) + " : " + str(element))
-# sys.stdout = sys.__stdout__
-# f.close()
-#
-# temp2 = 0
-# f = open(fnameOutput)
-# sys.stdout = open(fnameOutput2, 'w')
-# over80 = False
-# over90 = False
-# for i,element in enumerate(pca.explained_variance_ratio_):
-#     temp2 += element
-#     j = i + 1
-#     if j > 9:
-#         if temp2 >= 80 and not(over80):
-#             print("PC" + str(i) + ": " + str(element) + " - " + str(temp2) + "<---- 80%")
-#             over80 = True
-#         elif temp2 >= 90 and not(over90):
-#             print("PC" + str(i) + ": " + str(element) + " - " + str(temp2) + "<---- 90%")
-#             over90 = True
-#         else:
-#             print("PC" + str(i) + ": " + str(element) + " - " +str(temp2))
-#     else:
-#         if temp2 >= 80 and not(over80):
-#             print("PC" + str(i) + " : " + str(element) + " - " + str(temp2) + "<---- 80%")
-#             over80 = True
-#         elif temp2 >= 90 and not(over90):
-#             print("PC" + str(i) + " : " + str(element) + " - " + str(temp2) + "<---- 90%")
-#             over90 = True
-#         else:
-#             print("PC" + str(i) + " : " + str(element) + " - " +str(temp2))
-#
-# sys.stdout = sys.__stdout__
-# f.close()
-#
-# # plotting matrix principal component x feature where M[i, j] is the weight of feature j on PC i
-# matrixToPlot = np.zeros((len(pca.components_), 52))
-# for i, row in enumerate(pca.components_):
-#     matrixToPlot[i, :] = abs(row)
-# plt.matshow(matrixToPlot)
-# plt.savefig('./PCAdata/componentXfeatureMatrix', dpi=300)
-# plt.clf()
-#
-# # plotting PC with relative percentage of explained variance in a bar plots
-# per_var = np.round(pca.explained_variance_ratio_*100, decimals=1)
-# labels = ['PC' + str(x) for x in range(1, len(per_var)+1)]
-# plt.bar(x=range(1, len(per_var)+1), height=per_var, tick_label=labels)
-# plt.ylabel('percentage of explained variance')
-# plt.xlabel('principal component')
-# plt.title('scree plots')
-# plt.show()
-# plt.clf()
-
-#plots 2D graph with PC from 0 to 17 (PC0 - PC1, PC0 - PC2, ..., PC0 - PC17, PC1 - PC2, ..., PC17 - PC 17, PC18 - PC17)
-# pca_df = pd.DataFrame(pca_data, columns=labels)
-
-# #without labels
-# for i in range(0,20):
-#     j = i + 1
-#     for j in range(j, 20):
-#         PCi = "pca_df.PC" + str(i + 1)
-#         PCj = "pca_df.PC" + str(j + 1)
-#         plt.scatter(eval(PCi), eval(PCj))
-#         plt.title('PCA graph')
-#         plt.xlabel('PC' + str(i) + ' - {:.1f}%'.format(per_var[i]))
-#         plt.ylabel('PC' + str(j) + ' - {:.1f}%'.format(per_var[j]))
-#         plt.gca().set_aspect('equal', adjustable='box')
-#         plt.savefig("./PCAdata/PCAgraphNoLabeled/PC" + str(i) + " " + str(j), dpi=300)
-#         plt.clf()
-#
-# #with labels
-# for i in range(0,20):
-#     j = i + 1
-#     for j in range(j, 20):
-#         PCi = "pca_df.PC" + str(i+1)
-#         PCj = "pca_df.PC" + str(j+1)
-#         annotatePCi = PCi + ".loc[sample]"
-#         annotatePCj = PCj + ".loc[sample]"
-#         for sample in pca_df.index:
-#             plt.annotate(sample, (eval(annotatePCi), eval(annotatePCj)))
-#         plt.scatter(eval(PCi), eval(PCj))
-#         plt.title('PCA graph')
-#         plt.xlabel('PC' + str(i) + ' - {:.1f}%'.format(per_var[i]))
-#         plt.ylabel('PC' + str(j) + ' - {:.1f}%'.format(per_var[j]))
-#         plt.gca().set_aspect('equal', adjustable='box')
-#         plt.savefig("./PCAdata/PCAgraphLabeled/PC" + str(i) + " " + str(j), dpi=300)
-#         plt.clf()
-
-# CODE RESTART HERE:
-
 # VERSION F1X | F2X | ... | FnX | F1Y | F2Y | ... | FnY |
 food_effective_couple = np.zeros((len(food_couple), 210, 2, 17)) #len(food_couple) answer, each one with 210 couple made of 2 elements that each is rapresented by 17 feature (PCA)
 for i, answer in enumerate(food_couple):
@@ -404,15 +289,6 @@ if int(inputVar) != 1 and int(inputVar) != 2:
 if int(inputVar) == 1:
 
     for user_id, row in enumerate(food_effective_couple_zeros):
-        # if user_id >= half:
-        #     break
-        # if user_id == 0:
-        #     print("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ User number: " + str(user_id) + " ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~")
-        # else:
-        #     if user_id < 10:
-        #         print("\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ User number: " + str(user_id) + " ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~")
-        #     else:
-        #         print("\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ User number: " + str(user_id) + " ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~")
         X = food_effective_couple_zeros[user_id]
         Y = couple_label_zeros[user_id]
         final_values_acc = np.zeros((2,2,4,3), dtype='float32') # matrix of values of accuracy

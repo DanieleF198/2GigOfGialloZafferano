@@ -13,7 +13,7 @@ from sklearn.cluster import KMeans
 from sklearn.preprocessing import OneHotEncoder
 from scipy.stats import norm
 
-# importing of data (please don't consider the way it was done... just my way to handling data more systematically)
+# importing of data
 # in scalars.txt there is only preparation time
 # in categories.txt there are category, cost and difficulty, but then cost and difficulty will be treated as scalars
 # in ingredients there are the ingredients in a one-hot-encoding array
@@ -133,6 +133,8 @@ pca.fit(final_data)
 # apply pca on data in pandas_dataframe
 pca_data = pca.transform(final_data)
 
+# COMMENTED TO NOT OVERWRITE
+
 # prepare output files
 # pca_dir = "./PCA_data/"
 # fnameOutput = os.path.join(pca_dir, 'output.txt')
@@ -170,6 +172,9 @@ pca_data = pca.transform(final_data)
 # plotting PC with relative percentage of explained variance in a bar plots
 per_var = np.round(pca.explained_variance_ratio_*101, decimals=1)
 labels = ['PC' + str(x) for x in range(1, len(per_var)+1)]
+
+# COMMENTED TO NOT OVERWRITE
+
 # plt.bar(x=range(1, len(per_var)+1), height=per_var, tick_label=labels)
 # plt.ylabel('percentage of explained variance')
 # plt.xlabel('principal component')
@@ -180,6 +185,8 @@ labels = ['PC' + str(x) for x in range(1, len(per_var)+1)]
 feature_weights = pca.components_
 feature_weights = abs(feature_weights)
 labelsFeature = [str(i) for i in range(1, len(feature_weights[0])+1)]
+
+# COMMENTED TO NOT OVERWRITE
 
 # plot_ordered_weight_dir = "PCA_data/plots/weight_distr/"
 # for i in range(0, 47):
@@ -263,11 +270,10 @@ labelsFeature = [str(i) for i in range(1, len(feature_weights[0])+1)]
 
 
 # preparing dataframe for plotting result in n differents 2D graph
-# to decide the PC to take in cosideration, i've use both this algorithm and then decide depending on results:
-# 1st algorithm consist to, given eigenvalues, consider PC with eigenvalue that explain between 80% and 90% of variance
-# 2nd algorithm consist to, given mean of eigenvalues, consider PC with eigenvalue > to the mean.
-# given this two algorithm, i decide to use PC1 to PC19.
 pca_df = pd.DataFrame(pca_data, columns=labels)
+
+# COMMENTED TO NOT OVERWRITE
+
 # plot_labeled_dir = "./PCA_data/plots/labeled/"
 # plot_no_labeled_dir = "./PCA_data/plots/no-labeled/"
 #
@@ -618,7 +624,7 @@ pca_df = pd.DataFrame(pca_data, columns=labels)
 
 # in the next 5 lines I store in an array the sum of square within cluster of k-means with k going from 1 to 20
 # we do this to plots the result inside array and understanding which k is better using elbow method (we also use
-# other criterions such us the cardinality of the clusters)
+# other criteria such us the cardinality of the clusters)
 
 cluster_dir = "./cluster_data/"
 wcss = []
@@ -626,6 +632,8 @@ for i in range(1, 21):
     kmeans_pca = KMeans(n_clusters=i, init='k-means++', random_state=42)
     kmeans_pca.fit(pca_data)
     wcss.append(kmeans_pca.inertia_)
+
+# COMMENTED TO NOT OVERWRITE
 
 # plots mentioned in line 531
 # plt.plots(range(1, 21), wcss, marker='o', linestyle='--')
@@ -639,6 +647,8 @@ for i in range(2, 6):
     kmeans_pca = KMeans(n_clusters=i, init='k-means++', random_state=42)
     kmeans_pca.fit(pca_data)
     kmeans_predict = kmeans_pca.predict(pca_data)
+
+# COMMENTED TO NOT OVERWRITE
 
 #     plt.scatter(pca_df.PC1, pca_df.PC2, c=kmeans_predict, s=50, cmap='viridis')
 #     centers = kmeans_pca.cluster_centers_
