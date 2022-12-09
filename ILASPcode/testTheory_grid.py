@@ -77,14 +77,14 @@ def work(process_number):
     for choice in choices:
         if choice == 0:
             if grid_search:
-                path = './Data8Component2Std/testOutput/results_no_zero_grid_search_process' + str(process_number) + '.csv'
+                path = './Data8Component2Std/testOutput_original/results_no_zero_grid_search_process' + str(process_number) + '.csv'
             else:
-                path = './Data8Component2Std/testOutput/results_no_zero.csv'
+                path = './Data8Component2Std/testOutput_original/results_no_zero.csv'
         else:
             if grid_search:
-                path = './Data8Component2Std/testOutput/results_zero_grid_search' + str(process_number) + '.csv'
+                path = './Data8Component2Std/testOutput_original/results_zero_grid_search' + str(process_number) + '.csv'
             else:
-                path = './Data8Component2Std/testOutput/results_zero.csv'
+                path = './Data8Component2Std/testOutput_original/results_zero.csv'
         with open(path, 'w+', encoding='UTF8') as f_output:
             # f_output.write("USERID;MAXV;MAXP;MAXWC;TRAIN_SIZE;TEST_SIZE;CORRECT;UNCERTAIN;INCORRECT;CORRECTP;UNCERTAINP;INCORRECTP;CORRECT_UDISCARDEDP;TRAIN_TIME;THEORY\n")
             if grid_search:
@@ -92,7 +92,7 @@ def work(process_number):
             else:
                 f_output.write("USERID;MAXV;MAXP;MAXWC;TRAIN_SIZE;TEST_SIZE;ACCURACYP;PRECISIONP;RECALLP;TRAIN_TIME;THEORY\n")
             USERS = [i for i in range(0, 48)]
-            COUPLES = [210]
+            COUPLES = [150]
             for COUPLE in COUPLES:
                 train_size = COUPLE
                 for USER in USERS:
@@ -108,13 +108,13 @@ def work(process_number):
                         if USER not in [20, 29, 14, 11]:
                             continue
                     if int(choice) == 0:
-                        output_train_data_dir = "./Data8Component2Std/users_new_version_second/no_zero/train/" + str(COUPLE) + "Couples/"
-                        output_dir_for_train_data_dir = "./Data8Component2Std/final/users/no_zero/train/" + str(COUPLE) + "Couples/User" + str(USER) + "/outputTrain/"
-                        output_test_data_dir = "./Data8Component2Std/final/users/no_zero/test/105Couples/User" + str(USER) + "/testFiles/"
+                        output_train_data_dir = "./Data8Component2Std/users_original/no_zero/train/" + str(COUPLE) + "Couples/"
+                        output_dir_for_train_data_dir = "./Data8Component2Std/final_original/users/no_zero/train/" + str(COUPLE) + "Couples/User" + str(USER) + "/outputTrain/"
+                        output_test_data_dir = "./Data8Component2Std/final_original/users/no_zero/test/50Couples/User" + str(USER) + "/testFiles/"
                     else:
-                        output_train_data_dir = "./Data8Component2Std/users_new_version_second/zero/train/" + str(COUPLE) + "Couples/"
-                        output_dir_for_train_data_dir = "./Data8Component2Std/final/users/zero/train/" + str(COUPLE) + "Couples/User" + str(USER) + "/outputTrain/"
-                        output_test_data_dir = "./Data8Component2Std/final/users/zero/test/105Couples/User" + str(USER) + "/testFiles/"
+                        output_train_data_dir = "./Data8Component2Std/users_original/zero/train/" + str(COUPLE) + "Couples/"
+                        output_dir_for_train_data_dir = "./Data8Component2Std/final_original/users/zero/train/" + str(COUPLE) + "Couples/User" + str(USER) + "/outputTrain/"
+                        output_test_data_dir = "./Data8Component2Std/final_original/users/zero/test/50Couples/User" + str(USER) + "/testFiles/"
                     for filename in os.listdir(output_dir_for_train_data_dir):
                         if "default" in filename:
                             continue

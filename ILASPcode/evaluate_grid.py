@@ -10,7 +10,7 @@ data_210_couples_no_zeros = np.zeros((54, 24990, 11), dtype='float32')
 
 for choice in choices:
     if choice == 1:
-        path = './Data8Component2Std/testOutput/results_zero_grid_search_all.csv'
+        path = './Data8Component2Std/testOutput_original/results_zero_grid_search_all.csv'
     else:
         continue
         # temporally
@@ -80,9 +80,9 @@ for choice in choices:
     best_precision_indexes_per_user = {}
     best_recall_indexes_per_user = {}
 
-    output_accuracy_path = "./Data8Component2Std/grid_results/accuracy.txt"
-    output_precision_path = "./Data8Component2Std/grid_results/precision.txt"
-    output_recall_path = "./Data8Component2Std/grid_results/recall.txt"
+    output_accuracy_path = "./Data8Component2Std/grid_results_original/accuracy.txt"
+    output_precision_path = "./Data8Component2Std/grid_results_original/precision.txt"
+    output_recall_path = "./Data8Component2Std/grid_results_original/recall.txt"
 
     with open(output_accuracy_path, 'w+', encoding='UTF8') as f_output:
         for i, user in enumerate(data_210_couples_no_zeros):
