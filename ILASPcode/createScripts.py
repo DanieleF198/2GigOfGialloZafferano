@@ -8,10 +8,10 @@ for choice in choices:
     USERS = [str(i) for i in range(0, 48)]
     for USER in USERS:
         if int(choice) == 0:
-            train_data_dir = "./Data8Component2Std/final_original/users/no_zero/train/150Couples/User" + str(USER) + "/"
+            train_data_dir = "./Data8Component2Std/final/users/no_zero/train/45Couples/User" + str(USER) + "/"
             # test_data_dir = "./Data8Component2Std/final_original/users/no_zero/test/105Couples/User" + str(USER) + "/"
         else:
-            train_data_dir = "./Data8Component2Std/final_original/users/zero/train/150Couples/User" + str(USER) + "/"
+            train_data_dir = "./Data8Component2Std/final/users/zero/train/45Couples/User" + str(USER) + "/"
             # test_data_dir = "./Data8Component2Std/final_original/users/zero/test/105Couples/User" + str(USER) + "/"
         fileToCreate = open(train_data_dir + "script_ilasp_commands_equals_and_less_three.sh", "w+")
         for max_v in max_v_list:
@@ -49,6 +49,13 @@ for choice in choices:
                     fileToCreate.write("ILASP --version=4 ./trainFiles/train_max-v\(" + str(max_v) + "\)-max_p\(" + str(max_p) + "\).las > ./outputTrain/outputTrain_max-v\(" + str(max_v) + "\)-max_p\(" + str(max_p) + "\).txt;\n")
         fileToCreate.flush()
         fileToCreate.close()
+        fileToCreate = open(train_data_dir + "script_ilasp_commands_all.sh", "w+")
+        for max_v in max_v_list:
+            for max_p in max_p_list:
+                fileToCreate.write("ILASP --version=4 ./trainFiles/train_max-v\(" + str(max_v) + "\)-max_p\(" + str(max_p) + "\).las > ./outputTrain/outputTrain_max-v\(" + str(max_v) + "\)-max_p\(" + str(max_p) + "\).txt;\n")
+        fileToCreate.flush()
+        fileToCreate.close()
+
 
         # fileToCreate = open(test_data_dir + "script_ilasp_commands_equals_and_less_three.sh", "w+")
         # for max_v in max_v_list:
