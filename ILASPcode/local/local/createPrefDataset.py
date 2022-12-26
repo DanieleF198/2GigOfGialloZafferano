@@ -32,11 +32,11 @@ def reorder(df):
 
 
 
-NNoutput_dir = "./Data/NNoutput/"
-zero_dir_train = "Data/users/zero/train/105Couples/"
-no_zero_dir_train = "Data/users/no_zero/train/105Couples/"
-zero_dir_test = "Data/users/zero/test/105Couples/"
-no_zero_dir_test = "Data/users/no_zero/test/105Couples/"
+NNoutput_dir = "./Data8Component2Std/NNoutput/"
+zero_dir_train = "Data8Component2Std/users/zero/train/105Couples/"
+no_zero_dir_train = "Data8Component2Std/users/no_zero/train/105Couples/"
+zero_dir_test = "Data8Component2Std/users/zero/test/105Couples/"
+no_zero_dir_test = "Data8Component2Std/users/no_zero/test/105Couples/"
 f_preferences_train = os.path.join(NNoutput_dir, 'train/105Couples/samples.txt')
 f_labels_train = os.path.join(NNoutput_dir, 'train/105Couples/labels.txt')
 f_distances_train = os.path.join(NNoutput_dir, 'train/105Couples/distancesFromOriginal.txt')
@@ -131,18 +131,22 @@ for i, line in enumerate(linesOfDTest):
 couple_distances_train = couple_distances_train.flatten()
 couple_distances_test = couple_distances_test.flatten()
 
-differences_of_distances_train = np.zeros((len(couple_distances_train)-1), dtype='float32')
-differences_of_distances_test = np.zeros((len(couple_distances_test)-1), dtype='float32')
+differences_of_distances_train = []
+differences_of_distances_test = []
 
-for i, distance in enumerate(couple_distances_train):
-    if i == len(couple_distances_train)-1:
-        break
-    differences_of_distances_train[i] = couple_distances_train[i+1] - couple_distances_train[i]
+for i, distance_1 in enumerate(couple_distances_train):
+    for j, distance_2 in enumerate(couple_distances_train):
+        if j <= i:
+            continue
+        else:
+            differences_of_distances_train.append(distance_2 - distance_1)
 
-for i, distance in enumerate(couple_distances_test):
-    if i == len(couple_distances_test)-1:
-        break
-    differences_of_distances_test[i] = couple_distances_test[i+1] - couple_distances_test[i]
+for i, distance_1 in enumerate(couple_distances_test):
+    for j, distance_2 in enumerate(couple_distances_test):
+        if j <= i:
+            continue
+        else:
+            differences_of_distances_test.append(distance_2 - distance_1)
 
 mean_differences_train = np.mean(differences_of_distances_train)
 mean_differences_test = np.mean(differences_of_distances_test)

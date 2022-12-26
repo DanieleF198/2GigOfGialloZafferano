@@ -5,27 +5,27 @@ import re
 choices = [1]
 for choice in choices:
     if choice == 0:
-        path = './Data8Component2Std/testOutput_original/results_no_zero.csv'
+        path = './local/local/Data8Component2Std/testOutput/results_no_zero.csv'
     else:
-        path = './Data8Component2Std/testOutput_original/results_zero.csv'
+        path = './local/local/Data8Component2Std/testOutput/results_zero.csv'
     with open(path, 'w+', encoding='UTF8') as f_output:
         # f_output.write("USERID;MAXV;MAXP;MAXWC;TRAIN_SIZE;TEST_SIZE;CORRECT;UNCERTAIN;INCORRECT;CORRECTP;UNCERTAINP;INCORRECTP;CORRECT_UDISCARDEDP;TRAIN_TIME;THEORY\n")
         f_output.write("USERID;MAXV;MAXP;MAXWC;TRAIN_SIZE;TEST_SIZE;ACCURACYP;PRECISIONP;RECALLP;TRAIN_TIME;THEORY\n")
         USERS = [i for i in range(0, 48)]
-        COUPLES = [150]
+        COUPLES = [45, 105, 210]
         for COUPLE in COUPLES:
             train_size = COUPLE
             for USER in USERS:
                 if USER not in [15, 3, 32, 7, 36, 4, 20, 29, 14, 11]:
                     continue
                 if int(choice) == 0:
-                    output_train_data_dir = "./Data8Component2Std/users_original/no_zero/train/" + str(COUPLE) + "Couples/"
-                    output_dir_for_train_data_dir = "./Data8Component2Std/final_original/users/no_zero/train/" + str(COUPLE) + "Couples/User" + str(USER) + "/outputTrain/"
-                    output_test_data_dir = "./Data8Component2Std/final_original/users/no_zero/test/50Couples/User" + str(USER) + "/testFiles/"
+                    output_train_data_dir = "./local/local/Data8Component2Std/users/no_zero/train/" + str(COUPLE) + "Couples/"
+                    output_dir_for_train_data_dir = "./local/local/Data8Component2Std/final/users/no_zero/train/" + str(COUPLE) + "Couples/User" + str(USER) + "/outputTrain/"
+                    output_test_data_dir = "./local/local/Data8Component2Std/final/users/no_zero/test/105Couples/User" + str(USER) + "/testFiles/"
                 else:
-                    output_train_data_dir = "./Data8Component2Std/users_original/zero/train/" + str(COUPLE) + "Couples/"
-                    output_dir_for_train_data_dir = "./Data8Component2Std/final_original/users/zero/train/" + str(COUPLE) + "Couples/User" + str(USER) + "/outputTrain/"
-                    output_test_data_dir = "./Data8Component2Std/final_original/users/zero/test/50Couples/User" + str(USER) + "/testFiles/"
+                    output_train_data_dir = "./local/local/Data8Component2Std/users/zero/train/" + str(COUPLE) + "Couples/"
+                    output_dir_for_train_data_dir = "./local/local/Data8Component2Std/final/users/zero/train/" + str(COUPLE) + "Couples/User" + str(USER) + "/outputTrain/"
+                    output_test_data_dir = "./local/local/Data8Component2Std/final/users/zero/test/105Couples/User" + str(USER) + "/testFiles/"
                 for filename in os.listdir(output_dir_for_train_data_dir):
                     if "default" in filename:
                         continue
@@ -40,18 +40,18 @@ for choice in choices:
                     if int(max_v) != int(max_p):
                         continue
                     if int(max_v) > 0 and int(max_p) > 0:
-                        items = ilasp.itemsFromFile("Data8Component2Std/recipes/recipes_max_v(" + str(max_v) + ")-max_p(" + str(max_p) + ").las")
-                        language_bias = ilasp.languageBiasFromFile("Data8Component2Std/recipes/recipes_max_v(" + str(max_v) + ")-max_p(" + str(max_p) + ").las")
+                        items = ilasp.itemsFromFile("local/local/Data8Component2Std/recipes/recipes_max_v(" + str(max_v) + ")-max_p(" + str(max_p) + ").las")
+                        language_bias = ilasp.languageBiasFromFile("local/local/Data8Component2Std/recipes/recipes_max_v(" + str(max_v) + ")-max_p(" + str(max_p) + ").las")
                     elif int(max_v) > 0 or int(max_p) > 0:
                         if int(max_v) > 0:
-                            items = ilasp.itemsFromFile("Data8Component2Std/recipes/recipes_max_v(" + str(max_v) + ")-max_p(default).las")
-                            language_bias = ilasp.languageBiasFromFile("Data8Component2Std/recipes/recipes_max_v(" + str(max_v) + ")-max_p(default).las")
+                            items = ilasp.itemsFromFile("local/local/Data8Component2Std/recipes/recipes_max_v(" + str(max_v) + ")-max_p(default).las")
+                            language_bias = ilasp.languageBiasFromFile("local/local/Data8Component2Std/recipes/recipes_max_v(" + str(max_v) + ")-max_p(default).las")
                         else:
-                            items = ilasp.itemsFromFile("Data8Component2Std/recipes/recipes_max_v(default)-max_p(" + str(max_p) + ").las")
-                            language_bias = ilasp.languageBiasFromFile("Data8Component2Std/recipes/recipes_max_v(default)-max_p(" + str(max_p) + ").las")
+                            items = ilasp.itemsFromFile("local/local/Data8Component2Std/recipes/recipes_max_v(default)-max_p(" + str(max_p) + ").las")
+                            language_bias = ilasp.languageBiasFromFile("local/local/Data8Component2Std/recipes/recipes_max_v(default)-max_p(" + str(max_p) + ").las")
                     else:
-                        items = ilasp.itemsFromFile("Data8Component2Std/recipes/recipes_max_v(default)-max_p(default).las")
-                        language_bias = ilasp.languageBiasFromFile("Data8Component2Std/recipes/recipes_max_v(default)-max_p(default).las")
+                        items = ilasp.itemsFromFile("local/local/Data8Component2Std/recipes/recipes_max_v(default)-max_p(default).las")
+                        language_bias = ilasp.languageBiasFromFile("local/local/Data8Component2Std/recipes/recipes_max_v(default)-max_p(default).las")
                     f_train = os.path.join(output_dir_for_train_data_dir, filename)
                     f_train_data = os.path.join(output_train_data_dir, 'user' + str(USER) + ".txt")
                     temp_filename = filename.replace("outputTrain", "test")
