@@ -1,15 +1,15 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%% Pre-processing                          : 0.082s
-%% Hypothesis Space Generation             : 0.055s
-%% Conflict analysis                       : 12s
-%%   - Brave Orders                        : 12s
-%% Counterexample search                   : 3.04s
-%%   - CDOEs                               : 2.428s
-%%   - CDPIs                               : 0.611s
-%% Hypothesis Search                       : 24.891s
-%% Propagation                             : 32.678s
-%%   - CDOEs                               : 32.678s
-%% Total                                   : 73s
+%% Pre-processing                          : 0.076s
+%% Hypothesis Space Generation             : 0.05s
+%% Conflict analysis                       : 8.534s
+%%   - Brave Orders                        : 8.534s
+%% Counterexample search                   : 2.461s
+%%   - CDOEs                               : 1.931s
+%%   - CDPIs                               : 0.525s
+%% Hypothesis Search                       : 19.011s
+%% Propagation                             : 26.685s
+%%   - CDOEs                               : 26.685s
+%% Total                                   : 57.007s
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 :~ value(erbe_spezie_e_condimenti,V1).[V1@1, V1]
 :~ category(3).[-1@2]

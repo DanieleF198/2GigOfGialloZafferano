@@ -1,17 +1,17 @@
-:~ category(4).[-1@1]
-:~ value(forno,V1).[1@2, V1]
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Pre-processing                          : 0.078s
+%% Hypothesis Space Generation             : 0.163s
+%% Conflict analysis                       : 11.68s
+%%   - Brave Orders                        : 11.68s
+%% Counterexample search                   : 1.649s
+%%   - CDOEs                               : 1.241s
+%%   - CDPIs                               : 0.405s
+%% Hypothesis Search                       : 173.261s
+%% Propagation                             : 33.007s
+%%   - CDOEs                               : 33.007s
+%% Total                                   : 220.159s
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 :~ value(pasta,V1).[-1@3, V1]
+:~ value(forno,V1).[1@2, V1]
+:~ category(4).[-1@1]
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%% Pre-processing                          : 0.002s
-%% Hypothesis Space Generation             : 0.295s
-%% Conflict analysis                       : 24.003s
-%%   - Brave Orders                        : 24.003s
-%% Counterexample search                   : 7.806s
-%%   - CDOEs                               : 4.752s
-%%   - CDPIs                               : 3.052s
-%% Hypothesis Search                       : 291.294s
-%% Propagation                             : 62.671s
-%%   - CDOEs                               : 62.671s
-%% Total                                   : 386.585s
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

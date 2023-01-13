@@ -1,17 +1,17 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Pre-processing                          : 0.076s
+%% Hypothesis Space Generation             : 0.161s
+%% Conflict analysis                       : 10.705s
+%%   - Brave Orders                        : 10.703s
+%% Counterexample search                   : 1.489s
+%%   - CDOEs                               : 1.127s
+%%   - CDPIs                               : 0.37s
+%% Hypothesis Search                       : 138.922s
+%% Propagation                             : 28.977s
+%%   - CDOEs                               : 28.977s
+%% Total                                   : 180.671s
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 :~ value(verdure_e_ortaggi,V1).[-1@1, V1]
-:~ value(forno,V1).[-V1@2, V1]
 :~ value(farinacei,V1).[-V1@3, V1]
+:~ value(forno,V1).[-1@2, V1]
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%% Pre-processing                          : 0.002s
-%% Hypothesis Space Generation             : 0.291s
-%% Conflict analysis                       : 19.773s
-%%   - Brave Orders                        : 19.773s
-%% Counterexample search                   : 6.399s
-%%   - CDOEs                               : 3.96s
-%%   - CDPIs                               : 2.442s
-%% Hypothesis Search                       : 203.482s
-%% Propagation                             : 53.46s
-%%   - CDOEs                               : 53.46s
-%% Total                                   : 283.861s
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

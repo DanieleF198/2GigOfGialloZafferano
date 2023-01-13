@@ -1,15 +1,15 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%% Pre-processing                          : 0.094s
-%% Hypothesis Space Generation             : 0.055s
-%% Conflict analysis                       : 12.282s
-%%   - Brave Orders                        : 12.282s
-%% Counterexample search                   : 2.98s
-%%   - CDOEs                               : 2.375s
-%%   - CDPIs                               : 0.603s
-%% Hypothesis Search                       : 28.862s
-%% Propagation                             : 30.888s
-%%   - CDOEs                               : 30.888s
-%% Total                                   : 75.441s
+%% Pre-processing                          : 0.081s
+%% Hypothesis Space Generation             : 0.058s
+%% Conflict analysis                       : 9.817s
+%%   - Brave Orders                        : 9.817s
+%% Counterexample search                   : 2.618s
+%%   - CDOEs                               : 2.061s
+%%   - CDPIs                               : 0.558s
+%% Hypothesis Search                       : 23.906s
+%% Propagation                             : 28.353s
+%%   - CDOEs                               : 28.353s
+%% Total                                   : 65.038s
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 :~ value(uova,V1).[-V1@1, V1]
 :~ value(pesce,V1).[V1@2, V1]

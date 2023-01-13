@@ -2,27 +2,27 @@ import os
 from datetime import datetime
 
 
-pathFinalDirZeroTrain = './Data/final_new_version/users/zero/train/'
-# pathFinalDirZeroTest = './Data/final_new_version/users/zero/test/'
-pathFinalDirNoZeroTrain = './Data/final_new_version/users/no_zero/train/'
-# pathFinalDirNoZeroTest = './Data/final_new_version/users/no_zero/test/'
+pathFinalDirZeroTrain = './Data8Component2Std/final/users/zero/train/'
+# pathFinalDirZeroTest = './Data8Component2Std/final/users/zero/test/'
+pathFinalDirNoZeroTrain = './Data8Component2Std/final/users/no_zero/train/'
+# pathFinalDirNoZeroTest = './Data8Component2Std/final/users/no_zero/test/'
 
-pathUsersZeroCoupleTrainString = pathFinalDirZeroTrain + '210Couples'
+pathUsersZeroCoupleTrainString = pathFinalDirZeroTrain + '45Couples'
 # pathUsersZeroCoupleTestString = pathFinalDirZeroTest + '105Couples'
-pathUsersNoZeroCoupleTrainString = pathFinalDirNoZeroTrain + '210Couples'
+pathUsersNoZeroCoupleTrainString = pathFinalDirNoZeroTrain + '45Couples'
 # pathUsersNoZeroCoupleTestString = pathFinalDirNoZeroTest + '105Couples'
 
 effectivePathUsersZeroCoupleTrainString = os.path.join(pathUsersZeroCoupleTrainString)
 # effectivePathUsersZeroCoupleTestString = os.path.join(pathUsersZeroCoupleTestString)
 effectivePathUsersNoZeroCoupleTrainString = os.path.join(pathUsersNoZeroCoupleTrainString)
 # effectivePathUsersNoZeroCoupleTestString = os.path.join(pathUsersNoZeroCoupleTestString)
-
-os.makedirs(effectivePathUsersZeroCoupleTrainString)
+#
+# os.makedirs(effectivePathUsersZeroCoupleTrainString)
 # os.makedirs(effectivePathUsersZeroCoupleTestString)
-os.makedirs(effectivePathUsersNoZeroCoupleTrainString)
+# os.makedirs(effectivePathUsersNoZeroCoupleTrainString)
 # os.makedirs(effectivePathUsersNoZeroCoupleTestString)
 
-for i in range(0, 48):
+for i in range(48, 54):
     pathUsersZeroFinalTrainString = pathUsersZeroCoupleTrainString + '/User' + str(i)
     # pathUsersZeroFinalTestString = pathUsersZeroCoupleTestString + '/User' + str(i)
     pathUsersNoZeroFinalTrainString = pathUsersNoZeroCoupleTrainString + '/User' + str(i)

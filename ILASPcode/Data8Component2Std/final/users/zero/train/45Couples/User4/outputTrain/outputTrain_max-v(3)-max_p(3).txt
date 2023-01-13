@@ -1,17 +1,17 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Pre-processing                          : 0.071s
+%% Hypothesis Space Generation             : 0.165s
+%% Conflict analysis                       : 3.914s
+%%   - Brave Orders                        : 3.914s
+%% Counterexample search                   : 0.395s
+%%   - CDOEs                               : 0.254s
+%%   - CDPIs                               : 0.137s
+%% Hypothesis Search                       : 6.633s
+%% Propagation                             : 10.922s
+%%   - CDOEs                               : 10.922s
+%% Total                                   : 22.327s
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 :~ value(erbe_spezie_e_condimenti,V1).[-V1@2, V1]
-:~ category(3).[1@1]
-:~ category(3), value(uova,V1).[1@3, V1]
+:~ value(farinacei,V1).[-V1@1, V1]
+:~ value(carne,V1), category(3).[1@3, V1]
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%% Pre-processing                          : 0.001s
-%% Hypothesis Space Generation             : 0.291s
-%% Conflict analysis                       : 7.445s
-%%   - Brave Orders                        : 7.444s
-%% Counterexample search                   : 2.163s
-%%   - CDOEs                               : 1.163s
-%%   - CDPIs                               : 1.001s
-%% Hypothesis Search                       : 10.923s
-%% Propagation                             : 18.988s
-%%   - CDOEs                               : 18.988s
-%% Total                                   : 40.175s
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

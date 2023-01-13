@@ -12,7 +12,7 @@ list_theory_105_couple = []
 list_theory_210_couple = []
 for choice in choices:
     if choice == 1:
-        path = './PCAexperiment/testOutput_original20/results_zero.csv'
+        path = './Data8Component2Std/testOutput_original20/results_zero.csv'
     else:
         continue
         # temporally

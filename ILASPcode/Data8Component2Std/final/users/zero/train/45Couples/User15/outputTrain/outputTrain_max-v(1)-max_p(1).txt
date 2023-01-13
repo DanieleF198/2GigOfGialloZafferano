@@ -1,15 +1,15 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Pre-processing                          : 0.07s
+%% Hypothesis Space Generation             : 0.013s
+%% Conflict analysis                       : 0.744s
+%%   - Brave Orders                        : 0.744s
+%% Counterexample search                   : 0.274s
+%%   - CDOEs                               : 0.17s
+%%   - CDPIs                               : 0.097s
+%% Hypothesis Search                       : 1.739s
+%% Propagation                             : 2.545s
+%%   - CDOEs                               : 2.545s
+%% Total                                   : 5.44s
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 :~ category(3).[1@1]
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%% Pre-processing                          : 0.01s
-%% Hypothesis Space Generation             : 0.07s
-%% Conflict analysis                       : 1.781s
-%%   - Brave Orders                        : 1.781s
-%% Counterexample search                   : 1.353s
-%%   - CDOEs                               : 0.728s
-%%   - CDPIs                               : 0.62s
-%% Hypothesis Search                       : 3.251s
-%% Propagation                             : 5s
-%%   - CDOEs                               : 5s
-%% Total                                   : 11.582s
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

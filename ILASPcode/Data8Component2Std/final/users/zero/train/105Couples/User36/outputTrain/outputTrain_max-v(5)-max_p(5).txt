@@ -1,19 +1,19 @@
-:~ value(funghi_e_tartufi,V1).[1@4, V1]
-:~ category(5).[-1@2]
-:~ value(carne,V1).[V1@1, V1]
-:~ category(4), value(verdure_e_ortaggi,V1).[1@5, V1]
-:~ category(4), value(carne,V1).[-V1@3, V1]
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Pre-processing                          : 0.084s
+%% Hypothesis Space Generation             : 0.544s
+%% Conflict analysis                       : 17.069s
+%%   - Brave Orders                        : 17.069s
+%% Counterexample search                   : 1.38s
+%%   - CDOEs                               : 1.033s
+%%   - CDPIs                               : 0.352s
+%% Hypothesis Search                       : 1693.4s
+%% Propagation                             : 47.227s
+%%   - CDOEs                               : 47.227s
+%% Total                                   : 1760.28s
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+:~ value(funghi_e_tartufi,V1).[1@3, V1]
+:~ value(carne,V1).[-1@2, V1]
+:~ category(5).[-1@1]
+:~ value(carne,V1), category(3).[V1@4, V1]
+:~ value(verdure_e_ortaggi,V1), category(4).[V1@5, V1]
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%% Pre-processing                          : 0.002s
-%% Hypothesis Space Generation             : 0.894s
-%% Conflict analysis                       : 31.792s
-%%   - Brave Orders                        : 31.792s
-%% Counterexample search                   : 6.825s
-%%   - CDOEs                               : 4.09s
-%%   - CDPIs                               : 2.733s
-%% Hypothesis Search                       : 2203.39s
-%% Propagation                             : 87.809s
-%%   - CDOEs                               : 87.809s
-%% Total                                   : 2331.46s
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

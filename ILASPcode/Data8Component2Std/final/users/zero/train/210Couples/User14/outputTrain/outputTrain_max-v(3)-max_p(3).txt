@@ -1,15 +1,15 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%% Pre-processing                          : 0.088s
-%% Hypothesis Space Generation             : 0.147s
-%% Conflict analysis                       : 15.742s
-%%   - Brave Orders                        : 15.742s
-%% Counterexample search                   : 2.765s
-%%   - CDOEs                               : 2.224s
-%%   - CDPIs                               : 0.546s
-%% Hypothesis Search                       : 40.355s
-%% Propagation                             : 42.36s
-%%   - CDOEs                               : 42.36s
-%% Total                                   : 101.838s
+%% Pre-processing                          : 0.076s
+%% Hypothesis Space Generation             : 0.11s
+%% Conflict analysis                       : 12.594s
+%%   - Brave Orders                        : 12.594s
+%% Counterexample search                   : 2.337s
+%%   - CDOEs                               : 1.856s
+%%   - CDPIs                               : 0.484s
+%% Hypothesis Search                       : 33.125s
+%% Propagation                             : 35.675s
+%%   - CDOEs                               : 35.676s
+%% Total                                   : 84.198s
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 :~ value(pesce,V1).[V1@3, V1]
 :~ value(erbe_spezie_e_condimenti,V1).[-1@1, V1]

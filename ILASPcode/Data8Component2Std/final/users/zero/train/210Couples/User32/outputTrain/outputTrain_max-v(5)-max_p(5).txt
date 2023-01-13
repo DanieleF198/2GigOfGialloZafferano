@@ -1,15 +1,15 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Pre-processing                          : 0.077s
-%% Hypothesis Space Generation             : 0.658s
-%% Conflict analysis                       : 22.704s
-%%   - Brave Orders                        : 22.704s
-%% Counterexample search                   : 2.353s
-%%   - CDOEs                               : 1.878s
-%%   - CDPIs                               : 0.476s
-%% Hypothesis Search                       : 1008.65s
-%% Propagation                             : 58.839s
-%%   - CDOEs                               : 58.839s
-%% Total                                   : 1093.87s
+%% Hypothesis Space Generation             : 0.549s
+%% Conflict analysis                       : 16.975s
+%%   - Brave Orders                        : 16.973s
+%% Counterexample search                   : 1.882s
+%%   - CDOEs                               : 1.494s
+%%   - CDPIs                               : 0.39s
+%% Hypothesis Search                       : 805.344s
+%% Propagation                             : 48.692s
+%%   - CDOEs                               : 48.692s
+%% Total                                   : 873.959s
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 :~ value(farinacei,V1).[-V1@4, V1]
 :~ category(4).[1@2]

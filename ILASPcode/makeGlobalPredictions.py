@@ -94,7 +94,7 @@ for i, line in enumerate(linesOfP):
 linesOfCC = dataCC.split('\n')
 food_couple = np.zeros((len(linesOfCC), 420, 2), dtype='int32')
 for i, line in enumerate(linesOfCC):
-    if i < 48:
+    if i < 54:
         values = [x for x in line.split(';')[:]]
         values = values[:210]
         for j, value in enumerate(values):
@@ -169,18 +169,20 @@ pca_data = pca.transform(final_data)
 
 food_effective_couple = np.zeros((len(food_couple) - 1, 420, 2, 17))
 for i, answer in enumerate(food_couple):
-    if i < 48:
+    if i < 54:
         for j, couple in enumerate(answer):
             for k, food in enumerate(couple):
                 food_effective_couple[i, j, k, :] = pca_data[int(food)]
 
 food_effective_couple = np.reshape(food_effective_couple, (len(food_couple)-1, 420, 34))
 
-n_train = 15
+n_train = 10
 n_test = 15     # 15 food implies 105 couple
 recipes = random.sample(range(0, 100), n_train+n_test)
-recipes_train = recipes[0:n_train]
-recipes_test = recipes[n_train:n_train + n_test]
+# recipes_train = recipes[0:n_train]
+# recipes_test = recipes[n_train:n_train + n_test]
+recipes_train = np.array([86, 88, 53, 29, 8, 26, 71, 81, 4, 11])
+recipes_test = np.array([84, 15, 16, 18, 24, 50, 23, 77, 64, 21, 73, 48, 94, 67, 43])
 
 recipes_train_couple = np.zeros((round((n_train*(n_train-1))/2), 2))
 recipes_test_couple = np.zeros((round((n_test*(n_test-1))/2), 2))
@@ -263,7 +265,7 @@ for couple in recipes_train_couple:
     to_print = to_print + str(int(couple[0])) + "," + str(int(couple[1])) + ";"
 print(to_print)
 print("--------------------generation label for train--------------------")
-for i in range(0, 48):
+for i in range(48, 54):
     prediction(user_id=i, x=train_dataset)
 # print("--------------------generation samples for test--------------------")
 # to_print = ""
@@ -271,5 +273,5 @@ for i in range(0, 48):
 #     to_print = to_print + str(int(couple[0])) + "," + str(int(couple[1])) + ";"
 # print(to_print)
 # print("--------------------generation label for test--------------------")
-# for i in range(0, 48):
+# for i in range(48, 54):
 #     prediction(user_id=i, x=test_dataset)

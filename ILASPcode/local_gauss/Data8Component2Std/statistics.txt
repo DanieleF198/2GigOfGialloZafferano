@@ -1,0 +1,46 @@
+considered user id: 15, 3, 32, 7, 36, 4, 20, 29, 14, 11
+mean of test size: 105.0
+mean of train sizes: 45 - 105 - 190
+
+On Dataset_45_couples with maxv=maxp=1; mean of correct 0.35047619938850405; mean of uncertain 0.445714295655489; mean of incorrect 0.20380953075364233; mean of correct discarded 0.6079160928726196; mean of training time 19.976100158691406
+On Dataset_45_couples with maxv=maxp=2; mean of correct 0.4666666783392429; mean of uncertain 0.2895238161087036; mean of incorrect 0.24380953181535006; mean of correct discarded 0.6461991310119629; mean of training time 32.25630054473877
+On Dataset_45_couples with maxv=maxp=3; mean of correct 0.502857156097889; mean of uncertain 0.25904762372374535; mean of incorrect 0.23809524420648814; mean of correct discarded 0.6661990493535995; mean of training time 45.524800300598145
+On Dataset_45_couples with maxv=maxp=4; mean of correct 0.5342857286334037; mean of uncertain 0.23142857626080512; mean of incorrect 0.2342857213690877; mean of correct discarded 0.6849138081073761; mean of training time 58.13129997253418
+On Dataset_45_couples with maxv=maxp=5; mean of correct 0.5761904895305634; mean of uncertain 0.16857143193483354; mean of incorrect 0.255238101631403; mean of correct discarded 0.6881901443004608; mean of training time 74.03899974822998
+
+On Dataset_105_couples with maxv=maxp=1; mean of correct 0.3380952447652817; mean of uncertain 0.486666676402092; mean of incorrect 0.1752381012775004; mean of correct discarded 0.6349404633045197; mean of training time 78.11540069580079
+On Dataset_105_couples with maxv=maxp=2; mean of correct 0.4409523896872997; mean of uncertain 0.2942857213318348; mean of incorrect 0.2647619121707976; mean of correct discarded 0.6260202467441559; mean of training time 306.95270385742185
+On Dataset_105_couples with maxv=maxp=3; mean of correct 0.5171428725123406; mean of uncertain 0.26095238924026487; mean of incorrect 0.22190476777032017; mean of correct discarded 0.6978154927492142; mean of training time 953.2457000732422
+On Dataset_105_couples with maxv=maxp=4; mean of correct 0.5638095378875733; mean of uncertain 0.16285714730620385; mean of incorrect 0.273333337251097; mean of correct discarded 0.6666377633810043; mean of training time 2181.969903564453
+On Dataset_105_couples with maxv=maxp=5; mean of correct 0.5961904883384704; mean of uncertain 0.15428571738302707; mean of incorrect 0.24952381588518618; mean of correct discarded 0.7151430755853653; mean of training time 3725.0951904296876
+
+On Dataset_190_couples with maxv=maxp=1; mean of correct 0.48095239251852034; mean of uncertain 0.2590476252138615; mean of incorrect 0.2600000080652535; mean of correct discarded 0.6702949315309524; mean of training time 279.8732971191406
+On Dataset_190_couples with maxv=maxp=2; mean of correct 0.49238096326589587; mean of uncertain 0.22857143431901933; mean of incorrect 0.2790476270951331; mean of correct discarded 0.6609226256608963; mean of training time 5526.572961425782
+On Dataset_190_couples with maxv=maxp=3; mean of correct 0.6119047794491053; mean of uncertain 0.20595238753594458; mean of incorrect 0.18214286176953465; mean of correct discarded 0.7651382982730865; mean of training time 52033.13116455078
+On Dataset_190_couples with maxv=maxp=4; mean of correct nan; mean of uncertain nan; mean of incorrect nan; mean of correct discarded nan; mean of training time nan
+On Dataset_190_couples with maxv=maxp=5; mean of correct nan; mean of uncertain nan; mean of incorrect nan; mean of correct discarded nan; mean of training time nan
+
+mean of means:
+On dataset with 45 couples:
+train size = 45
+correct = 0.4860952503979206
+uncertain = 0.2788571487367153
+incorrect = 0.2350476259551942
+correct discarded = 0.6586836451292039
+training time = 45.98550014495849
+
+On dataset with 105 couples:
+train size = 105
+correct = 0.4912381066381932
+uncertain = 0.2718095303326845
+incorrect = 0.23695238687098027
+correct discarded = 0.6681114083528519
+training time = 1449.075779724121
+
+On dataset with 190 couples:
+train size = 190
+correct = 0.5284127117445071
+uncertain = 0.23119048235627515
+incorrect = 0.24039683230997375
+correct discarded = 0.6987852851549784
+training time = 19279.859141031902

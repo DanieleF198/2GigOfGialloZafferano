@@ -1,0 +1,19 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Pre-processing                          : 0.072s
+%% Hypothesis Space Generation             : 0.032s
+%% Conflict analysis                       : 7.236s
+%%   - Brave Orders                        : 7.236s
+%% Counterexample search                   : 0.431s
+%%   - CDOEs                               : 0.278s
+%%   - CDPIs                               : 0.154s
+%% Hypothesis Search                       : 26.16s
+%% Propagation                             : 18.528s
+%%   - CDOEs                               : 18.528s
+%% Total                                   : 52.882s
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+:~ value(erbe_spezie_e_condimenti,V1).[1@4, V1]
+:~ value(erbe_spezie_e_condimenti,V1).[-V1@3, V1]
+:~ category(4).[1@1]
+:~ value(verdure_e_ortaggi,V1).[V1@5, V1]
+:~ category(3).[1@2]
+

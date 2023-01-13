@@ -1,18 +1,18 @@
-:~ value(carne,V1).[-V1@1, V1]
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Pre-processing                          : 0.072s
+%% Hypothesis Space Generation             : 0.261s
+%% Conflict analysis                       : 9.88s
+%%   - Brave Orders                        : 9.88s
+%% Counterexample search                   : 1.135s
+%%   - CDOEs                               : 0.863s
+%%   - CDPIs                               : 0.269s
+%% Hypothesis Search                       : 273.588s
+%% Propagation                             : 30.03s
+%%   - CDOEs                               : 30.03s
+%% Total                                   : 315.31s
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+:~ value(carne,V1).[1@1, V1]
+:~ value(pesce,V1).[V1@2, V1]
 :~ value(farinacei,V1).[-V1@4, V1]
-:~ category(3).[-1@2]
-:~ value(forno,V1).[-1@3, V1]
+:~ value(forno,V1).[-V1@3, V1]
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%% Pre-processing                          : 0.002s
-%% Hypothesis Space Generation             : 0.508s
-%% Conflict analysis                       : 22.015s
-%%   - Brave Orders                        : 22.015s
-%% Counterexample search                   : 5.819s
-%%   - CDOEs                               : 3.571s
-%%   - CDPIs                               : 2.252s
-%% Hypothesis Search                       : 480.668s
-%% Propagation                             : 59.527s
-%%   - CDOEs                               : 59.527s
-%% Total                                   : 569.12s
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

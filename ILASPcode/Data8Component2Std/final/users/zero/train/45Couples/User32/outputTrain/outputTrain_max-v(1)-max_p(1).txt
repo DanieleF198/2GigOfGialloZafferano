@@ -1,15 +1,15 @@
-:~ value(farinacei,V1).[-1@1, V1]
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Pre-processing                          : 0.075s
+%% Hypothesis Space Generation             : 0.013s
+%% Conflict analysis                       : 0.928s
+%%   - Brave Orders                        : 0.928s
+%% Counterexample search                   : 0.327s
+%%   - CDOEs                               : 0.202s
+%%   - CDPIs                               : 0.122s
+%% Hypothesis Search                       : 1.435s
+%% Propagation                             : 2.975s
+%%   - CDOEs                               : 2.975s
+%% Total                                   : 5.811s
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+:~ category(3).[1@1]
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%% Pre-processing                          : 0.001s
-%% Hypothesis Space Generation             : 0.033s
-%% Conflict analysis                       : 2.018s
-%%   - Brave Orders                        : 2.018s
-%% Counterexample search                   : 1.501s
-%%   - CDOEs                               : 0.809s
-%%   - CDPIs                               : 0.694s
-%% Hypothesis Search                       : 2.644s
-%% Propagation                             : 5.603s
-%%   - CDOEs                               : 5.603s
-%% Total                                   : 11.917s
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

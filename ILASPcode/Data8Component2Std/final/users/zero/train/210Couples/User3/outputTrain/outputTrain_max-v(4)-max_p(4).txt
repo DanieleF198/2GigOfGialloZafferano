@@ -1,15 +1,15 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%% Pre-processing                          : 0.087s
-%% Hypothesis Space Generation             : 0.3s
-%% Conflict analysis                       : 19.249s
-%%   - Brave Orders                        : 19.249s
-%% Counterexample search                   : 2.538s
-%%   - CDOEs                               : 2.049s
-%%   - CDPIs                               : 0.486s
-%% Hypothesis Search                       : 371.943s
-%% Propagation                             : 49.36s
-%%   - CDOEs                               : 49.36s
-%% Total                                   : 443.979s
+%% Pre-processing                          : 0.074s
+%% Hypothesis Space Generation             : 0.228s
+%% Conflict analysis                       : 15.521s
+%%   - Brave Orders                        : 15.52s
+%% Counterexample search                   : 2.171s
+%%   - CDOEs                               : 1.74s
+%%   - CDPIs                               : 0.441s
+%% Hypothesis Search                       : 312.792s
+%% Propagation                             : 43.303s
+%%   - CDOEs                               : 43.303s
+%% Total                                   : 374.505s
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 :~ value(pesce,V1).[-V1@3, V1]
 :~ category(3).[-1@4]

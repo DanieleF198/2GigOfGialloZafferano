@@ -1,15 +1,15 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%% Pre-processing                          : 0.096s
-%% Hypothesis Space Generation             : 0.129s
-%% Conflict analysis                       : 21.269s
-%%   - Brave Orders                        : 21.269s
-%% Counterexample search                   : 3.442s
-%%   - CDOEs                               : 2.785s
-%%   - CDPIs                               : 0.661s
-%% Hypothesis Search                       : 404.85s
-%% Propagation                             : 52.488s
-%%   - CDOEs                               : 52.489s
-%% Total                                   : 482.711s
+%% Pre-processing                          : 0.076s
+%% Hypothesis Space Generation             : 0.112s
+%% Conflict analysis                       : 14.674s
+%%   - Brave Orders                        : 14.674s
+%% Counterexample search                   : 2.685s
+%%   - CDOEs                               : 2.125s
+%%   - CDPIs                               : 0.578s
+%% Hypothesis Search                       : 292.74s
+%% Propagation                             : 42.686s
+%%   - CDOEs                               : 42.687s
+%% Total                                   : 353.278s
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 :~ value(verdure_e_ortaggi,V1).[-V1@3, V1]
 :~ value(erbe_spezie_e_condimenti,V1).[-V1@1, V1]

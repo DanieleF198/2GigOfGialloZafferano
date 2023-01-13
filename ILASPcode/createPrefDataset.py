@@ -4,12 +4,12 @@ import sys
 import numpy as np
 
 NNoutput_dir = "./Data/NNoutput/"
-zero_dir_train = "Data/users_new_version_second/zero/train/210Couples/"
-no_zero_dir_train = "Data/users_new_version_second/no_zero/train/210Couples/"
+zero_dir_train = "Data/users_new_version_second/zero/train/45Couples/"
+no_zero_dir_train = "Data/users_new_version_second/no_zero/train/45Couples/"
 zero_dir_test = "Data/users_new_version_second/zero/test/105Couples/"
 no_zero_dir_test = "Data/users_new_version_second/no_zero/test/105Couples/"
-f_preferences_train = os.path.join(NNoutput_dir, 'train/210Couples/samples.txt')
-f_labels_train = os.path.join(NNoutput_dir, 'train/210Couples/labels.txt')
+f_preferences_train = os.path.join(NNoutput_dir, 'train/45Couples/samples.txt')
+f_labels_train = os.path.join(NNoutput_dir, 'train/45Couples/labels.txt')
 f_preferences_test = os.path.join(NNoutput_dir, 'test/105Couples/samples.txt')
 f_labels_test = os.path.join(NNoutput_dir, 'test/105Couples/labels.txt')
 
@@ -27,7 +27,7 @@ dataLTest = fLTest.read()
 fLTest.close()
 
 linesOfPTrain = dataPTrain.split('\n')
-couples_dataset_train = np.zeros((len(linesOfPTrain)-1, 210, 2), dtype='int32')
+couples_dataset_train = np.zeros((len(linesOfPTrain)-1, 45, 2), dtype='int32')
 for i, line in enumerate(linesOfPTrain):
     couples = [x for x in line.split(';')[0:]]
     for j, couple in enumerate(couples):
@@ -38,7 +38,7 @@ for i, line in enumerate(linesOfPTrain):
         couples_dataset_train[i, j, 1] = int(elements[1])
 
 linesOfLTrain = dataLTrain.split('\n')
-couple_label_train = np.zeros((len(linesOfLTrain)-1, 210), dtype='int32')
+couple_label_train = np.zeros((len(linesOfLTrain)-1, 45), dtype='int32')
 for i, line in enumerate(linesOfLTrain):
     if line == '':
         continue
@@ -68,7 +68,7 @@ for i, line in enumerate(linesOfLTest):
         veryValue = int(value)
         couple_label_test[i, j] = veryValue
 
-for i in range(0, 48):
+for i in range(48, 54):
 
     # f_user_output = os.path.join(zero_dir_train, 'user' + str(i) + '.txt')
     # f = open(f_user_output, 'w+')
