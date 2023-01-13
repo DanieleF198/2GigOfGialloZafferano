@@ -6,9 +6,9 @@ import pandas as pd
 
 choices = [0, 1]
 users = [i for i in range(0, 54)]
-data_45_couples_no_zeros = np.zeros((54, 1, 4), dtype='float32')
-data_105_couples_no_zeros = np.zeros((54, 1, 4), dtype='float32')
-data_210_couples_no_zeros = np.zeros((54, 1, 4), dtype='float32')
+data_45_couples_no_zeros = np.zeros((44, 1, 4), dtype='float32')
+data_105_couples_no_zeros = np.zeros((44, 1, 4), dtype='float32')
+data_210_couples_no_zeros = np.zeros((44, 1, 4), dtype='float32')
 list_theory_45_couple = []
 list_theory_105_couple = []
 list_theory_210_couple = []
@@ -19,7 +19,10 @@ for choice in choices:
         continue
         # temporally
         # path = './Data8Component2Std/testOutput/results_no_zero.csv'
+    user_counter = 0
     for user in users:
+        if user in [15, 3, 32, 7, 36, 4, 20, 29, 14, 11]:
+            continue
         parameter_base = 0
         test_not_inserted = True
         with open(path, newline='\n') as csvFile:
@@ -31,34 +34,36 @@ for choice in choices:
                     if int(row[4]) <= 45:    # 45CouplesCase
                         if int(row[1]) == 1 and int(row[2]) == 4:
                             if int(row[0]) == user:
-                                data_45_couples_no_zeros[user][0][0] = float(row[6])       # accuracy_percentage
-                                data_45_couples_no_zeros[user][0][1] = float(row[7])       # precision_percentage
-                                data_45_couples_no_zeros[user][0][2] = float(row[8])       # recall_percentage
-                                data_45_couples_no_zeros[user][0][3] = float(row[9])      # train_time
+                                data_45_couples_no_zeros[user_counter][0][0] = float(row[6])       # accuracy_percentage
+                                data_45_couples_no_zeros[user_counter][0][1] = float(row[7])       # precision_percentage
+                                data_45_couples_no_zeros[user_counter][0][2] = float(row[8])       # recall_percentage
+                                data_45_couples_no_zeros[user_counter][0][3] = float(row[9])      # train_time
                                 list_theory_45_couple.append(row[10])                                  # theory
                     elif (int(row[4]) > 45) and (int(row[4]) <= 105):    # 45CouplesCase
                         if int(row[1]) == 1 and int(row[2]) == 5:
                             if int(row[0]) == user:
-                                data_105_couples_no_zeros[user][0][0] = float(row[6])       # accuracy_percentage
-                                data_105_couples_no_zeros[user][0][1] = float(row[7])       # precision_percentage
-                                data_105_couples_no_zeros[user][0][2] = float(row[8])       # recall_percentage
-                                data_105_couples_no_zeros[user][0][3] = float(row[9])      # train_time
+                                data_105_couples_no_zeros[user_counter][0][0] = float(row[6])       # accuracy_percentage
+                                data_105_couples_no_zeros[user_counter][0][1] = float(row[7])       # precision_percentage
+                                data_105_couples_no_zeros[user_counter][0][2] = float(row[8])       # recall_percentage
+                                data_105_couples_no_zeros[user_counter][0][3] = float(row[9])      # train_time
                                 list_theory_105_couple.append(row[10])                                  # theory
                     elif (int(row[4]) > 105) and (int(row[4]) <= 210):
                         if int(row[1]) == 1 and int(row[2]) == 5:
                             if int(row[0]) == user:
-                                data_210_couples_no_zeros[user][0][0] = float(row[6])       # accuracy_percentage
-                                data_210_couples_no_zeros[user][0][1] = float(row[7])       # precision_percentage
-                                data_210_couples_no_zeros[user][0][2] = float(row[8])       # recall_percentage
-                                data_210_couples_no_zeros[user][0][3] = float(row[9])      # train_time
+                                data_210_couples_no_zeros[user_counter][0][0] = float(row[6])       # accuracy_percentage
+                                data_210_couples_no_zeros[user_counter][0][1] = float(row[7])       # precision_percentage
+                                data_210_couples_no_zeros[user_counter][0][2] = float(row[8])       # recall_percentage
+                                data_210_couples_no_zeros[user_counter][0][3] = float(row[9])      # train_time
                                 list_theory_210_couple.append(row[10])                                  # theory
+        user_counter+=1
+
 
     user_counter = 0
     insert_counter = 0
-    final_accuracy_percentages = np.zeros((54, 3))
-    final_precision_percentages = np.zeros((54, 3))
-    final_recall_percentages = np.zeros((54, 3))
-    final_training_times = np.zeros((54, 3))
+    final_accuracy_percentages = np.zeros((44, 3))
+    final_precision_percentages = np.zeros((44, 3))
+    final_recall_percentages = np.zeros((44, 3))
+    final_training_times = np.zeros((44, 3))
     for user_matrix_45, user_matrix_105, user_matrix_210 in zip(data_45_couples_no_zeros, data_105_couples_no_zeros, data_210_couples_no_zeros):
         accuracy_percentages_45 = user_matrix_45[:, 0]
         precision_percentages_45 = user_matrix_45[:, 1]
