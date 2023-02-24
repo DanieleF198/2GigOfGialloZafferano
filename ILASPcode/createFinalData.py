@@ -14,36 +14,36 @@ if __name__ == "__main__":
         for max_p in max_p_list:
             for choice in choices:
                 if int(max_v) > 0 and int(max_p) > 0:
-                    items = ilasp.itemsFromFile("PCAexperiment/recipes5/recipes_max_v(" + str(max_v) + ")-max_p(" + str(max_p) + ").las")
-                    language_bias = ilasp.languageBiasFromFile("PCAexperiment/recipes5/recipes_max_v(" + str(max_v) + ")-max_p(" + str(max_p) + ").las")
+                    items = ilasp.itemsFromFile("Data8Component2Std/recipes/recipes_max_v(" + str(max_v) + ")-max_p(" + str(max_p) + ").las")
+                    language_bias = ilasp.languageBiasFromFile("Data8Component2Std/recipes/recipes_max_v(" + str(max_v) + ")-max_p(" + str(max_p) + ").las")
                 elif int(max_v) > 0 or int(max_p) > 0:
                     if int(max_v) > 0:
-                        items = ilasp.itemsFromFile("PCAexperiment/recipes5/recipes_max_v(" + str(max_v) + ")-max_p(default).las")
-                        language_bias = ilasp.languageBiasFromFile("PCAexperiment/recipes5/recipes_max_v(" + str(max_v) + ")-max_p(default).las")
+                        items = ilasp.itemsFromFile("Data8Component2Std/recipes/recipes_max_v(" + str(max_v) + ")-max_p(default).las")
+                        language_bias = ilasp.languageBiasFromFile("Data8Component2Std/recipes/recipes_max_v(" + str(max_v) + ")-max_p(default).las")
                     else:
-                        items = ilasp.itemsFromFile("PCAexperiment/recipes5/recipes_max_v(default)-max_p(" + str(max_p) +").las")
-                        language_bias = ilasp.languageBiasFromFile("PCAexperiment/recipes5/recipes_max_v(default)-max_p(" + str(max_p) +").las")
+                        items = ilasp.itemsFromFile("Data8Component2Std/recipes/recipes_max_v(default)-max_p(" + str(max_p) +").las")
+                        language_bias = ilasp.languageBiasFromFile("Data8Component2Std/recipes/recipes_max_v(default)-max_p(" + str(max_p) +").las")
                 else:
-                    items = ilasp.itemsFromFile("PCAexperiment/recipes5/recipes_max_v(default)-max_p(default).las")
-                    language_bias = ilasp.languageBiasFromFile("PCAexperiment/recipes5/recipes_max_v(default)-max_p(default).las")
+                    items = ilasp.itemsFromFile("Data8Component2Std/recipes/recipes_max_v(default)-max_p(default).las")
+                    language_bias = ilasp.languageBiasFromFile("Data8Component2Std/recipes/recipes_max_v(default)-max_p(default).las")
 
                 USERS = [str(i) for i in range(0,48)]
 
                 for USER in USERS:
                     if int(choice) == 0:
-                        output_train_data_dir = "./PCAexperiment/final5/users/no_zero/train/210Couples/User" + str(USER) + "/trainFiles/"
-                        output_test_data_dir = "./PCAexperiment/final5/users/no_zero/test/105Couples/User" + str(USER) + "/testFiles/"
-                        output_dir_for_train_data_dir = "./PCAexperiment/final5/users/no_zero/train/210Couples/User" + str(USER) + "/outputTrain/"
-                        output_dir_for_test_data_dir = "./PCAexperiment/final5/users/no_zero/test/105Couples/User" + str(USER) + "/outputTest/"
-                        preferences_train = ilasp.preferencesFromFileSpacesAndSign("PCAexperiment/users_new_version_second/no_zero/train/210Couples/user" + str(USER) + ".txt")
-                        preferences_test = ilasp.preferencesFromFileSpacesAndSign("PCAexperiment/users_new_version_second/no_zero/test/105Couples/user" + str(USER) + ".txt")
+                        output_train_data_dir = "./Data8Component2Std/final/users/no_zero/train/210Couples/User" + str(USER) + "/trainFiles/"
+                        output_test_data_dir = "./Data8Component2Std/final/users/no_zero/test/105Couples/User" + str(USER) + "/testFiles/"
+                        output_dir_for_train_data_dir = "./Data8Component2Std/final/users/no_zero/train/210Couples/User" + str(USER) + "/outputTrain/"
+                        output_dir_for_test_data_dir = "./Data8Component2Std/final/users/no_zero/test/105Couples/User" + str(USER) + "/outputTest/"
+                        preferences_train = ilasp.preferencesFromFileSpacesAndSign("Data8Component2Std/users_new_version_second/no_zero/train/210Couples/user" + str(USER) + ".txt")
+                        preferences_test = ilasp.preferencesFromFileSpacesAndSign("Data8Component2Std/users_new_version_second/no_zero/test/105Couples/user" + str(USER) + ".txt")
                     else:
-                        output_train_data_dir = "./PCAexperiment/final5/users/zero/train/210Couples/User" + str(USER) + "/trainFiles/"
-                        output_test_data_dir = "./PCAexperiment/final5/users/zero/test/105Couples/User" + str(USER) + "/testFiles/"
-                        output_dir_for_train_data_dir = "./PCAexperiment/final5/users/zero/train/210Couples/User" + str(USER) + "/outputTrain/"
-                        output_dir_for_test_data_dir = "./PCAexperiment/final5/users/zero/test/105Couples/User" + str(USER) + "/outputTest/"
-                        preferences_train = ilasp.preferencesFromFileSpacesAndSign("PCAexperiment/users_new_version_second/zero/train/210Couples/user" + str(USER) + ".txt")
-                        preferences_test = ilasp.preferencesFromFileSpacesAndSign("PCAexperiment/users_new_version_second/zero/test/105Couples/user" + str(USER) + ".txt")
+                        output_train_data_dir = "./Data8Component2Std/final/users/zero/train/210Couples/User" + str(USER) + "/trainFiles/"
+                        output_test_data_dir = "./Data8Component2Std/final/users/zero/test/105Couples/User" + str(USER) + "/testFiles/"
+                        output_dir_for_train_data_dir = "./Data8Component2Std/final/users/zero/train/210Couples/User" + str(USER) + "/outputTrain/"
+                        output_dir_for_test_data_dir = "./Data8Component2Std/final/users/zero/test/105Couples/User" + str(USER) + "/outputTest/"
+                        preferences_train = ilasp.preferencesFromFileSpacesAndSign("Data8Component2Std/users_new_version_second/zero/train/210Couples/user" + str(USER) + ".txt")
+                        preferences_test = ilasp.preferencesFromFileSpacesAndSign("Data8Component2Std/users_new_version_second/zero/test/105Couples/user" + str(USER) + ".txt")
 
                     if int(max_v) > 0 and int(max_p) > 0:
                         train_output_file = open(output_train_data_dir + "train_max-v(" + str(max_v) + ")-max_p(" + str(max_p) + ").las", "w+")
