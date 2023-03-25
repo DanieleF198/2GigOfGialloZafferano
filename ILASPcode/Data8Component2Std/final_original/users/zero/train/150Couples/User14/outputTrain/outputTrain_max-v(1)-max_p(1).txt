@@ -1,15 +1,15 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%% Pre-processing                          : 0.16s
-%% Hypothesis Space Generation             : 0.022s
-%% Conflict analysis                       : 8.904s
-%%   - Brave Orders                        : 8.904s
-%% Counterexample search                   : 4.089s
-%%   - CDOEs                               : 3.224s
-%%   - CDPIs                               : 0.876s
-%% Hypothesis Search                       : 18.292s
-%% Propagation                             : 24.837s
-%%   - CDOEs                               : 24.837s
-%% Total                                   : 56.591s
+%% Pre-processing                          : 0.096s
+%% Hypothesis Space Generation             : 0.016s
+%% Conflict analysis                       : 5.444s
+%%   - Brave Orders                        : 5.444s
+%% Counterexample search                   : 3.082s
+%%   - CDOEs                               : 2.4s
+%%   - CDPIs                               : 0.669s
+%% Hypothesis Search                       : 12.011s
+%% Propagation                             : 18.252s
+%%   - CDOEs                               : 18.252s
+%% Total                                   : 39.021s
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 :~ value(verdure_e_ortaggi,V1).[-V1@1, V1]
 

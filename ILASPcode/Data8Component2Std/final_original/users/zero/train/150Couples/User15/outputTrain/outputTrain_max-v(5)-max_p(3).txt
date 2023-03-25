@@ -1,0 +1,17 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Pre-processing                          : 0.094s
+%% Hypothesis Space Generation             : 0.358s
+%% Conflict analysis                       : 14.185s
+%%   - Brave Orders                        : 14.184s
+%% Counterexample search                   : 2.545s
+%%   - CDOEs                               : 2.031s
+%%   - CDPIs                               : 0.525s
+%% Hypothesis Search                       : 657.009s
+%% Propagation                             : 38.313s
+%%   - CDOEs                               : 38.313s
+%% Total                                   : 712.898s
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+:~ value(uova,V1).[-V1@1, V1]
+:~ category(3).[1@3]
+:~ value(verdure_e_ortaggi,V1), category(4).[-1@2, V1]
+
