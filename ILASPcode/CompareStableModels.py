@@ -190,12 +190,12 @@ def compare_cm_grid(i1, i2, sign, weak_constraints, treshold_value, factors_comb
                               "cottura_a_vapore": 5.0,
                               "stufato": 5.0}
 
-    for i, penalty_score in enumerate(m1_cost):   # note that the vector codification made by clingo is [5, 4, 3, 2, 1] while yours factors have following order [1, 2, 3, 4, 5]
+    for i, penalty_score in enumerate(m1_cost):   # note that the vector codification made by clingo is [5, 4, 3, 2, 1] while yours is [1, 2, 3, 4, 5]
         if "category" in list_weak_constraint[len(list_weak_constraint)-i-1] and not ("V1@" in list_weak_constraint[len(list_weak_constraint)-i-1]):
             m1_cost[i] = float(m1_cost[i]) * factors_combination[len(list_weak_constraint)-i-1]
             # print("category")
         elif "prepTime" in list_weak_constraint[len(list_weak_constraint)-i-1] and "V1@" in list_weak_constraint[len(list_weak_constraint)-i-1]:
-            m1_cost[i] = (m1_cost[i] / 280) * factors_combination[len(list_weak_constraint)-i-1]
+            m1_cost[i] = (m1_cost[i] / 280)  * factors_combination[len(list_weak_constraint)-i-1]
             # print("prepTime")
         elif "void" in list_weak_constraint[len(list_weak_constraint)-i-1]:
             m1_cost[i] = float(m1_cost[i])
@@ -215,7 +215,7 @@ def compare_cm_grid(i1, i2, sign, weak_constraints, treshold_value, factors_comb
                     bypass = True
             # print("others")
 
-    for i, penalty_score in enumerate(m2_cost):   # note that the vector codification made by clingo is [5, 4, 3, 2, 1] while yours factors have following order [1, 2, 3, 4, 5]
+    for i, penalty_score in enumerate(m2_cost):   # note that the vector codification made by clingo is [5, 4, 3, 2, 1] while yours is [1, 2, 3, 4, 5]
         if "category" in list_weak_constraint[len(list_weak_constraint)-i-1] and not ("V1@" in list_weak_constraint[len(list_weak_constraint)-i-1]):
             m2_cost[i] = float(m2_cost[i]) * factors_combination[len(list_weak_constraint)-i-1]
             # print("category")

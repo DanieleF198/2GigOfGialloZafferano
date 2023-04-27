@@ -6,23 +6,23 @@ import pandas as pd
 
 choices = [0, 1]
 users = [i for i in range(0, 54)]
-data_45_couples_no_zeros = np.zeros((44, 1, 4), dtype='float32')
-data_105_couples_no_zeros = np.zeros((44, 1, 4), dtype='float32')
-data_210_couples_no_zeros = np.zeros((44, 1, 4), dtype='float32')
+data_45_couples_no_zeros = np.zeros((54, 1, 4), dtype='float32')
+data_105_couples_no_zeros = np.zeros((54, 1, 4), dtype='float32')
+data_210_couples_no_zeros = np.zeros((54, 1, 4), dtype='float32')
 list_theory_45_couple = []
 list_theory_105_couple = []
 list_theory_210_couple = []
 for choice in choices:
     if choice == 1:
-        path = './Data8Component2Std/testOutput/results_zero_founded_parameters.csv'
+        path = './Data8Component2Std/testOutput_original/results_zero_founded_parameters.csv'
     else:
         continue
         # temporally
         # path = './Data8Component2Std/testOutput/results_no_zero.csv'
     user_counter = 0
     for user in users:
-        if user in [15, 3, 32, 7, 36, 4, 20, 29, 14, 11]:
-            continue
+        # if user in [15, 3, 32, 7, 36, 4, 20, 29, 14, 11]:
+        #     continue
         parameter_base = 0
         test_not_inserted = True
         with open(path, newline='\n') as csvFile:
@@ -60,10 +60,10 @@ for choice in choices:
 
     user_counter = 0
     insert_counter = 0
-    final_accuracy_percentages = np.zeros((44, 3))
-    final_precision_percentages = np.zeros((44, 3))
-    final_recall_percentages = np.zeros((44, 3))
-    final_training_times = np.zeros((44, 3))
+    final_accuracy_percentages = np.zeros((54, 3))
+    final_precision_percentages = np.zeros((54, 3))
+    final_recall_percentages = np.zeros((54, 3))
+    final_training_times = np.zeros((54, 3))
     for user_matrix_45, user_matrix_105, user_matrix_210 in zip(data_45_couples_no_zeros, data_105_couples_no_zeros, data_210_couples_no_zeros):
         accuracy_percentages_45 = user_matrix_45[:, 0]
         precision_percentages_45 = user_matrix_45[:, 1]

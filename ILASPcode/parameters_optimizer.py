@@ -175,8 +175,6 @@ for COUPLE in COUPLES:
     for max_v in max_v_list:
         for max_p in max_p_list:
             for USER in USERS:
-                if COUPLE == 210:
-                    break
                 if COUPLE == 45:
                     if max_v != 1 or max_p != 4:
                         continue
@@ -207,7 +205,6 @@ for COUPLE in COUPLES:
                 else:
                     items = ilasp.itemsFromFile("Data8Component2Std/recipes/recipes_max_v(default)-max_p(default).las")
                     language_bias = ilasp.languageBiasFromFile("Data8Component2Std/recipes/recipes_max_v(default)-max_p(default).las")
-                preferences_train = ilasp.preferencesFromFileSpacesAndSign("Data8Component2Std/users_new_version_second/no_zero/train/210Couples/user" + str(USER) + ".txt")
                 output_train_data_dir = "./Data8Component2Std/users_new_version_second/zero/train/" + str(COUPLE) + "Couples/"
                 output_dir_for_train_data_dir = "./Data8Component2Std/final/users/zero/train/" + str(COUPLE) + "Couples/User" + str(USER) + "/outputTrain/"
                 for filename in os.listdir(output_dir_for_train_data_dir):
@@ -225,6 +222,8 @@ for COUPLE in COUPLES:
                     else:
                         if int(max_v_theory) != 1 or int(max_p_theory) != 5:
                             continue
+                    # if int(max_v_theory) != 3 or int(max_p_theory) != 5:
+                    #     continue
                     f_train = os.path.join(output_dir_for_train_data_dir, filename)
                     f_train_data = os.path.join(output_train_data_dir, 'user' + str(USER) + ".txt")
                     F_TRAIN = open(f_train)
@@ -242,18 +241,13 @@ for COUPLE in COUPLES:
                                 theory += line + "\n"
                     break
 
-                # DEFINE VARIABLES
-                if COUPLE == 45:
-                    n = 10
-                elif COUPLE == 105:
-                    n = 15
-                else:
-                    n = 20
                 theory_entries = theory.split("\n")
                 theory_entries.pop()
                 list_of_item = []
+                list_of_couple = []
                 y = np.zeros(len(train_set), dtype='int')
                 for index, couple in enumerate(train_set):
+                    list_of_couple.append([couple[0], couple[1]])
                     for element in couple:
                         if element == '>':
                             y[index] = 1
@@ -266,31 +260,74 @@ for COUPLE in COUPLES:
                                 continue
                             else:
                                 list_of_item.append(element)
-                recipes_indexes = np.zeros(n, dtype="int")
+                recipes_indexes = np.zeros(len(list_of_item), dtype="int")
+                couple_indexes = np.zeros((len(list_of_couple), 2), dtype="int")
                 for index, item in enumerate(list_of_item):
                     recipes_indexes[index] = int(item.split('m')[1])
+                for index, couple in enumerate(list_of_couple):
+                    for ii in range(2):
+                        couple_indexes[index, ii] = int(couple[ii].split('m')[1])
                 # note: for my own comfort vector of weight is encoded as [1, 2, 3, 4, 5] but remember that clingo reverse the order, and so encode [5, 4, 3, 2, 1]
-                X = np.zeros((n, max_p), dtype="float32")   # note: respect to the definition in formulation, here i memorize directly (x[i, j]*p[j])/n[j]
-                for i in range(0, n):
+                X = np.zeros((len(list_of_item), max_p), dtype="float32")   # note: respect to the definition in formulation, here i memorize directly (x[i, j]*p[j])/n[j]
+                for i in range(0, len(list_of_item)):
                     item = items[list_of_item[i]]
                     for j in range(0, len(theory_entries)):
-                        first_split = theory_entries[j].split('(')[1]
-                        second_literal = ""
-                        if " " in first_split[0:len(first_split)-4]:
-                            literal = first_split.split(',')[0]
-                            second_literal = first_split.split('), ')[1]
-                            second_split = theory_entries[j].split('[')[1]
+                        if theory_entries[j].count("), ") > 1:
+                            print("ERROR: there is a weack constraint with more than 2 literals inside")    # I've already checked manually, but i'll insert this if to prevent and handle this kind of error.
+                            quit()
+                        if ("category" in theory_entries[j]) and ("), " not in theory_entries[j]):  # there's only category literal
+                            literal = theory_entries[j].split(".")[0][3:]
+                            second_literal = ""
+                            first_split = theory_entries[j].split(".")[1]
+                            weight = first_split.split('@')[0]
+                            level = first_split.split('@')[1]
+                            weight = weight[1:]
+                            level = int(level[0:len(level)-1])
+                        elif("category" in theory_entries[j]) and ("), " in theory_entries[j]): # there's category literal but is not alone
+                            first_part = theory_entries[j].split("), ")[0]
+                            second_part = theory_entries[j].split("), ")[1]
+                            if "category" in first_part:
+                                literal = first_part + ")"
+                                literal = literal[3:]
+                                second_literal_temp = second_part.split("(")[1]
+                                second_literal = second_literal_temp.split(",")[0]
+                                first_split = second_part.split("[")[1]
+                                second_split = first_split.split(',')[0]
+                                if "]" in second_split:
+                                    second_split = second_split[0:len(second_split) - 1]
+                                weight = second_split.split('@')[0]
+                                level = int(second_split.split('@')[1])
+                                temp_value = literal
+                                literal = second_literal
+                                second_literal = temp_value
+                            else:
+                                second_literal = second_part.split(".")[0]
+                                literal_temp = first_part.split("(")[1]
+                                literal = literal_temp.split(",")[0]
+                                first_split = second_part.split("[")[1]
+                                second_split = first_split.split(',')[0]
+                                if "]" in second_split:
+                                    second_split = second_split[0:len(third_split) - 1]
+                                weight = second_split.split('@')[0]
+                                level = int(second_split.split('@')[1])
                         else:
-                            literal = first_split.split(',')[0]   # NOTE: max_v = 1, so we have at most 1 literal
-                            second_split = first_split.split('[')[1]
-                        third_split = second_split.split(',')[0]
-                        if "]" in third_split:
-                            third_split = third_split[0:len(third_split)-1]
-                        weigth = third_split.split('@')[0]
-                        level = int(third_split.split('@')[1])
-                        if literal in item or second_literal in item:
-                            if "V" in weigth:
-                                if "-" in weigth:
+                            first_split = theory_entries[j].split('(')[1]
+                            second_literal = ""
+                            if " " in first_split[0:len(first_split)-4]:
+                                literal = first_split.split(',')[0]
+                                second_literal = first_split.split('), ')[1]
+                                second_split = theory_entries[j].split('[')[1]
+                            else:
+                                literal = first_split.split(',')[0]   # NOTE: max_v = 1, so we have at most 1 literal
+                                second_split = first_split.split('[')[1]
+                            third_split = second_split.split(',')[0]
+                            if "]" in third_split:
+                                third_split = third_split[0:len(third_split)-1]
+                            weight = third_split.split('@')[0]
+                            level = int(third_split.split('@')[1])
+                        if literal in item and second_literal in item:
+                            if "V" in weight:
+                                if "-" in weight:
                                     if literal in macro_ingredients_dictionary:
                                         X[i, level-1] = -(all_data[recipes_indexes[i], 4 + macro_ingredients_dictionary[literal]])/macro_ingredients_norm_dictionary[literal]
                                     elif literal in preparation_dictionary:
@@ -315,22 +352,22 @@ for COUPLE in COUPLES:
                             else:
                                 if second_literal != "":
                                     if second_literal in macro_ingredients_dictionary:
-                                        X[i, level - 1] = (int(weigth))/macro_ingredients_norm_dictionary[literal]
+                                        X[i, level - 1] = (int(weight))/macro_ingredients_norm_dictionary[literal]
                                     elif second_literal in preparation_dictionary:
-                                        X[i, level - 1] = (int(weigth)) / preparation_norm_dictionary[literal]
+                                        X[i, level - 1] = (int(weight)) / preparation_norm_dictionary[literal]
                                     elif second_literal == "prepTime":
-                                        X[i, level - 1] = (int(weigth)) / 280
+                                        X[i, level - 1] = (int(weight)) / 280
                                     else:
-                                        X[i, level - 1] = int(weigth)
+                                        X[i, level - 1] = int(weight)
                                 elif literal in item:   # this double check is caused because "" is always in items
                                     if literal in macro_ingredients_dictionary:
-                                        X[i, level - 1] = (int(weigth)) / macro_ingredients_norm_dictionary[literal]
+                                        X[i, level - 1] = (int(weight)) / macro_ingredients_norm_dictionary[literal]
                                     elif literal in preparation_dictionary:
-                                        X[i, level - 1] = (int(weigth)) / preparation_norm_dictionary[literal]
+                                        X[i, level - 1] = (int(weight)) / preparation_norm_dictionary[literal]
                                     elif literal == "prepTime":
-                                        X[i, level - 1] = (int(weigth)) / 280
+                                        X[i, level - 1] = (int(weight)) / 280
                                     else:
-                                        X[i, level - 1] = int(weigth)
+                                        X[i, level - 1] = int(weight)
 
 
                 # DEFINE GUROBI MODEL
@@ -340,10 +377,12 @@ for COUPLE in COUPLES:
                     l = 190
                 else:
                     l = COUPLE
+                if COUPLE == 150:
+                    l = len(couple_indexes)
                 gb_model = gb.Model()
                 z = gb_model.addVars(max_p, vtype=gb.GRB.CONTINUOUS, lb=0.0, ub=1.0, name='z')
                 t = gb_model.addVar(vtype=gb.GRB.CONTINUOUS, lb=0.0, ub=1.0, name='t')
-                q = gb_model.addVars(n, vtype=gb.GRB.CONTINUOUS, name='q', lb=-gb.GRB.INFINITY)
+                q = gb_model.addVars(len(list_of_item), vtype=gb.GRB.CONTINUOUS, name='q', lb=-gb.GRB.INFINITY)
                 s = gb_model.addVars(l, vtype=gb.GRB.BINARY, name='s')
                 gb_model.update()
                 gb_model.write('./Lp_files/model.lp')
@@ -353,7 +392,12 @@ for COUPLE in COUPLES:
                 # b2[l] = q[l1] < q[l2] - t ? 1 : 0
                 # v[l] = b1[l] - b2[l]
 
-                # note that b1[l] and b2[l] exclude themselves
+                # note that b1[l] and b2[l] exclude themselves  (t could be equal to 0)
+                #                   ----------[q[l2]-t----------q[l2]----------q[l2]+t]----------
+                #   b1[l]=1     =>                                                    (--q[l1]---
+                #   b2[l]=1     =>  ---q[l1]--)
+                #   b1/2[l] = 0 =>            [-----------------q[l1]-----------------]
+                #   b1/2[l] = 1 =>                            impossible
 
                 # 3 cases:  b1[l] |   b2[l]
                 #            0         0   [case in which classification return 0]
@@ -363,8 +407,9 @@ for COUPLE in COUPLES:
 
                 # if q[l1] > q[l2] + t then b1[l] = 1 and b2[l] = 0, so v[l] = 1 - 0 = 1
                 # if q[l1] < q[l2] - t then b1[l] = 0 and b2[l] = 1, so v[l] = 0 - 1 = -1
-                # if q[l2] - t <= q[l1] <= q[l2] + t  then b1[l] = 0 and b2[l] = 0 and so v[l] = 0 - 0 = 0
+                # if q[l2] - t <= q[l1] <= q[l2] + t then b1[l] = 0 and b2[l] = 0 and so v[l] = 0 - 0 = 0
                 # there aren't other cases, and v[l] get values correctly respect his definition
+                # finally, I use this gurobi guide for constraint definition: https://support.gurobi.com/hc/en-us/articles/4414392016529-How-do-I-model-conditional-statements-in-Gurobi-
 
 
                 b1 = gb_model.addVars(l, vtype=gb.GRB.BINARY, name='b1')
@@ -386,7 +431,7 @@ for COUPLE in COUPLES:
                 gb_model.addConstr(z[0] >= 0)
                 gb_model.update()
                 gb_model.write('./Lp_files/model.lp')
-                for i in range(n):
+                for i in range(len(list_of_item)):
                     gb_model.addConstr(q[i] == gb.quicksum(X[i, j] * z[j] for j in range(max_p)))     # (3)
                 gb_model.update()
                 gb_model.write('./Lp_files/model.lp')
@@ -395,18 +440,27 @@ for COUPLE in COUPLES:
                 M = 100
                 for l1, recipe1 in enumerate(recipes_indexes):
                     for l2, recipe2 in enumerate(recipes_indexes):
-                        if l2 <= l1:
-                            continue
-                        gb_model.addConstr(q[l1] >= q[l2] + t + eps - M * (1 - z1[couple_counter]))
-                        gb_model.addConstr(q[l1] <= q[l2] + t + M * z1[couple_counter])
-                        gb_model.addConstr(q[l1] <= q[l2] - t - eps + M * (1 - z2[couple_counter]))   # - eps
-                        gb_model.addConstr(q[l1] >= q[l2] - t - M * z2[couple_counter])
-                        gb_model.addConstr(z1[couple_counter] + z2[couple_counter] <= 1)
-                        gb_model.addGenConstrIndicator(z1[couple_counter], True, b1[couple_counter] == 1)
-                        gb_model.addGenConstrIndicator(z1[couple_counter], False, b1[couple_counter] == 0)
-                        gb_model.addGenConstrIndicator(z2[couple_counter], True, b2[couple_counter] == 1)
-                        gb_model.addGenConstrIndicator(z2[couple_counter], False, b2[couple_counter] == 0)
-                        couple_counter += 1
+                        if COUPLE == 150:
+                            if [recipe1, recipe2] in couple_indexes.tolist():
+                                gb_model.addConstr(q[l1] >= q[l2] + t + eps - M * (1 - z1[couple_counter]))
+                                gb_model.addConstr(q[l1] <= q[l2] + t + M * z1[couple_counter])
+                                gb_model.addConstr(q[l1] <= q[l2] - t - eps + M * (1 - z2[couple_counter]))   # - eps
+                                gb_model.addConstr(q[l1] >= q[l2] - t - M * z2[couple_counter])
+                                gb_model.addConstr(z1[couple_counter] + z2[couple_counter] <= 1)
+                                gb_model.addConstr(b1[couple_counter] == z1[couple_counter])
+                                gb_model.addConstr(b2[couple_counter] == z2[couple_counter])
+                                couple_counter += 1
+                        else:
+                            if l2 <= l1:
+                                continue
+                            gb_model.addConstr(q[l1] >= q[l2] + t + eps - M * (1 - z1[couple_counter]))
+                            gb_model.addConstr(q[l1] <= q[l2] + t + M * z1[couple_counter])
+                            gb_model.addConstr(q[l1] <= q[l2] - t - eps + M * (1 - z2[couple_counter]))   # - eps
+                            gb_model.addConstr(q[l1] >= q[l2] - t - M * z2[couple_counter])
+                            gb_model.addConstr(z1[couple_counter] + z2[couple_counter] <= 1)
+                            gb_model.addConstr(b1[couple_counter] == z1[couple_counter])
+                            gb_model.addConstr(b2[couple_counter] == z2[couple_counter])
+                            couple_counter += 1
                 gb_model.update()
                 gb_model.write('./Lp_files/model.lp')
                 gb_model.addConstrs(v[couple_number] == b1[couple_number] - b2[couple_number] for couple_number in range(l))     # (4)
@@ -416,10 +470,15 @@ for COUPLE in COUPLES:
                 couple_counter = 0
                 for l1, recipe1 in enumerate(recipes_indexes):
                     for l2, recipe2 in enumerate(recipes_indexes):
-                        if l2 <= l1:
-                            continue
-                        gb_model.addGenConstrIndicator(s[couple_counter], True, v[couple_counter] == y[couple_counter])
-                        couple_counter += 1
+                        if COUPLE == 150:
+                            if [recipe1, recipe2] in couple_indexes.tolist():
+                                gb_model.addGenConstrIndicator(s[couple_counter], True, v[couple_counter] == y[couple_counter])
+                                couple_counter += 1
+                        else:
+                            if l2 <= l1:
+                                continue
+                            gb_model.addGenConstrIndicator(s[couple_counter], True, v[couple_counter] == y[couple_counter])
+                            couple_counter += 1
                 gb_model.update()
                 gb_model.write('./Lp_files/model.lp')
 

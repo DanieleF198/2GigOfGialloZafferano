@@ -83,6 +83,16 @@ def preferencesToBraveOrderings(preferences):
 
     return output
 
+def preferencesToBraveOrderingsSign(preferences):
+    output = ""
+    i = 0
+
+    for preference in preferences:
+        output = output + "#brave_ordering(o{}@1,{},{},{}).\n".format(i, preferences[i][0],preferences[i][1],preferences[i][2])
+        i = i+1
+
+    return output
+
 # ------- TRAIN AND TEST: ------- 
 def train(theory_path,options=""):
     ilasp = subprocess.run("ILASP --version=4 {} --quiet {}".format(options,theory_path), stdout=subprocess.PIPE, shell=True)

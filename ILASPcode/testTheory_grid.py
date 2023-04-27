@@ -81,7 +81,7 @@ def work(process_number):
         if choice == 0:
             if grid_search:
                 if process_number == 999:
-                    path = './Data8Component2Std/testOutput/results_no_zero_after_opt.csv'
+                    path = './Data8Component2Std/testOutput/results_no_zero_after_opt(training)~without2ndConstraint.csv'
                 else:
                     path = './Data8Component2Std/testOutput/results_no_zero_grid_search_process' + str(process_number) + '.csv'
             else:
@@ -89,7 +89,7 @@ def work(process_number):
         else:
             if grid_search:
                 if process_number == 999:
-                    path = './Data8Component2Std/testOutput/results_zero_after_opt.csv'
+                    path = './Data8Component2Std/testOutput/results_zero_after_opt(training)~without2ndConstraint.csv'
                 else:
                     path = './Data8Component2Std/testOutput/results_zero_grid_search' + str(process_number) + '.csv'
             else:
@@ -134,8 +134,8 @@ def work(process_number):
                         end_index_max_v_max_p = filename.find(").txt")
                         max_v = int(filename[start_index_max_v_max_p:first_middle_index_max_v_max_p])
                         max_p = int(filename[second_middle_index_max_v_max_p:end_index_max_v_max_p])
-                        if int(max_v) == 10 or int(max_p) == 10:
-                            continue
+                        # if int(max_v) == 10 or int(max_p) == 10:
+                        #     continue
                         # if int(max_v) != int(max_p):
                         #     continue
                         if COUPLE == 45:
@@ -143,6 +143,9 @@ def work(process_number):
                                 continue
                         else:
                             if max_v != 1 or max_p != 5:
+                                continue
+                        if COUPLE == 150:
+                            if max_v != 3 or max_p != 5:
                                 continue
                         if int(max_v) > 0 and int(max_p) > 0:
                             items = ilasp.itemsFromFile("Data8Component2Std/recipes/recipes_max_v(" + str(max_v) + ")-max_p(" + str(max_p) + ").las")
@@ -168,9 +171,12 @@ def work(process_number):
                         F_TRAIN.close()
                         # train_set = ilasp.preferencesFromFileSpaces(f_train_data)
                         train_set = ilasp.preferencesFromFileSpacesAndSign(f_train_data)
-                        test_set = ilasp.preferencesFromFileSign(f_test)
+                        # test_set = ilasp.preferencesFromFileSign(f_test)
+                        test_set = ilasp.preferencesFromFileSpacesAndSign(f_train_data)
+
                         train_size = len(train_set)
                         test_size = len(test_set)
+
                         if grid_search:
                             wc_counter = 0
                             if ':~' not in data_train:
@@ -189,15 +195,18 @@ def work(process_number):
                                         training_time += line[start_index+2:end_index]
                                 if wc_counter == 1:
                                     if process_number == 999:
+                                        if COUPLE == 150:
+                                            results = ilasp.test_cm_grid(theory, items, test_set, 0.001121, [0.247746, 0.207977, 0.191326, 0.164781, 0.18817])
+                                            f_output.write(str(USER) + ";" + str(max_v) + ";" + str(max_p) + ";3;" + str(train_size) + ";" + str(test_size) + ";" + str(results["avg_accuracy"]) + ";" + str(results["avg_precision"]) + ";" + str(results["avg_recall"]) + ";" + str(training_time) + ";" + theory.replace("\n", "") + ";0.001121;" + str(float(wc_counter)) + ";0.247746;0.207977;0.191326;0.164781;0.18817\n")
                                         if COUPLE == 45:
-                                            results = ilasp.test_cm_grid(theory, items, test_set, 0.001275, [0.077795, 0.162525, 0.285251, 0.474429, 0.0]) # cases where there are 1 weak constraint but maxp is setted to 5 (in this case the missing weak constraint could be of any level)
-                                            f_output.write(str(USER) + ";" + str(max_v) + ";" + str(max_p) + ";3;" + str(train_size) + ";" + str(test_size) + ";" + str(results["avg_accuracy"]) + ";" + str(results["avg_precision"]) + ";" + str(results["avg_recall"]) + ";" + str(training_time) + ";" + theory.replace("\n", "") + ";0.001275;" + str(float(wc_counter)) + ";0.077795;0.162525;0.285251;0.474429;0.0\n")
+                                            results = ilasp.test_cm_grid(theory, items, test_set, 0.001674, [0.146598, 0.17019, 0.278311, 0.404901, 0.0]) # cases where there are 1 weak constraint but maxp is setted to 5 (in this case the missing weak constraint could be of any level)
+                                            f_output.write(str(USER) + ";" + str(max_v) + ";" + str(max_p) + ";3;" + str(train_size) + ";" + str(test_size) + ";" + str(results["avg_accuracy"]) + ";" + str(results["avg_precision"]) + ";" + str(results["avg_recall"]) + ";" + str(training_time) + ";" + theory.replace("\n", "") + ";0.001674;" + str(float(wc_counter)) + ";0.146598;0.17019;0.278311;0.404901;0.0\n")
                                         if COUPLE == 105:
-                                            results = ilasp.test_cm_grid(theory, items, test_set, 0.003006, [0.072401, 0.105771, 0.15755, 0.264914, 0.399364])  # cases where there are 1 weak constraint but maxp is setted to 5 (in this case the missing weak constraint could be of any level)
-                                            f_output.write(str(USER) + ";" + str(max_v) + ";" + str(max_p) + ";3;" + str(train_size) + ";" + str(test_size) + ";" + str(results["avg_accuracy"]) + ";" + str(results["avg_precision"]) + ";" + str(results["avg_recall"]) + ";" + str(training_time) + ";" + theory.replace("\n", "") + ";0.003006;" + str(float(wc_counter)) + ";0.072401;0.105771;0.15755;0.264914;0.399364\n")
+                                            results = ilasp.test_cm_grid(theory, items, test_set, 0.000804, [0.095697, 0.118528, 0.213800, 0.288997, 0.289790])  # cases where there are 1 weak constraint but maxp is setted to 5 (in this case the missing weak constraint could be of any level)
+                                            f_output.write(str(USER) + ";" + str(max_v) + ";" + str(max_p) + ";3;" + str(train_size) + ";" + str(test_size) + ";" + str(results["avg_accuracy"]) + ";" + str(results["avg_precision"]) + ";" + str(results["avg_recall"]) + ";" + str(training_time) + ";" + theory.replace("\n", "") + ";0.000804;" + str(float(wc_counter)) + ";0.095697;0.118528;0.213800;0.288997;0.289790\n")
                                         elif COUPLE == 210:
-                                            results = ilasp.test_cm_grid(theory, items, test_set, 0.002522, [0.075826, 0.136272, 0.184249, 0.265232, 0.338421])  # cases where there are 1 weak constraint but maxp is setted to 5 (in this case the missing weak constraint could be of any level)
-                                            f_output.write(str(USER) + ";" + str(max_v) + ";" + str(max_p) + ";3;" + str(train_size) + ";" + str(test_size) + ";" + str(results["avg_accuracy"]) + ";" + str(results["avg_precision"]) + ";" + str(results["avg_recall"]) + ";" + str(training_time) + ";" + theory.replace("\n", "") + ";0.002522;" + str(float(wc_counter)) + ";0.075826;0.136272;0.184249;0.265232;0.338421\n")
+                                            results = ilasp.test_cm_grid(theory, items, test_set, 0.001132, [0.100688, 0.155456, 0.218262, 0.226039, 0.299556])  # cases where there are 1 weak constraint but maxp is setted to 5 (in this case the missing weak constraint could be of any level)
+                                            f_output.write(str(USER) + ";" + str(max_v) + ";" + str(max_p) + ";3;" + str(train_size) + ";" + str(test_size) + ";" + str(results["avg_accuracy"]) + ";" + str(results["avg_precision"]) + ";" + str(results["avg_recall"]) + ";" + str(training_time) + ";" + theory.replace("\n", "") + ";0.001132;" + str(float(wc_counter)) + ";0.100688;0.155456;0.218262;0.226039;0.299556\n")
                                         break
                                     for treshold_value in treshold_values:
                                         for factors_combination in factors_combinations_case_1:
@@ -205,15 +214,18 @@ def work(process_number):
                                             f_output.write(str(USER) + ";" + str(max_v) + ";" + str(max_p) + ";3;" + str(train_size) + ";" + str(test_size) + ";" + str(results["avg_accuracy"]) + ";" + str(results["avg_precision"]) + ";" + str(results["avg_recall"]) + ";" + str(training_time) + ";" + theory.replace("\n", "") + ";" + str(treshold_value) + ";" + str(float(wc_counter)) + ";" + str(factors_combination[0]) + ";" + str(factors_combination[1]) + ";" + str(factors_combination[2]) + ";" + str(factors_combination[3]) + ";" + str(factors_combination[4]) + "\n")
                                 if wc_counter == 2:
                                     if process_number == 999:
+                                        if COUPLE == 150:
+                                            results = ilasp.test_cm_grid(theory, items, test_set, 0.001121, [0.247746, 0.207977, 0.191326, 0.164781, 0.18817])
+                                            f_output.write(str(USER) + ";" + str(max_v) + ";" + str(max_p) + ";3;" + str(train_size) + ";" + str(test_size) + ";" + str(results["avg_accuracy"]) + ";" + str(results["avg_precision"]) + ";" + str(results["avg_recall"]) + ";" + str(training_time) + ";" + theory.replace("\n", "") + ";0.001121;" + str(float(wc_counter)) + ";0.247746;0.207977;0.191326;0.164781;0.18817\n")
                                         if COUPLE == 45:
-                                            results = ilasp.test_cm_grid(theory, items, test_set, 0.001275, [0.077795, 0.162525, 0.285251, 0.474429, 0.0]) # cases where there are 2 weak constraint but maxp is setted to 5 (in this case the missing weak constraint could be of any level)
-                                            f_output.write(str(USER) + ";" + str(max_v) + ";" + str(max_p) + ";3;" + str(train_size) + ";" + str(test_size) + ";" + str(results["avg_accuracy"]) + ";" + str(results["avg_precision"]) + ";" + str(results["avg_recall"]) + ";" + str(training_time) + ";" + theory.replace("\n", "") + ";0.001275;" + str(float(wc_counter)) + ";0.077795;0.162525;0.285251;0.474429;0.0\n")
+                                            results = ilasp.test_cm_grid(theory, items, test_set, 0.001674, [0.146598, 0.17019, 0.278311, 0.404901, 0.0]) # cases where there are 2 weak constraint but maxp is setted to 5 (in this case the missing weak constraint could be of any level)
+                                            f_output.write(str(USER) + ";" + str(max_v) + ";" + str(max_p) + ";3;" + str(train_size) + ";" + str(test_size) + ";" + str(results["avg_accuracy"]) + ";" + str(results["avg_precision"]) + ";" + str(results["avg_recall"]) + ";" + str(training_time) + ";" + theory.replace("\n", "") + ";0.001674;" + str(float(wc_counter)) + ";0.146598;0.17019;0.278311;0.404901;0.0\n")
                                         if COUPLE == 105:
-                                            results = ilasp.test_cm_grid(theory, items, test_set, 0.003006, [0.072401, 0.105771, 0.15755, 0.264914, 0.399364])  # cases where there are 2 weak constraint but maxp is setted to 5 (in this case the missing weak constraint could be of any level)
-                                            f_output.write(str(USER) + ";" + str(max_v) + ";" + str(max_p) + ";3;" + str(train_size) + ";" + str(test_size) + ";" + str(results["avg_accuracy"]) + ";" + str(results["avg_precision"]) + ";" + str(results["avg_recall"]) + ";" + str(training_time) + ";" + theory.replace("\n", "") + ";0.003006;" + str(float(wc_counter)) + ";0.072401;0.105771;0.15755;0.264914;0.399364\n")
+                                            results = ilasp.test_cm_grid(theory, items, test_set, 0.000804, [0.095697, 0.118528, 0.213800, 0.288997, 0.289790])  # cases where there are 2 weak constraint but maxp is setted to 5 (in this case the missing weak constraint could be of any level)
+                                            f_output.write(str(USER) + ";" + str(max_v) + ";" + str(max_p) + ";3;" + str(train_size) + ";" + str(test_size) + ";" + str(results["avg_accuracy"]) + ";" + str(results["avg_precision"]) + ";" + str(results["avg_recall"]) + ";" + str(training_time) + ";" + theory.replace("\n", "") + ";0.000804;" + str(float(wc_counter)) + ";0.095697;0.118528;0.213800;0.288997;0.289790\n")
                                         elif COUPLE == 210:
-                                            results = ilasp.test_cm_grid(theory, items, test_set, 0.002522, [0.075826, 0.136272, 0.184249, 0.265232, 0.338421])  # cases where there are 2 weak constraint but maxp is setted to 5 (in this case the missing weak constraint could be of any level)
-                                            f_output.write(str(USER) + ";" + str(max_v) + ";" + str(max_p) + ";3;" + str(train_size) + ";" + str(test_size) + ";" + str(results["avg_accuracy"]) + ";" + str(results["avg_precision"]) + ";" + str(results["avg_recall"]) + ";" + str(training_time) + ";" + theory.replace("\n", "") + ";0.002522;" + str(float(wc_counter)) + ";0.075826;0.136272;0.184249;0.265232;0.338421\n")
+                                            results = ilasp.test_cm_grid(theory, items, test_set, 0.001132, [0.100688, 0.155456, 0.218262, 0.226039, 0.299556])  # cases where there are 2 weak constraint but maxp is setted to 5 (in this case the missing weak constraint could be of any level)
+                                            f_output.write(str(USER) + ";" + str(max_v) + ";" + str(max_p) + ";3;" + str(train_size) + ";" + str(test_size) + ";" + str(results["avg_accuracy"]) + ";" + str(results["avg_precision"]) + ";" + str(results["avg_recall"]) + ";" + str(training_time) + ";" + theory.replace("\n", "") + ";0.001132;" + str(float(wc_counter)) + ";0.100688;0.155456;0.218262;0.226039;0.299556\n")
                                         break
                                     for treshold_value in treshold_values:
                                         for factors_combination in factors_combinations_case_2:
@@ -221,15 +233,18 @@ def work(process_number):
                                             f_output.write(str(USER) + ";" + str(max_v) + ";" + str(max_p) + ";3;" + str(train_size) + ";" + str(test_size) + ";" + str(results["avg_accuracy"]) + ";" + str(results["avg_precision"]) + ";" + str(results["avg_recall"]) + ";" + str(training_time) + ";" + theory.replace("\n", "") + ";" + str(treshold_value) + ";" + str(float(wc_counter)) + ";" + str(factors_combination[0]) + ";" + str(factors_combination[1]) + ";" + str(factors_combination[2]) + ";" + str(factors_combination[3]) + ";" + str(factors_combination[4]) + "\n")
                                 if wc_counter == 3:
                                     if process_number == 999:
+                                        if COUPLE == 150:
+                                            results = ilasp.test_cm_grid(theory, items, test_set, 0.001121, [0.247746, 0.207977, 0.191326, 0.164781, 0.18817])
+                                            f_output.write(str(USER) + ";" + str(max_v) + ";" + str(max_p) + ";3;" + str(train_size) + ";" + str(test_size) + ";" + str(results["avg_accuracy"]) + ";" + str(results["avg_precision"]) + ";" + str(results["avg_recall"]) + ";" + str(training_time) + ";" + theory.replace("\n", "") + ";0.001121;" + str(float(wc_counter)) + ";0.247746;0.207977;0.191326;0.164781;0.18817\n")
                                         if COUPLE == 45:
-                                            results = ilasp.test_cm_grid(theory, items, test_set, 0.001275, [0.077795, 0.162525, 0.285251, 0.474429, 0.0]) # cases where there are 3 weak constraint but maxp is setted to 5 (in this case the missing weak constraint could be of any level)
-                                            f_output.write(str(USER) + ";" + str(max_v) + ";" + str(max_p) + ";3;" + str(train_size) + ";" + str(test_size) + ";" + str(results["avg_accuracy"]) + ";" + str(results["avg_precision"]) + ";" + str(results["avg_recall"]) + ";" + str(training_time) + ";" + theory.replace("\n", "") + ";0.001275;" + str(float(wc_counter)) + ";0.077795;0.162525;0.285251;0.474429;0.0\n")
+                                            results = ilasp.test_cm_grid(theory, items, test_set, 0.001674, [0.146598, 0.17019, 0.278311, 0.404901, 0.0]) # cases where there are 3 weak constraint but maxp is setted to 5 (in this case the missing weak constraint could be of any level)
+                                            f_output.write(str(USER) + ";" + str(max_v) + ";" + str(max_p) + ";3;" + str(train_size) + ";" + str(test_size) + ";" + str(results["avg_accuracy"]) + ";" + str(results["avg_precision"]) + ";" + str(results["avg_recall"]) + ";" + str(training_time) + ";" + theory.replace("\n", "") + ";0.001674;" + str(float(wc_counter)) + ";0.146598;0.17019;0.278311;0.404901;0.0\n")
                                         if COUPLE == 105:
-                                            results = ilasp.test_cm_grid(theory, items, test_set, 0.003006, [0.072401, 0.105771, 0.15755, 0.264914, 0.399364])  # cases where there are 3 weak constraint but maxp is setted to 5 (in this case the missing weak constraint could be of any level)
-                                            f_output.write(str(USER) + ";" + str(max_v) + ";" + str(max_p) + ";3;" + str(train_size) + ";" + str(test_size) + ";" + str(results["avg_accuracy"]) + ";" + str(results["avg_precision"]) + ";" + str(results["avg_recall"]) + ";" + str(training_time) + ";" + theory.replace("\n", "") + ";0.003006;" + str(float(wc_counter)) + ";0.072401;0.105771;0.15755;0.264914;0.399364\n")
+                                            results = ilasp.test_cm_grid(theory, items, test_set, 0.000804, [0.095697, 0.118528, 0.213800, 0.288997, 0.289790])  # cases where there are 3 weak constraint but maxp is setted to 5 (in this case the missing weak constraint could be of any level)
+                                            f_output.write(str(USER) + ";" + str(max_v) + ";" + str(max_p) + ";3;" + str(train_size) + ";" + str(test_size) + ";" + str(results["avg_accuracy"]) + ";" + str(results["avg_precision"]) + ";" + str(results["avg_recall"]) + ";" + str(training_time) + ";" + theory.replace("\n", "") + ";0.000804;" + str(float(wc_counter)) + ";0.095697;0.118528;0.213800;0.288997;0.289790\n")
                                         elif COUPLE == 210:
-                                            results = ilasp.test_cm_grid(theory, items, test_set, 0.002522, [0.075826, 0.136272, 0.184249, 0.265232, 0.338421])  # cases where there are 3 weak constraint but maxp is setted to 5 (in this case the missing weak constraint could be of any level)
-                                            f_output.write(str(USER) + ";" + str(max_v) + ";" + str(max_p) + ";3;" + str(train_size) + ";" + str(test_size) + ";" + str(results["avg_accuracy"]) + ";" + str(results["avg_precision"]) + ";" + str(results["avg_recall"]) + ";" + str(training_time) + ";" + theory.replace("\n", "") + ";0.002522;" + str(float(wc_counter)) + ";0.075826;0.136272;0.184249;0.265232;0.338421\n")
+                                            results = ilasp.test_cm_grid(theory, items, test_set, 0.001132, [0.100688, 0.155456, 0.218262, 0.226039, 0.299556])  # cases where there are 3 weak constraint but maxp is setted to 5 (in this case the missing weak constraint could be of any level)
+                                            f_output.write(str(USER) + ";" + str(max_v) + ";" + str(max_p) + ";3;" + str(train_size) + ";" + str(test_size) + ";" + str(results["avg_accuracy"]) + ";" + str(results["avg_precision"]) + ";" + str(results["avg_recall"]) + ";" + str(training_time) + ";" + theory.replace("\n", "") + ";0.001132;" + str(float(wc_counter)) + ";0.100688;0.155456;0.218262;0.226039;0.299556\n")
                                         break
                                     for treshold_value in treshold_values:
                                         for factors_combination in factors_combinations_case_3:
@@ -237,15 +252,18 @@ def work(process_number):
                                             f_output.write(str(USER) + ";" + str(max_v) + ";" + str(max_p) + ";3;" + str(train_size) + ";" + str(test_size) + ";" + str(results["avg_accuracy"]) + ";" + str(results["avg_precision"]) + ";" + str(results["avg_recall"]) + ";" + str(training_time) + ";" + theory.replace("\n", "") + ";" + str(treshold_value) + ";" + str(float(wc_counter)) + ";" + str(factors_combination[0]) + ";" + str(factors_combination[1]) + ";" + str(factors_combination[2]) + ";" + str(factors_combination[3]) + ";" + str(factors_combination[4]) + "\n")
                                 if wc_counter == 4:
                                     if process_number == 999:
+                                        if COUPLE == 150:
+                                            results = ilasp.test_cm_grid(theory, items, test_set, 0.001121, [0.247746, 0.207977, 0.191326, 0.164781, 0.18817])
+                                            f_output.write(str(USER) + ";" + str(max_v) + ";" + str(max_p) + ";3;" + str(train_size) + ";" + str(test_size) + ";" + str(results["avg_accuracy"]) + ";" + str(results["avg_precision"]) + ";" + str(results["avg_recall"]) + ";" + str(training_time) + ";" + theory.replace("\n", "") + ";0.001121;" + str(float(wc_counter)) + ";0.247746;0.207977;0.191326;0.164781;0.18817\n")
                                         if COUPLE == 45:
-                                            results = ilasp.test_cm_grid(theory, items, test_set, 0.001275, [0.077795, 0.162525, 0.285251, 0.474429, 0.0])
-                                            f_output.write(str(USER) + ";" + str(max_v) + ";" + str(max_p) + ";3;" + str(train_size) + ";" + str(test_size) + ";" + str(results["avg_accuracy"]) + ";" + str(results["avg_precision"]) + ";" + str(results["avg_recall"]) + ";" + str(training_time) + ";" + theory.replace("\n", "") + ";0.001275;" + str(float(wc_counter)) + ";0.077795;0.162525;0.285251;0.474429;0.0\n")
+                                            results = ilasp.test_cm_grid(theory, items, test_set, 0.001674, [0.146598, 0.17019, 0.278311, 0.404901, 0.0])
+                                            f_output.write(str(USER) + ";" + str(max_v) + ";" + str(max_p) + ";3;" + str(train_size) + ";" + str(test_size) + ";" + str(results["avg_accuracy"]) + ";" + str(results["avg_precision"]) + ";" + str(results["avg_recall"]) + ";" + str(training_time) + ";" + theory.replace("\n", "") + ";0.001674;" + str(float(wc_counter)) + ";0.146598;0.17019;0.278311;0.404901;0.0\n")
                                         if COUPLE == 105:
-                                            results = ilasp.test_cm_grid(theory, items, test_set, 0.003006, [0.072401, 0.105771, 0.15755, 0.264914, 0.399364])  # cases where there are 4 weak constraint but maxp is setted to 5 (in this case the missing weak constraint could be of any level)
-                                            f_output.write(str(USER) + ";" + str(max_v) + ";" + str(max_p) + ";3;" + str(train_size) + ";" + str(test_size) + ";" + str(results["avg_accuracy"]) + ";" + str(results["avg_precision"]) + ";" + str(results["avg_recall"]) + ";" + str(training_time) + ";" + theory.replace("\n", "") + ";0.003006;" + str(float(wc_counter)) + ";0.072401;0.105771;0.15755;0.264914;0.399364\n")
+                                            results = ilasp.test_cm_grid(theory, items, test_set, 0.000804, [0.095697, 0.118528, 0.213800, 0.288997, 0.289790])  # cases where there are 4 weak constraint but maxp is setted to 5 (in this case the missing weak constraint could be of any level)
+                                            f_output.write(str(USER) + ";" + str(max_v) + ";" + str(max_p) + ";3;" + str(train_size) + ";" + str(test_size) + ";" + str(results["avg_accuracy"]) + ";" + str(results["avg_precision"]) + ";" + str(results["avg_recall"]) + ";" + str(training_time) + ";" + theory.replace("\n", "") + ";0.000804;" + str(float(wc_counter)) + ";0.095697;0.118528;0.213800;0.288997;0.289790\n")
                                         elif COUPLE == 210:
-                                            results = ilasp.test_cm_grid(theory, items, test_set, 0.002522, [0.075826, 0.136272, 0.184249, 0.265232, 0.338421])  # cases where there are 4 weak constraint but maxp is setted to 5 (in this case the missing weak constraint could be of any level)
-                                            f_output.write(str(USER) + ";" + str(max_v) + ";" + str(max_p) + ";3;" + str(train_size) + ";" + str(test_size) + ";" + str(results["avg_accuracy"]) + ";" + str(results["avg_precision"]) + ";" + str(results["avg_recall"]) + ";" + str(training_time) + ";" + theory.replace("\n", "") + ";0.002522;" + str(float(wc_counter)) + ";0.075826;0.136272;0.184249;0.265232;0.338421\n")
+                                            results = ilasp.test_cm_grid(theory, items, test_set, 0.001132, [0.100688, 0.155456, 0.218262, 0.226039, 0.299556])  # cases where there are 4 weak constraint but maxp is setted to 5 (in this case the missing weak constraint could be of any level)
+                                            f_output.write(str(USER) + ";" + str(max_v) + ";" + str(max_p) + ";3;" + str(train_size) + ";" + str(test_size) + ";" + str(results["avg_accuracy"]) + ";" + str(results["avg_precision"]) + ";" + str(results["avg_recall"]) + ";" + str(training_time) + ";" + theory.replace("\n", "") + ";0.001132;" + str(float(wc_counter)) + ";0.100688;0.155456;0.218262;0.226039;0.299556\n")
                                         break
                                     for treshold_value in treshold_values:
                                         for factors_combination in factors_combinations_case_4:
@@ -253,14 +271,17 @@ def work(process_number):
                                             f_output.write(str(USER) + ";" + str(max_v) + ";" + str(max_p) + ";3;" + str(train_size) + ";" + str(test_size) + ";" + str(results["avg_accuracy"]) + ";" + str(results["avg_precision"]) + ";" + str(results["avg_recall"]) + ";" + str(training_time) + ";" + theory.replace("\n", "") + ";" + str(treshold_value) + ";" + str(float(wc_counter)) + ";" + str(factors_combination[0]) + ";" + str(factors_combination[1]) + ";" + str(factors_combination[2]) + ";" + str(factors_combination[3]) + ";" + str(factors_combination[4]) + "\n")
                                 if wc_counter == 5:
                                     if process_number == 999:
+                                        if COUPLE == 150:
+                                            results = ilasp.test_cm_grid(theory, items, test_set, 0.001121, [0.247746, 0.207977, 0.191326, 0.164781, 0.18817])
+                                            f_output.write(str(USER) + ";" + str(max_v) + ";" + str(max_p) + ";3;" + str(train_size) + ";" + str(test_size) + ";" + str(results["avg_accuracy"]) + ";" + str(results["avg_precision"]) + ";" + str(results["avg_recall"]) + ";" + str(training_time) + ";" + theory.replace("\n", "") + ";0.001121;" + str(float(wc_counter)) + ";0.247746;0.207977;0.191326;0.164781;0.18817\n")
                                         if COUPLE == 45:
                                             print("error")  # max_p is set to 4 so couldn't be that there are 5 weak constraints
                                         if COUPLE == 105:
-                                            results = ilasp.test_cm_grid(theory, items, test_set, 0.003006, [0.072401, 0.105771, 0.15755, 0.264914, 0.399364])  # cases where there are 4 weak constraint but maxp is setted to 5 (in this case the missing weak constraint could be of any level)
-                                            f_output.write(str(USER) + ";" + str(max_v) + ";" + str(max_p) + ";3;" + str(train_size) + ";" + str(test_size) + ";" + str(results["avg_accuracy"]) + ";" + str(results["avg_precision"]) + ";" + str(results["avg_recall"]) + ";" + str(training_time) + ";" + theory.replace("\n", "") + ";0.003006;" + str(float(wc_counter)) + ";0.072401;0.105771;0.15755;0.264914;0.399364\n")
+                                            results = ilasp.test_cm_grid(theory, items, test_set, 0.000804, [0.095697, 0.118528, 0.213800, 0.288997, 0.289790])  # cases where there are 4 weak constraint but maxp is setted to 5 (in this case the missing weak constraint could be of any level)
+                                            f_output.write(str(USER) + ";" + str(max_v) + ";" + str(max_p) + ";3;" + str(train_size) + ";" + str(test_size) + ";" + str(results["avg_accuracy"]) + ";" + str(results["avg_precision"]) + ";" + str(results["avg_recall"]) + ";" + str(training_time) + ";" + theory.replace("\n", "") + ";0.000804;" + str(float(wc_counter)) + ";0.095697;0.118528;0.213800;0.288997;0.289790\n")
                                         elif COUPLE == 210:
-                                            results = ilasp.test_cm_grid(theory, items, test_set, 0.002522, [0.075826, 0.136272, 0.184249, 0.265232, 0.338421])  # cases where there are 4 weak constraint but maxp is setted to 5 (in this case the missing weak constraint could be of any level)
-                                            f_output.write(str(USER) + ";" + str(max_v) + ";" + str(max_p) + ";3;" + str(train_size) + ";" + str(test_size) + ";" + str(results["avg_accuracy"]) + ";" + str(results["avg_precision"]) + ";" + str(results["avg_recall"]) + ";" + str(training_time) + ";" + theory.replace("\n", "") + ";0.002522;" + str(float(wc_counter)) + ";0.075826;0.136272;0.184249;0.265232;0.338421\n")
+                                            results = ilasp.test_cm_grid(theory, items, test_set, 0.001132, [0.100688, 0.155456, 0.218262, 0.226039, 0.299556])  # cases where there are 4 weak constraint but maxp is setted to 5 (in this case the missing weak constraint could be of any level)
+                                            f_output.write(str(USER) + ";" + str(max_v) + ";" + str(max_p) + ";3;" + str(train_size) + ";" + str(test_size) + ";" + str(results["avg_accuracy"]) + ";" + str(results["avg_precision"]) + ";" + str(results["avg_recall"]) + ";" + str(training_time) + ";" + theory.replace("\n", "") + ";0.001132;" + str(float(wc_counter)) + ";0.100688;0.155456;0.218262;0.226039;0.299556\n")
                                         break
                                     for treshold_value in treshold_values:
                                         for factors_combination in factors_combinations_case_5:
