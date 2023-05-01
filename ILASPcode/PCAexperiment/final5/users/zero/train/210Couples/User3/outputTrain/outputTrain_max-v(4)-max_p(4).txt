@@ -1,15 +1,15 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%% Pre-processing                          : 0.013s
-%% Hypothesis Space Generation             : 0.016s
-%% Conflict analysis                       : 0.407s
-%%   - Brave Orders                        : 0.407s
-%% Counterexample search                   : 1.595s
-%%   - CDOEs                               : 1.249s
-%%   - CDPIs                               : 0.345s
-%% Hypothesis Search                       : 1.5s
-%% Propagation                             : 1.781s
-%%   - CDOEs                               : 1.781s
-%% Total                                   : 5.348s
+%% Pre-processing                          : 0.082s
+%% Hypothesis Space Generation             : 0.017s
+%% Conflict analysis                       : 0.436s
+%%   - Brave Orders                        : 0.436s
+%% Counterexample search                   : 1.638s
+%%   - CDOEs                               : 1.301s
+%%   - CDPIs                               : 0.339s
+%% Hypothesis Search                       : 1.933s
+%% Propagation                             : 1.881s
+%%   - CDOEs                               : 1.881s
+%% Total                                   : 6.031s
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 :~ value(pc3,V1).[-V1@1, V1]
 :~ value(pc4,V1).[-V1@2, V1]
