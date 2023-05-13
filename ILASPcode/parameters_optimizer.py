@@ -144,30 +144,30 @@ preparation_dictionary = {"bollitura": 0,
                           "forno": 5,
                           "cottura_a_fiamma": 6,
                           "stufato": 7}
-
-
-macro_ingredients_norm_dictionary = {"cereali": 0.0,
-                                "latticini": 1.0,
-                                "uova": 4.0,
-                                "farinacei": 7.0,
-                                "frutta": 2.0,
-                                "erbe_spezie_e_condimenti": 11.0,
-                                "carne": 5.0,
-                                "funghi_e_tartufi": 3.0,
-                                "pasta": 5.0,
-                                "pesce": 9.0,
-                                "dolcificanti": 1.0,
-                                "verdure_e_ortaggi": 8.0}
-
-preparation_norm_dictionary = {"bollitura": 5.0,
-                          "rosolatura": 5.0,
-                          "frittura": 5.0,
-                          "marinatura": 3.0,
-                          "mantecatura": 4.0,
-                          "forno": 5.0,
-                          "cottura_a_fiamma": 5.0,
-                          "cottura_a_vapore": 5.0,
-                          "stufato": 5.0}
+#
+#
+# macro_ingredients_norm_dictionary = {"cereali": 0.0,
+#                                 "latticini": 1.0,
+#                                 "uova": 4.0,
+#                                 "farinacei": 7.0,
+#                                 "frutta": 2.0,
+#                                 "erbe_spezie_e_condimenti": 11.0,
+#                                 "carne": 5.0,
+#                                 "funghi_e_tartufi": 3.0,
+#                                 "pasta": 5.0,
+#                                 "pesce": 9.0,
+#                                 "dolcificanti": 1.0,
+#                                 "verdure_e_ortaggi": 8.0}
+#
+# preparation_norm_dictionary = {"bollitura": 5.0,
+#                           "rosolatura": 5.0,
+#                           "frittura": 5.0,
+#                           "marinatura": 3.0,
+#                           "mantecatura": 4.0,
+#                           "forno": 5.0,
+#                           "cottura_a_fiamma": 5.0,
+#                           "cottura_a_vapore": 5.0,
+#                           "stufato": 5.0}
 
 results = pd.DataFrame(columns=("USER_ID", "MAX_V", "MAX_P", "DATASET_SIZE", "OPT", "THRESHOLD", "F1", "F2", "F3", "F4", "F5"))
 
@@ -329,9 +329,9 @@ for COUPLE in COUPLES:
                             if "V" in weight:
                                 if "-" in weight:
                                     if literal in macro_ingredients_dictionary:
-                                        X[i, level-1] = -(all_data[recipes_indexes[i], 4 + macro_ingredients_dictionary[literal]])/macro_ingredients_norm_dictionary[literal]
+                                        X[i, level-1] = -(all_data[recipes_indexes[i], 4 + macro_ingredients_dictionary[literal]])  # /macro_ingredients_norm_dictionary[literal]
                                     elif literal in preparation_dictionary:
-                                        X[i, level-1] = -(all_data[recipes_indexes[i], 4 + len(macro_ingredients_dictionary)+preparation_dictionary[literal]])/preparation_norm_dictionary[literal]
+                                        X[i, level-1] = -(all_data[recipes_indexes[i], 4 + len(macro_ingredients_dictionary)+preparation_dictionary[literal]])  # /preparation_norm_dictionary[literal]
                                     elif literal == "cost":
                                         X[i, level-1] = -all_data[recipes_indexes[i], 1]
                                     elif literal == "prepTime":
@@ -340,9 +340,9 @@ for COUPLE in COUPLES:
                                         X[i, level-1] = -all_data[recipes_indexes[i], 2]
                                 else:
                                     if literal in macro_ingredients_dictionary:
-                                        X[i, level-1] = (all_data[recipes_indexes[i], 4 + macro_ingredients_dictionary[literal]])/macro_ingredients_norm_dictionary[literal]
+                                        X[i, level-1] = (all_data[recipes_indexes[i], 4 + macro_ingredients_dictionary[literal]])   # /macro_ingredients_norm_dictionary[literal]
                                     elif literal in preparation_dictionary:
-                                        X[i, level-1] = (all_data[recipes_indexes[i], 4 + len(macro_ingredients_dictionary)+preparation_dictionary[literal]])/preparation_norm_dictionary[literal]
+                                        X[i, level-1] = (all_data[recipes_indexes[i], 4 + len(macro_ingredients_dictionary)+preparation_dictionary[literal]])   # /preparation_norm_dictionary[literal]
                                     elif literal == "cost":
                                         X[i, level-1] = all_data[recipes_indexes[i], 1]
                                     elif literal == "prepTime":
@@ -350,25 +350,7 @@ for COUPLE in COUPLES:
                                     else:
                                         X[i, level-1] = all_data[recipes_indexes[i], 2]
                             else:
-                                if second_literal != "":
-                                    if second_literal in macro_ingredients_dictionary:
-                                        X[i, level - 1] = (int(weight))/macro_ingredients_norm_dictionary[literal]
-                                    elif second_literal in preparation_dictionary:
-                                        X[i, level - 1] = (int(weight)) / preparation_norm_dictionary[literal]
-                                    elif second_literal == "prepTime":
-                                        X[i, level - 1] = (int(weight)) / 280
-                                    else:
-                                        X[i, level - 1] = int(weight)
-                                elif literal in item:   # this double check is caused because "" is always in items
-                                    if literal in macro_ingredients_dictionary:
-                                        X[i, level - 1] = (int(weight)) / macro_ingredients_norm_dictionary[literal]
-                                    elif literal in preparation_dictionary:
-                                        X[i, level - 1] = (int(weight)) / preparation_norm_dictionary[literal]
-                                    elif literal == "prepTime":
-                                        X[i, level - 1] = (int(weight)) / 280
-                                    else:
-                                        X[i, level - 1] = int(weight)
-
+                                X[i, level - 1] = int(weight)/1
 
                 # DEFINE GUROBI MODEL
 
@@ -390,7 +372,7 @@ for COUPLE in COUPLES:
 
                 # b1[l] = q[l1] > q[l2] + t ? 1 : 0
                 # b2[l] = q[l1] < q[l2] - t ? 1 : 0
-                # v[l] = b1[l] - b2[l]
+                # v[l] = b2[l] - b1[l]
 
                 # note that b1[l] and b2[l] exclude themselves  (t could be equal to 0)
                 #                   ----------[q[l2]-t----------q[l2]----------q[l2]+t]----------
@@ -405,8 +387,8 @@ for COUPLE in COUPLES:
                 #            1         0   [case in which classification return 1]
                 #            1         1   [impossible]
 
-                # if q[l1] > q[l2] + t then b1[l] = 1 and b2[l] = 0, so v[l] = 1 - 0 = 1
-                # if q[l1] < q[l2] - t then b1[l] = 0 and b2[l] = 1, so v[l] = 0 - 1 = -1
+                # if q[l1] > q[l2] + t then b1[l] = 1 and b2[l] = 0, so v[l] = 0 - 1 = -1
+                # if q[l1] < q[l2] - t then b1[l] = 0 and b2[l] = 1, so v[l] = 1 - 0 = 1
                 # if q[l2] - t <= q[l1] <= q[l2] + t then b1[l] = 0 and b2[l] = 0 and so v[l] = 0 - 0 = 0
                 # there aren't other cases, and v[l] get values correctly respect his definition
                 # finally, I use this gurobi guide for constraint definition: https://support.gurobi.com/hc/en-us/articles/4414392016529-How-do-I-model-conditional-statements-in-Gurobi-
@@ -463,7 +445,7 @@ for COUPLE in COUPLES:
                             couple_counter += 1
                 gb_model.update()
                 gb_model.write('./Lp_files/model.lp')
-                gb_model.addConstrs(v[couple_number] == b1[couple_number] - b2[couple_number] for couple_number in range(l))     # (4)
+                gb_model.addConstrs(v[couple_number] == b2[couple_number] - b1[couple_number] for couple_number in range(l))     # (4)
                 gb_model.update()
                 gb_model.write('./Lp_files/model.lp')
 

@@ -4,7 +4,7 @@ maxp = 5
 
 
 def relation_satisfied_case_no_zero(m1_cost,m2_cost, sign):
-    if sign == '<':     # m1 it's not preferred over m2
+    if sign == '<':     # m1 it's preferred over m2
         for i in range(len(m1_cost)):
             if (m1_cost[i] < m2_cost[i]):
                 return 1
@@ -20,7 +20,7 @@ def relation_satisfied_case_no_zero(m1_cost,m2_cost, sign):
 
 
 def relation_satisfied(m1_cost,m2_cost, sign):
-    if sign == '<':     # m1 it's not preferred over m2
+    if sign == '<':     # m1 it's preferred over m2
         for i in range(len(m1_cost)):
             if (m1_cost[i] < m2_cost[i]):
                 return 1
@@ -40,53 +40,49 @@ def relation_satisfied(m1_cost,m2_cost, sign):
     return 2
 
 def relation_satisfied_cm(m1_cost,m2_cost, sign):
-    if sign == '<':     # m1 it's not preferred over m2
+    if sign == '<':     # m1 it's preferred over m2
         for i in range(len(m1_cost)):
             if m1_cost[i] < m2_cost[i]:
                 return 1
             if m2_cost[i] < m1_cost[i]:
-                return 2
-        return 3
+                return 4
+        return 7
     elif sign == '>':   # m2 it's preferred over m1
         for i in range(len(m1_cost)):
             if m1_cost[i] < m2_cost[i]:
-                return 4
+                return 2
             if m2_cost[i] < m1_cost[i]:
                 return 5
-        return 6
+        return 8
     else:   # m1 and m2 are indifferent
         for i in range(len(m1_cost)):
             if not (m1_cost[i] == m2_cost[i]):
                 if m1_cost[i] < m2_cost[i]:
-                    return 7
+                    return 3
                 else:
-                    return 8
+                    return 6
         return 9
 
 def relation_satisfied_cm_grid(m1_cost,m2_cost, sign,  treshold_value):
     m1_total_cost = sum(m1_cost)
     m2_total_cost = sum(m2_cost)
     inside_treshold = False
-    if abs(m1_total_cost) > abs(m2_total_cost) and (abs(m1_total_cost) - abs(m2_total_cost) < treshold_value):
+    if (m1_total_cost <= m2_total_cost + treshold_value) and (m1_total_cost >= m2_total_cost - treshold_value):
         inside_treshold = True
-    elif abs(m1_total_cost) < abs(m2_total_cost) and (abs(m2_total_cost) - abs(m1_total_cost) < treshold_value):
-        inside_treshold = True
-    elif m1_total_cost == m2_total_cost:
-        inside_treshold = True
-    if sign == '<':     # m1 it's not preferred over m2
+    if sign == '<':     # m1 it's preferred over m2
         if inside_treshold:
-            return 3
+            return 7
         else:
             if m1_total_cost < m2_total_cost:
                 return 1
             else:
-                return 2
+                return 4
     elif sign == '>':   # m2 it's preferred over m1
         if inside_treshold:
-            return 6
+            return 8
         else:
             if m1_total_cost < m2_total_cost:
-                return 4
+                return 2
             else:
                 return 5
     else:   # m1 and m2 are indifferent
@@ -94,9 +90,43 @@ def relation_satisfied_cm_grid(m1_cost,m2_cost, sign,  treshold_value):
             return 9
         else:
             if m1_total_cost < m2_total_cost:
-                return 7
+                return 3
             else:
-                return 8
+                return 6
+
+# a method created just to make some experiment
+def relation_satisfied_cm_grid_2(m1_cost,m2_cost, sign,  treshold_value):
+    inside_treshold = False
+    for i in range(len(m1_cost)):
+        if (m1_cost[i] <= m2_cost[i] + treshold_value) and (m1_cost[i] >= m2_cost[i] - treshold_value):
+            inside_treshold = True
+    if sign == '<':     # m1 it's preferred over m2
+        if inside_treshold:
+            return 7
+        else:
+            for i in range(len(m1_cost)):
+                if m1_cost[i] < m2_cost[i]:
+                    return 1
+                else:
+                    return 4
+    elif sign == '>':   # m2 it's preferred over m1
+        if inside_treshold:
+            return 8
+        else:
+            for i in range(len(m1_cost)):
+                if m1_cost[i] < m2_cost[i]:
+                    return 2
+                else:
+                    return 5
+    else:   # m1 and m2 are indifferent
+        if inside_treshold:
+            return 9
+        else:
+            for i in range(len(m1_cost)):
+                if m1_cost[i] < m2_cost[i]:
+                    return 3
+                else:
+                    return 6
 
 
 def create_preamble(max_priority_level):
@@ -167,6 +197,9 @@ def compare_cm_grid(i1, i2, sign, weak_constraints, treshold_value, factors_comb
         for m in handle:
             m2_cost = m.cost
 
+    # m1_cost = [0, 0, 0, -4, -3]
+    # m2_cost = [0, 1, 0, 0, -2]
+
     macro_ingredients_dictionary = {"cereali": 0.0,
                                     "latticini": 1.0,
                                     "uova": 4.0,
@@ -190,6 +223,49 @@ def compare_cm_grid(i1, i2, sign, weak_constraints, treshold_value, factors_comb
                               "cottura_a_vapore": 5.0,
                               "stufato": 5.0}
 
+    list_of_levels = [i for i in range(len(list_weak_constraint))]
+    list_weak_constraint_sorted = []
+    sorted_counter = 1
+    second_counter = 0
+    list_present_indexes = []
+    number_passed_void = 0
+    number_void = 0
+    for wc in list_weak_constraint:
+        if wc == "void":
+            number_void += 1
+            continue
+        else:
+            list_present_indexes.append(int(wc.split("@")[1][0]))
+
+    while True:
+        if (sorted_counter not in list_present_indexes) and (number_passed_void != number_void):
+            list_weak_constraint_sorted.append("void")
+            number_passed_void += 1
+            sorted_counter += 1
+            continue
+        if list_weak_constraint[second_counter] == "void":
+            second_counter += 1
+            if second_counter == len(list_weak_constraint):
+                second_counter = 0
+            continue
+        if sorted_counter == int(list_weak_constraint[second_counter].split("@")[1][0]):
+            list_weak_constraint_sorted.append(list_weak_constraint[second_counter])
+            sorted_counter += 1
+        second_counter += 1
+        if sorted_counter >= len(list_weak_constraint):
+            break
+        elif second_counter == len(list_weak_constraint):
+            second_counter = 0
+
+    for_debugging = list_weak_constraint
+    list_weak_constraint = list_weak_constraint_sorted
+
+    while True:
+        if len(list_weak_constraint) < len(m1_cost):
+            list_weak_constraint.append("void")
+        else:
+            break
+
     for i, penalty_score in enumerate(m1_cost):   # note that the vector codification made by clingo is [5, 4, 3, 2, 1] while yours is [1, 2, 3, 4, 5]
         if "category" in list_weak_constraint[len(list_weak_constraint)-i-1] and not ("V1@" in list_weak_constraint[len(list_weak_constraint)-i-1]):
             m1_cost[i] = float(m1_cost[i]) * factors_combination[len(list_weak_constraint)-i-1]
@@ -207,11 +283,17 @@ def compare_cm_grid(i1, i2, sign, weak_constraints, treshold_value, factors_comb
                 if ingredient in list_weak_constraint[len(list_weak_constraint)-i-1] and "V1@" in list_weak_constraint[len(list_weak_constraint)-i-1]:
                     m1_cost[i] = (m1_cost[i] / macro_ingredients_dictionary[ingredient]) * factors_combination[len(list_weak_constraint)-i-1]
                     bypass = True
+                if ingredient in list_weak_constraint[len(list_weak_constraint)-i-1] and not "V1@" in list_weak_constraint[len(list_weak_constraint)-i-1]:
+                    m1_cost[i] = m1_cost[i] * factors_combination[len(list_weak_constraint)-i-1]
+                    bypass = True
             for preparation in preparation_dictionary.keys():
                 if bypass:
                     break
                 if preparation in list_weak_constraint[len(list_weak_constraint)-i-1] and "V1@" in list_weak_constraint[len(list_weak_constraint)-i-1]:
                     m1_cost[i] = (m1_cost[i] / preparation_dictionary[preparation]) * factors_combination[len(list_weak_constraint)-i-1]
+                    bypass = True
+                if preparation in list_weak_constraint[len(list_weak_constraint)-i-1] and not "V1@" in list_weak_constraint[len(list_weak_constraint)-i-1]:
+                    m1_cost[i] = m1_cost[i]* factors_combination[len(list_weak_constraint)-i-1]
                     bypass = True
             # print("others")
 
@@ -232,11 +314,17 @@ def compare_cm_grid(i1, i2, sign, weak_constraints, treshold_value, factors_comb
                 if ingredient in list_weak_constraint[len(list_weak_constraint)-i-1] and "V1@" in list_weak_constraint[len(list_weak_constraint)-i-1]:
                     m2_cost[i] = (m2_cost[i] / macro_ingredients_dictionary[ingredient]) * factors_combination[len(list_weak_constraint)-i-1]
                     bypass = True
+                if ingredient in list_weak_constraint[len(list_weak_constraint)-i-1] and not "V1@" in list_weak_constraint[len(list_weak_constraint)-i-1]:
+                    m2_cost[i] = m2_cost[i]* factors_combination[len(list_weak_constraint)-i-1]
+                    bypass = True
             for preparation in preparation_dictionary.keys():
                 if bypass:
                     break
                 if preparation in list_weak_constraint[len(list_weak_constraint)-i-1] and "V1@" in list_weak_constraint[len(list_weak_constraint)-i-1]:
                     m2_cost[i] = (m2_cost[i] / preparation_dictionary[preparation]) * factors_combination[len(list_weak_constraint)-i-1]
+                    bypass = True
+                if preparation in list_weak_constraint[len(list_weak_constraint)-i-1] and not "V1@" in list_weak_constraint[len(list_weak_constraint)-i-1]:
+                    m2_cost[i] = m2_cost[i]* factors_combination[len(list_weak_constraint)-i-1]
                     bypass = True
             # print("others")
 
