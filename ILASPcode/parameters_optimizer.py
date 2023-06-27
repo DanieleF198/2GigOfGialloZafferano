@@ -146,28 +146,28 @@ preparation_dictionary = {"bollitura": 0,
                           "stufato": 7}
 #
 #
-# macro_ingredients_norm_dictionary = {"cereali": 0.0,
-#                                 "latticini": 1.0,
-#                                 "uova": 4.0,
-#                                 "farinacei": 7.0,
-#                                 "frutta": 2.0,
-#                                 "erbe_spezie_e_condimenti": 11.0,
-#                                 "carne": 5.0,
-#                                 "funghi_e_tartufi": 3.0,
-#                                 "pasta": 5.0,
-#                                 "pesce": 9.0,
-#                                 "dolcificanti": 1.0,
-#                                 "verdure_e_ortaggi": 8.0}
-#
-# preparation_norm_dictionary = {"bollitura": 5.0,
-#                           "rosolatura": 5.0,
-#                           "frittura": 5.0,
-#                           "marinatura": 3.0,
-#                           "mantecatura": 4.0,
-#                           "forno": 5.0,
-#                           "cottura_a_fiamma": 5.0,
-#                           "cottura_a_vapore": 5.0,
-#                           "stufato": 5.0}
+macro_ingredients_norm_dictionary = {"cereali": 0.0,
+                                "latticini": 1.0,
+                                "uova": 4.0,
+                                "farinacei": 7.0,
+                                "frutta": 2.0,
+                                "erbe_spezie_e_condimenti": 11.0,
+                                "carne": 5.0,
+                                "funghi_e_tartufi": 3.0,
+                                "pasta": 5.0,
+                                "pesce": 9.0,
+                                "dolcificanti": 1.0,
+                                "verdure_e_ortaggi": 8.0}
+
+preparation_norm_dictionary = {"bollitura": 5.0,
+                          "rosolatura": 5.0,
+                          "frittura": 5.0,
+                          "marinatura": 3.0,
+                          "mantecatura": 4.0,
+                          "forno": 5.0,
+                          "cottura_a_fiamma": 5.0,
+                          "cottura_a_vapore": 5.0,
+                          "stufato": 5.0}
 
 results = pd.DataFrame(columns=("USER_ID", "MAX_V", "MAX_P", "DATASET_SIZE", "OPT", "THRESHOLD", "F1", "F2", "F3", "F4", "F5"))
 
@@ -245,16 +245,22 @@ for COUPLE in COUPLES:
                 theory_entries.pop()
                 list_of_item = []
                 list_of_couple = []
+                counter_of_class_one = 0
+                counter_of_class_zero = 0
+                counter_of_class_minus_one = 0
                 y = np.zeros(len(train_set), dtype='int')
                 for index, couple in enumerate(train_set):
                     list_of_couple.append([couple[0], couple[1]])
                     for element in couple:
                         if element == '>':
-                            y[index] = 1
-                        elif element == "<":
                             y[index] = -1
+                            counter_of_class_minus_one += 1
+                        elif element == "<":
+                            y[index] = 1
+                            counter_of_class_one += 1
                         elif element == "=":
                             y[index] = 0
+                            counter_of_class_zero += 1
                         else:
                             if element in list_of_item:
                                 continue
@@ -269,9 +275,18 @@ for COUPLE in COUPLES:
                         couple_indexes[index, ii] = int(couple[ii].split('m')[1])
                 # note: for my own comfort vector of weight is encoded as [1, 2, 3, 4, 5] but remember that clingo reverse the order, and so encode [5, 4, 3, 2, 1]
                 X = np.zeros((len(list_of_item), max_p), dtype="float32")   # note: respect to the definition in formulation, here i memorize directly (x[i, j]*p[j])/n[j]
+                list_to_check = ["@1", "@2", "@3", "@4", "@5"]
+                list_checked = [False, False, False, False, False]
+                for iter_check, to_check in enumerate(list_to_check):
+                    for entry in theory_entries:
+                        if to_check in entry:
+                            list_checked[iter_check] = True
                 for i in range(0, len(list_of_item)):
                     item = items[list_of_item[i]]
                     for j in range(0, len(theory_entries)):
+                        if theory_entries[j].count("V2") > 1:
+                            print("ERROR: there is a weack constraint with more than 2 variables inside")  # I've already checked manually, but i'll insert this if to prevent and handle this kind of error.
+                            quit()
                         if theory_entries[j].count("), ") > 1:
                             print("ERROR: there is a weack constraint with more than 2 literals inside")    # I've already checked manually, but i'll insert this if to prevent and handle this kind of error.
                             quit()
@@ -328,29 +343,31 @@ for COUPLE in COUPLES:
                         if literal in item and second_literal in item:
                             if "V" in weight:
                                 if "-" in weight:
-                                    if literal in macro_ingredients_dictionary:
-                                        X[i, level-1] = -(all_data[recipes_indexes[i], 4 + macro_ingredients_dictionary[literal]])  # /macro_ingredients_norm_dictionary[literal]
-                                    elif literal in preparation_dictionary:
-                                        X[i, level-1] = -(all_data[recipes_indexes[i], 4 + len(macro_ingredients_dictionary)+preparation_dictionary[literal]])  # /preparation_norm_dictionary[literal]
-                                    elif literal == "cost":
-                                        X[i, level-1] = -all_data[recipes_indexes[i], 1]
-                                    elif literal == "prepTime":
-                                        X[i, level - 1] = -(all_data[recipes_indexes[i], 2])/280
-                                    else:
-                                        X[i, level-1] = -all_data[recipes_indexes[i], 2]
+                                    X[i, level - 1] = -1
+                                    # if literal in macro_ingredients_dictionary:
+                                    #     X[i, level-1] = -(all_data[recipes_indexes[i], 4 + macro_ingredients_dictionary[literal]])  # macro_ingredients_norm_dictionary[literal]
+                                    # elif literal in preparation_dictionary:
+                                    #     X[i, level-1] = -(all_data[recipes_indexes[i], 4 + len(macro_ingredients_dictionary)+preparation_dictionary[literal]])  # preparation_norm_dictionary[literal]
+                                    # elif literal == "cost":
+                                    #     X[i, level-1] = -all_data[recipes_indexes[i], 1]
+                                    # elif literal == "prepTime":
+                                    #     X[i, level - 1] = -(all_data[recipes_indexes[i], 2])    # /280
+                                    # else:
+                                    #     X[i, level-1] = -all_data[recipes_indexes[i], 2]
                                 else:
-                                    if literal in macro_ingredients_dictionary:
-                                        X[i, level-1] = (all_data[recipes_indexes[i], 4 + macro_ingredients_dictionary[literal]])   # /macro_ingredients_norm_dictionary[literal]
-                                    elif literal in preparation_dictionary:
-                                        X[i, level-1] = (all_data[recipes_indexes[i], 4 + len(macro_ingredients_dictionary)+preparation_dictionary[literal]])   # /preparation_norm_dictionary[literal]
-                                    elif literal == "cost":
-                                        X[i, level-1] = all_data[recipes_indexes[i], 1]
-                                    elif literal == "prepTime":
-                                        X[i, level - 1] = -(all_data[recipes_indexes[i], 2])/280
-                                    else:
-                                        X[i, level-1] = all_data[recipes_indexes[i], 2]
+                                    X[i, level - 1] = 1
+                                    # if literal in macro_ingredients_dictionary:
+                                    #     X[i, level-1] = (all_data[recipes_indexes[i], 4 + macro_ingredients_dictionary[literal]])   # macro_ingredients_norm_dictionary[literal]
+                                    # elif literal in preparation_dictionary:
+                                    #     X[i, level-1] = (all_data[recipes_indexes[i], 4 + len(macro_ingredients_dictionary)+preparation_dictionary[literal]])   # preparation_norm_dictionary[literal]
+                                    # elif literal == "cost":
+                                    #     X[i, level-1] = all_data[recipes_indexes[i], 1]
+                                    # elif literal == "prepTime":
+                                    #     X[i, level - 1] = -(all_data[recipes_indexes[i], 2])    # /280
+                                    # else:
+                                    #     X[i, level-1] = all_data[recipes_indexes[i], 2]
                             else:
-                                X[i, level - 1] = int(weight)/1
+                                X[i, level - 1] = int(weight)
 
                 # DEFINE GUROBI MODEL
 
@@ -363,9 +380,13 @@ for COUPLE in COUPLES:
                     l = len(couple_indexes)
                 gb_model = gb.Model()
                 z = gb_model.addVars(max_p, vtype=gb.GRB.CONTINUOUS, lb=0.0, ub=1.0, name='z')
-                t = gb_model.addVar(vtype=gb.GRB.CONTINUOUS, lb=0.0, ub=1.0, name='t')
+                t = gb_model.addVar(vtype=gb.GRB.CONTINUOUS, lb=0.0, ub=0.0, name='t')
                 q = gb_model.addVars(len(list_of_item), vtype=gb.GRB.CONTINUOUS, name='q', lb=-gb.GRB.INFINITY)
                 s = gb_model.addVars(l, vtype=gb.GRB.BINARY, name='s')
+                # s1 = gb_model.addVars(l, vtype=gb.GRB.BINARY, name='s1')
+                # s2 = gb_model.addVars(l, vtype=gb.GRB.BINARY, name='s2')
+                # s3 = gb_model.addVars(l, vtype=gb.GRB.BINARY, name='s3')
+
                 gb_model.update()
                 gb_model.write('./Lp_files/model.lp')
                 # v decomposition:
@@ -403,18 +424,36 @@ for COUPLE in COUPLES:
                 gb_model.write('./Lp_files/model.lp')
 
                 # CONSTRAINT DEFINITION
-                gb_model.addConstr(z.sum('*') == 1)     # (1)
+                gb_model.addConstr(z.sum('*') == 1)  # (1)
                 gb_model.update()
                 gb_model.write('./Lp_files/model.lp')
                 for j in reversed(range(max_p)):
-                    if j > 0:
-                        for k in range(0, j):
-                            gb_model.addConstr(z[j] >= z[k])      # (2)
-                gb_model.addConstr(z[0] >= 0)
+                    if j >= 0:
+                        if list_checked[j]:
+                            if j == 0:
+                                continue
+                            for k in range(0, j):
+                                gb_model.addConstr(z[j] >= z[k])  # (2)
+                        else:
+                            gb_model.addConstr(z[j] == 0)  # (2)
+                first_z_reached = False
+                for j in range(max_p):
+                    if first_z_reached:
+                        break
+                    elif list_checked[j]:
+                        gb_model.addConstr(z[j] >= 0)
+                        first_z_reached = True
+                gb_model.update()
+                gb_model.write('./Lp_files/model.lp')
+                # temp for test
+                for j in reversed(range(max_p)):
+                    if j > 1:
+                        if list_checked[j]:
+                            gb_model.addConstr(z[j] >= gb.quicksum(z[i] for i in range(j)) + 0.01)
                 gb_model.update()
                 gb_model.write('./Lp_files/model.lp')
                 for i in range(len(list_of_item)):
-                    gb_model.addConstr(q[i] == gb.quicksum(X[i, j] * z[j] for j in range(max_p)))     # (3)
+                    gb_model.addConstr(q[i] == gb.quicksum(X[i, j] * z[j] for j in range(max_p) if list_checked[j]))  # (3)
                 gb_model.update()
                 gb_model.write('./Lp_files/model.lp')
                 couple_counter = 0
@@ -450,15 +489,46 @@ for COUPLE in COUPLES:
                 gb_model.write('./Lp_files/model.lp')
 
                 couple_counter = 0
+                counter_class_one = 0
+                counter_class_minus_one = 0
+                counter_class_zero = 0
                 for l1, recipe1 in enumerate(recipes_indexes):
                     for l2, recipe2 in enumerate(recipes_indexes):
                         if COUPLE == 150:
-                            if [recipe1, recipe2] in couple_indexes.tolist():
+                            # if [recipe1, recipe2] in couple_indexes.tolist():
+                            #     if y[couple_counter] == 1:
+                            #         gb_model.addGenConstrIndicator(s1[couple_counter], True, v[couple_counter] == 1)
+                            #         gb_model.addGenConstrIndicator(s2[couple_counter], True, v[couple_counter] >= 0)
+                            #         gb_model.addGenConstrIndicator(s3[couple_counter], True, v[couple_counter] == 1)
+                            #         gb_model.addGenConstrIndicator(s3[couple_counter], True, v[couple_counter] == -1)
+                            #     elif y[couple_counter] == -1:
+                            #         gb_model.addGenConstrIndicator(s1[couple_counter], True, v[couple_counter] <= 0)
+                            #         gb_model.addGenConstrIndicator(s2[couple_counter], True, v[couple_counter] == -1)
+                            #         gb_model.addGenConstrIndicator(s3[couple_counter], True, v[couple_counter] == 1)
+                            #         gb_model.addGenConstrIndicator(s3[couple_counter], True, v[couple_counter] == -1)
+                            #     else:
+                            #         gb_model.addGenConstrIndicator(s1[couple_counter], True, v[couple_counter] <= 0)
+                            #         gb_model.addGenConstrIndicator(s2[couple_counter], True, v[couple_counter] >= 0)
+                            #         gb_model.addGenConstrIndicator(s3[couple_counter], True, v[couple_counter] == 0)
                                 gb_model.addGenConstrIndicator(s[couple_counter], True, v[couple_counter] == y[couple_counter])
                                 couple_counter += 1
                         else:
                             if l2 <= l1:
                                 continue
+                            # if y[couple_counter] == 1:
+                            #     gb_model.addGenConstrIndicator(s1[couple_counter], True, v[couple_counter] == 1)
+                            #     gb_model.addGenConstrIndicator(s2[couple_counter], True, v[couple_counter] >= 0)
+                            #     gb_model.addGenConstrIndicator(s3[couple_counter], True, v[couple_counter] == 1)
+                            #     gb_model.addGenConstrIndicator(s3[couple_counter], True, v[couple_counter] == -1)
+                            # elif y[couple_counter] == -1:
+                            #     gb_model.addGenConstrIndicator(s1[couple_counter], True, v[couple_counter] <= 0)
+                            #     gb_model.addGenConstrIndicator(s2[couple_counter], True, v[couple_counter] == -1)
+                            #     gb_model.addGenConstrIndicator(s3[couple_counter], True, v[couple_counter] == 1)
+                            #     gb_model.addGenConstrIndicator(s3[couple_counter], True, v[couple_counter] == -1)
+                            # else:
+                            #     gb_model.addGenConstrIndicator(s1[couple_counter], True, v[couple_counter] <= 0)
+                            #     gb_model.addGenConstrIndicator(s2[couple_counter], True, v[couple_counter] >= 0)
+                            #     gb_model.addGenConstrIndicator(s3[couple_counter], True, v[couple_counter] == 0)
                             gb_model.addGenConstrIndicator(s[couple_counter], True, v[couple_counter] == y[couple_counter])
                             couple_counter += 1
                 gb_model.update()
@@ -466,6 +536,7 @@ for COUPLE in COUPLES:
 
                 # objective function
 
+                # gb_model.setObjective((((gb.quicksum(s1))/l) + ((gb.quicksum(s2))/l) + ((gb.quicksum(s3))/l))/3, sense=gb.GRB.MAXIMIZE)    # avg accuracy
                 gb_model.setObjective(gb.quicksum(s), sense=gb.GRB.MAXIMIZE,)
                 gb_model.update()
                 gb_model.write('./Lp_files/model.lp')
@@ -490,6 +561,16 @@ for COUPLE in COUPLES:
                 print("t = " + str(t))
 
                 print("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~")
+                # print("-----------------S1-----------------")
+                # for i, s1_value in enumerate(s1):
+                #     print("s1[" + str(i) + "] = " + str(s1[i]))
+                # print("-----------------S2-----------------")
+                # for i, s2_value in enumerate(s2):
+                #     print("s2[" + str(i) + "] = " + str(s2[i]))
+                # print("-----------------S3-----------------")
+                # for i, s3_value in enumerate(s3):
+                #     print("s3[" + str(i) + "] = " + str(s3[i]))
+
                 df_index = len(results)
                 if COUPLE == 210:
                     results.loc[df_index] = [USER, max_v, max_p, 190, int(gb_model.ObjVal), np.round(t.X, decimals=5), 0, 0, 0, 0, 0]

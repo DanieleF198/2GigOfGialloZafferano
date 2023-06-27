@@ -5,9 +5,9 @@ import os
 choices = [0, 1]
 users = [i for i in range(0, 54)]
 COUPLES = [45, 105, 210]
-data_45_couples_no_zeros = np.zeros((54, 10000, 11), dtype='float32')
-data_105_couples_no_zeros = np.zeros((54, 10000, 11), dtype='float32')
-data_210_couples_no_zeros = np.zeros((54, 10000, 11), dtype='float32')
+data_45_couples_zeros = np.zeros((54, 1000000, 11), dtype='float32')
+data_105_couples_zeros = np.zeros((54, 1000000, 11), dtype='float32')
+data_210_couples_zeros = np.zeros((54, 1000000, 11), dtype='float32')
 
 for choice in choices:
     if choice == 1:
@@ -33,17 +33,17 @@ for choice in choices:
                             continue
                         else:
                             if int(row[0]) == user:
-                                data_45_couples_no_zeros[user][counter45][0] = float(row[6])       # accuracy_percentage
-                                data_45_couples_no_zeros[user][counter45][1] = float(row[7])       # precision_percentage
-                                data_45_couples_no_zeros[user][counter45][2] = float(row[8])       # recall_percentage
-                                data_45_couples_no_zeros[user][counter45][3] = float(row[9])      # train_time
-                                data_45_couples_no_zeros[user][counter45][4] = float(row[11])     # treshold
-                                data_45_couples_no_zeros[user][counter45][5] = float(row[12])     # number_wc
-                                data_45_couples_no_zeros[user][counter45][6] = float(row[13])     # f1
-                                data_45_couples_no_zeros[user][counter45][7] = float(row[14])     # f2
-                                data_45_couples_no_zeros[user][counter45][8] = float(row[15])     # f3
-                                data_45_couples_no_zeros[user][counter45][9] = float(row[16])     # f4
-                                data_45_couples_no_zeros[user][counter45][10] = float(row[17])     # f5
+                                data_45_couples_zeros[user][counter45][0] = float(row[6])       # accuracy_percentage
+                                data_45_couples_zeros[user][counter45][1] = float(row[7])       # precision_percentage
+                                data_45_couples_zeros[user][counter45][2] = float(row[8])       # recall_percentage
+                                data_45_couples_zeros[user][counter45][3] = float(row[9])      # train_time
+                                data_45_couples_zeros[user][counter45][4] = float(row[11])     # treshold
+                                data_45_couples_zeros[user][counter45][5] = float(row[12])     # number_wc
+                                data_45_couples_zeros[user][counter45][6] = float(row[13])     # f1
+                                data_45_couples_zeros[user][counter45][7] = float(row[14])     # f2
+                                data_45_couples_zeros[user][counter45][8] = float(row[15])     # f3
+                                data_45_couples_zeros[user][counter45][9] = float(row[16])     # f4
+                                data_45_couples_zeros[user][counter45][10] = float(row[17])     # f5
                                 counter45 = counter45 + 1
 
             elif COUPLE == 105:
@@ -54,17 +54,17 @@ for choice in choices:
                             continue
                         else:
                             if int(row[0]) == user:
-                                data_105_couples_no_zeros[user][counter105][0] = float(row[6])       # accuracy_percentage
-                                data_105_couples_no_zeros[user][counter105][1] = float(row[7])       # precision_percentage
-                                data_105_couples_no_zeros[user][counter105][2] = float(row[8])       # recall_percentage
-                                data_105_couples_no_zeros[user][counter105][3] = float(row[9])      # train_time
-                                data_105_couples_no_zeros[user][counter105][4] = float(row[11])     # treshold
-                                data_105_couples_no_zeros[user][counter105][5] = float(row[12])     # number_wc
-                                data_105_couples_no_zeros[user][counter105][6] = float(row[13])     # f1
-                                data_105_couples_no_zeros[user][counter105][7] = float(row[14])     # f2
-                                data_105_couples_no_zeros[user][counter105][8] = float(row[15])     # f3
-                                data_105_couples_no_zeros[user][counter105][9] = float(row[16])     # f4
-                                data_105_couples_no_zeros[user][counter105][10] = float(row[17])     # f5
+                                data_105_couples_zeros[user][counter105][0] = float(row[6])       # accuracy_percentage
+                                data_105_couples_zeros[user][counter105][1] = float(row[7])       # precision_percentage
+                                data_105_couples_zeros[user][counter105][2] = float(row[8])       # recall_percentage
+                                data_105_couples_zeros[user][counter105][3] = float(row[9])      # train_time
+                                data_105_couples_zeros[user][counter105][4] = float(row[11])     # treshold
+                                data_105_couples_zeros[user][counter105][5] = float(row[12])     # number_wc
+                                data_105_couples_zeros[user][counter105][6] = float(row[13])     # f1
+                                data_105_couples_zeros[user][counter105][7] = float(row[14])     # f2
+                                data_105_couples_zeros[user][counter105][8] = float(row[15])     # f3
+                                data_105_couples_zeros[user][counter105][9] = float(row[16])     # f4
+                                data_105_couples_zeros[user][counter105][10] = float(row[17])     # f5
                                 counter105 = counter105 + 1
             elif COUPLE == 210:
                 with open(path210, newline='\n') as csvFile:
@@ -74,17 +74,17 @@ for choice in choices:
                             continue
                         else:
                             if int(row[0]) == user:
-                                data_210_couples_no_zeros[user][counter210][0] = float(row[6])       # accuracy_percentage
-                                data_210_couples_no_zeros[user][counter210][1] = float(row[7])       # precision_percentage
-                                data_210_couples_no_zeros[user][counter210][2] = float(row[8])       # recall_percentage
-                                data_210_couples_no_zeros[user][counter210][3] = float(row[9])      # train_time
-                                data_210_couples_no_zeros[user][counter210][4] = float(row[11])     # treshold
-                                data_210_couples_no_zeros[user][counter210][5] = float(row[12])     # number_wc
-                                data_210_couples_no_zeros[user][counter210][6] = float(row[13])     # f1
-                                data_210_couples_no_zeros[user][counter210][7] = float(row[14])     # f2
-                                data_210_couples_no_zeros[user][counter210][8] = float(row[15])     # f3
-                                data_210_couples_no_zeros[user][counter210][9] = float(row[16])     # f4
-                                data_210_couples_no_zeros[user][counter210][10] = float(row[17])     # f5
+                                data_210_couples_zeros[user][counter210][0] = float(row[6])       # accuracy_percentage
+                                data_210_couples_zeros[user][counter210][1] = float(row[7])       # precision_percentage
+                                data_210_couples_zeros[user][counter210][2] = float(row[8])       # recall_percentage
+                                data_210_couples_zeros[user][counter210][3] = float(row[9])      # train_time
+                                data_210_couples_zeros[user][counter210][4] = float(row[11])     # treshold
+                                data_210_couples_zeros[user][counter210][5] = float(row[12])     # number_wc
+                                data_210_couples_zeros[user][counter210][6] = float(row[13])     # f1
+                                data_210_couples_zeros[user][counter210][7] = float(row[14])     # f2
+                                data_210_couples_zeros[user][counter210][8] = float(row[15])     # f3
+                                data_210_couples_zeros[user][counter210][9] = float(row[16])     # f4
+                                data_210_couples_zeros[user][counter210][10] = float(row[17])     # f5
                                 counter210 = counter210 + 1
 
     best_accuracy_indexes_per_user_45 = {}
@@ -109,7 +109,7 @@ for choice in choices:
     for COUPLE in COUPLES:
         if COUPLE == 45:
             with open(output_accuracy_path_45, 'w+', encoding='UTF8') as f_output:
-                for i, user in enumerate(data_45_couples_no_zeros):
+                for i, user in enumerate(data_45_couples_zeros):
                     max_accuracy_45 = np.amax(user[:, 0])
                     max_accuracy_indexes_45 = np.where(user[:, 0] == np.amax(user[:, 0]))
                     f_output.write("User " +str(i) + ": " + str(max_accuracy_45) + " accuracy; in the following cases: \n")
@@ -134,7 +134,7 @@ for choice in choices:
                 counter_accuracy_cases = 0
 
                 f_output.write("best accuracy summary\n")
-                for i, user in enumerate(data_45_couples_no_zeros):
+                for i, user in enumerate(data_45_couples_zeros):
                     cases_counter = 0
                     for user_indexes in best_accuracy_indexes_per_user_45:
                         if i == user_indexes:
@@ -196,7 +196,7 @@ for choice in choices:
                 f_output.write(str(associated_accuracy) + " accuracy; " + str(associated_precision) + " precision; " + str(associated_recall) + " recall; " + str(associated_treshold) + " treshold; " + str(associated_nuber_wc) + "wc; [" + str(associated_f1) + ", " + str(associated_f2) + ", " + str(associated_f3) + ", " + str(associated_f4) + ", " + str(associated_f5) + "] as factor vector\n")
 
             with open(output_precision_path_45, 'w+', encoding='UTF8') as f_output:
-                for i, user in enumerate(data_45_couples_no_zeros):
+                for i, user in enumerate(data_45_couples_zeros):
                     max_precision_45 = np.amax(user[:, 1])
                     max_precision_indexes_45 = np.where(user[:, 1] == np.amax(user[:, 1]))
                     f_output.write("User " + str(i) + ": " + str(max_precision_45) + " precision; in the following cases: \n")
@@ -224,7 +224,7 @@ for choice in choices:
                 counter_precision_cases = 0
 
                 f_output.write("best precision summary\n")
-                for i, user in enumerate(data_45_couples_no_zeros):
+                for i, user in enumerate(data_45_couples_zeros):
                     cases_counter = 0
                     for user_indexes in best_precision_indexes_per_user_45:
                         if i == user_indexes:
@@ -294,7 +294,7 @@ for choice in choices:
                     associated_f3) + ", " + str(associated_f4) + ", " + str(associated_f5) + "] as factor vector\n")
 
             with open(output_recall_path_45, 'w+', encoding='UTF8') as f_output:
-                for i, user in enumerate(data_45_couples_no_zeros):
+                for i, user in enumerate(data_45_couples_zeros):
                     max_recall_45 = np.amax(user[:, 2])
                     max_recall_indexes_45 = np.where(user[:, 2] == np.amax(user[:, 2]))
                     f_output.write("User " + str(i) + ": " + str(max_recall_45) + " recall; in the following cases: \n")
@@ -322,7 +322,7 @@ for choice in choices:
                 counter_recall_cases = 0
 
                 f_output.write("best recall summary\n")
-                for i, user in enumerate(data_45_couples_no_zeros):
+                for i, user in enumerate(data_45_couples_zeros):
                     # if i not in [15, 3, 32, 7, 36, 4, 20, 29, 14, 11]:
                     #     continue
                     cases_counter = 0
@@ -395,7 +395,7 @@ for choice in choices:
 
         elif COUPLE == 105:
             with open(output_accuracy_path_105, 'w+', encoding='UTF8') as f_output:
-                for i, user in enumerate(data_105_couples_no_zeros):
+                for i, user in enumerate(data_105_couples_zeros):
                     max_accuracy_105 = np.amax(user[:, 0])
                     max_accuracy_indexes_105 = np.where(user[:, 0] == np.amax(user[:, 0]))
                     f_output.write("User " + str(i) + ": " + str(max_accuracy_105) + " accuracy; in the following cases: \n")
@@ -419,7 +419,7 @@ for choice in choices:
                 counter_accuracy_cases = 0
 
                 f_output.write("best accuracy summary\n")
-                for i, user in enumerate(data_105_couples_no_zeros):
+                for i, user in enumerate(data_105_couples_zeros):
                     cases_counter = 0
                     for user_indexes in best_accuracy_indexes_per_user_105:
                         if i == user_indexes:
@@ -481,7 +481,7 @@ for choice in choices:
                 f_output.write(str(associated_accuracy) + " accuracy; " + str(associated_precision) + " precision; " + str(associated_recall) + " recall; " + str(associated_treshold) + " treshold; " + str(associated_nuber_wc) + "wc; [" + str(associated_f1) + ", " + str(associated_f2) + ", " + str(associated_f3) + ", " + str(associated_f4) + ", " + str(associated_f5) + "] as factor vector\n")
 
             with open(output_precision_path_105, 'w+', encoding='UTF8') as f_output:
-                for i, user in enumerate(data_105_couples_no_zeros):
+                for i, user in enumerate(data_105_couples_zeros):
                     max_precision_105 = np.amax(user[:, 1])
                     max_precision_indexes_105 = np.where(user[:, 1] == np.amax(user[:, 1]))
                     f_output.write("User " + str(i) + ": " + str(max_precision_105) + " precision; in the following cases: \n")
@@ -509,7 +509,7 @@ for choice in choices:
                 counter_precision_cases = 0
 
                 f_output.write("best precision summary\n")
-                for i, user in enumerate(data_105_couples_no_zeros):
+                for i, user in enumerate(data_105_couples_zeros):
                     cases_counter = 0
                     for user_indexes in best_precision_indexes_per_user_105:
                         if i == user_indexes:
@@ -579,7 +579,7 @@ for choice in choices:
                     associated_f3) + ", " + str(associated_f4) + ", " + str(associated_f5) + "] as factor vector\n")
 
             with open(output_recall_path_105, 'w+', encoding='UTF8') as f_output:
-                for i, user in enumerate(data_105_couples_no_zeros):
+                for i, user in enumerate(data_105_couples_zeros):
                     max_recall_105 = np.amax(user[:, 2])
                     max_recall_indexes_105 = np.where(user[:, 2] == np.amax(user[:, 2]))
                     f_output.write("User " + str(i) + ": " + str(max_recall_105) + " recall; in the following cases: \n")
@@ -607,7 +607,7 @@ for choice in choices:
                 counter_recall_cases = 0
 
                 f_output.write("best recall summary\n")
-                for i, user in enumerate(data_105_couples_no_zeros):
+                for i, user in enumerate(data_105_couples_zeros):
                     # if i not in [15, 3, 32, 7, 36, 4, 20, 29, 14, 11]:
                     #     continue
                     cases_counter = 0
@@ -680,7 +680,7 @@ for choice in choices:
 
         elif COUPLE == 210:
             with open(output_accuracy_path_210, 'w+', encoding='UTF8') as f_output:
-                for i, user in enumerate(data_210_couples_no_zeros):
+                for i, user in enumerate(data_210_couples_zeros):
                     max_accuracy_210 = np.amax(user[:, 0])
                     max_accuracy_indexes_210 = np.where(user[:, 0] == np.amax(user[:, 0]))
                     f_output.write("User " + str(i) + ": " + str(max_accuracy_210) + " accuracy; in the following cases: \n")
@@ -704,7 +704,7 @@ for choice in choices:
                 counter_accuracy_cases = 0
 
                 f_output.write("best accuracy summary\n")
-                for i, user in enumerate(data_210_couples_no_zeros):
+                for i, user in enumerate(data_210_couples_zeros):
                     cases_counter = 0
                     for user_indexes in best_accuracy_indexes_per_user_210:
                         if i == user_indexes:
@@ -766,7 +766,7 @@ for choice in choices:
                 f_output.write(str(associated_accuracy) + " accuracy; " + str(associated_precision) + " precision; " + str(associated_recall) + " recall; " + str(associated_treshold) + " treshold; " + str(associated_nuber_wc) + "wc; [" + str(associated_f1) + ", " + str(associated_f2) + ", " + str(associated_f3) + ", " + str(associated_f4) + ", " + str(associated_f5) + "] as factor vector\n")
 
             with open(output_precision_path_210, 'w+', encoding='UTF8') as f_output:
-                for i, user in enumerate(data_210_couples_no_zeros):
+                for i, user in enumerate(data_210_couples_zeros):
                     max_precision_210 = np.amax(user[:, 1])
                     max_precision_indexes_210 = np.where(user[:, 1] == np.amax(user[:, 1]))
                     f_output.write("User " + str(i) + ": " + str(max_precision_210) + " precision; in the following cases: \n")
@@ -794,7 +794,7 @@ for choice in choices:
                 counter_precision_cases = 0
 
                 f_output.write("best precision summary\n")
-                for i, user in enumerate(data_210_couples_no_zeros):
+                for i, user in enumerate(data_210_couples_zeros):
                     cases_counter = 0
                     for user_indexes in best_precision_indexes_per_user_210:
                         if i == user_indexes:
@@ -864,7 +864,7 @@ for choice in choices:
                     associated_f3) + ", " + str(associated_f4) + ", " + str(associated_f5) + "] as factor vector\n")
 
             with open(output_recall_path_210, 'w+', encoding='UTF8') as f_output:
-                for i, user in enumerate(data_210_couples_no_zeros):
+                for i, user in enumerate(data_210_couples_zeros):
                     max_recall_210 = np.amax(user[:, 2])
                     max_recall_indexes_210 = np.where(user[:, 2] == np.amax(user[:, 2]))
                     f_output.write("User " + str(i) + ": " + str(max_recall_210) + " recall; in the following cases: \n")
@@ -892,7 +892,7 @@ for choice in choices:
                 counter_recall_cases = 0
 
                 f_output.write("best recall summary\n")
-                for i, user in enumerate(data_210_couples_no_zeros):
+                for i, user in enumerate(data_210_couples_zeros):
                     # if i not in [15, 3, 32, 7, 36, 4, 20, 29, 14, 11]:
                     #     continue
                     cases_counter = 0
