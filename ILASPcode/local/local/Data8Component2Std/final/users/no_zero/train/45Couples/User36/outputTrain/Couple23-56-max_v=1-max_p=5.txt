@@ -1,0 +1,17 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Pre-processing                          : 0.098s
+%% Hypothesis Space Generation             : 0.066s
+%% Conflict analysis                       : 3.87s
+%%   - Brave Orders                        : 3.87s
+%% Counterexample search                   : 0.198s
+%%   - CDOEs                               : 0.1s
+%%   - CDPIs                               : 0.095s
+%% Hypothesis Search                       : 14.181s
+%% Propagation                             : 5.557s
+%%   - CDOEs                               : 5.557s
+%% Total                                   : 25.029s
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+:~ value(frutta,V1).[V1@3, V1]
+:~ value(uova,V1).[V1@2, V1]
+:~ category(3).[1@5]
+

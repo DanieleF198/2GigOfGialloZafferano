@@ -1,0 +1,16 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Pre-processing                          : 0.069s
+%% Hypothesis Space Generation             : 0.045s
+%% Conflict analysis                       : 7.018s
+%%   - Brave Orders                        : 7.018s
+%% Counterexample search                   : 0.582s
+%%   - CDOEs                               : 0.405s
+%%   - CDPIs                               : 0.178s
+%% Hypothesis Search                       : 33.202s
+%% Propagation                             : 16.435s
+%%   - CDOEs                               : 16.435s
+%% Total                                   : 58.061s
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+:~ value(forno,V1).[-V1@4, V1]
+:~ category(2).[-1@5]
+

@@ -1,0 +1,16 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Pre-processing                          : 0.08s
+%% Hypothesis Space Generation             : 0.065s
+%% Conflict analysis                       : 2.738s
+%%   - Brave Orders                        : 2.738s
+%% Counterexample search                   : 0.229s
+%%   - CDOEs                               : 0.157s
+%%   - CDPIs                               : 0.073s
+%% Hypothesis Search                       : 11.856s
+%% Propagation                             : 3.872s
+%%   - CDOEs                               : 3.872s
+%% Total                                   : 19.797s
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+:~ value(farinacei,V1).[V1@4, V1]
+:~ category(3).[1@5]
+

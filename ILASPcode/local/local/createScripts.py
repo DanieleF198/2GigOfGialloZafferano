@@ -1,237 +1,59 @@
 import os
+import numpy as np
 
-max_v_list = [2]
-max_p_list = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+max_v_list = [1, 2, 3, 4, 5]
+max_p_list = [1, 2, 3, 4, 5]
 choices = [0, 1]
+list_of_user = [15, 3, 32, 7, 36, 4, 20, 29, 14, 11]
+no_zero = True
+if no_zero:
+    NNoutput_dir = "Data8Component2Std/sampled-recipes-no-zero/"
+else:
+    NNoutput_dir = "Data8Component2Std/sampled-recipes-zero/"
 
-for choice in choices:
-    USERS = [str(i) for i in range(0, 48)]
-    for USER in USERS:
-        if int(choice) == 0:
-            train_data_dir = "./Data8Component2Std/final/users/no_zero/train/105Couples/User" + str(USER) + "/"
-            # test_data_dir = "./Data8Component2Std/final/users/no_zero/test/105Couples/User" + str(USER) + "/"
-        else:
-            train_data_dir = "./Data8Component2Std/final/users/zero/train/105Couples/User" + str(USER) + "/"
-            # test_data_dir = "./Data8Component2Std/final/users/zero/test/105Couples/User" + str(USER) + "/"
-        fileToCreate = open(train_data_dir + "script_ilasp_commands_equals_and_less_three.sh", "w+")
-        for max_v in max_v_list:
-            for max_p in max_p_list:
-                if max_v > 3 or max_p > 3:
-                    continue
-                if max_v == max_p:
-                    fileToCreate.write("ILASP --version=4 ./trainFiles/train_max-v\(" + str(max_v) + "\)-max_p\(" + str(max_p) + "\).las > ./outputTrain/outputTrain_max-v\(" + str(max_v) + "\)-max_p\(" + str(max_p) + "\).txt;\n")
+
+f_couples = os.path.join(NNoutput_dir, 'couple.txt')
+
+fCouples = open(f_couples)
+dataCouples = fCouples.read()
+fCouples.close()
+
+linesOfCouples = dataCouples.split('\n')
+couples = np.zeros((len(linesOfCouples), 2), dtype='float32')
+for i, line in enumerate(linesOfCouples):
+    if line == '':
+        continue
+    values = [x for x in line.split(';')[:]]
+    for j, value in enumerate(values):
+        if value == '':
+            continue
+        couples[i, j] = value
+
+no_zero_data_dir = "./Data8Component2Std/final/users/no_zero/train/45Couples/"
+zero_data_dir = "./Data8Component2Std/final/users/zero/train/45Couples/"
+
+if no_zero:
+    for USER in list_of_user:
+        fileToCreate = open(no_zero_data_dir + "script_ilasp_for_test_user" + str(USER) + ".sh", "w+")
+        for k, couple in enumerate(couples):
+            for max_v in max_v_list:
+                for max_p in max_p_list:
+                    if max_v == 1 and max_p == 5:
+                            fileToCreate.write("ILASP --version=4 ./User" + str(USER) + "/trainFiles/Couple" + str(int(couple[0])) + '-' + str(int(couple[1])) + "-max_v=" + str(max_v) + "-max_p=" + str(max_p) + ".las > ./User" + str(USER) + "/outputTrain/Couple" + str(int(couple[0])) + '-' + str(int(couple[1])) + "-max_v=" + str(max_v) + "-max_p=" + str(max_p) + ".txt;\n")
+                    else:
+                        continue
         fileToCreate.flush()
         fileToCreate.close()
-        fileToCreate = open(train_data_dir + "script_ilasp_commands_not_equals_and_less_three.sh", "w+")
-        for max_v in max_v_list:
-            for max_p in max_p_list:
-                if max_v > 3 or max_p > 3:
-                    continue
-                if max_v != max_p:
-                    fileToCreate.write("ILASP --version=4 ./trainFiles/train_max-v\(" + str(max_v) + "\)-max_p\(" + str(max_p) + "\).las > ./outputTrain/outputTrain_max-v\(" + str(max_v) + "\)-max_p\(" + str(max_p) + "\).txt;\n")
+
+else:
+    for USER in list_of_user:
+        fileToCreate = open(zero_data_dir + "script_ilasp_for_test_user" + str(USER) + ".sh", "w+")
+        for k, couple in enumerate(couples):
+            for max_v in max_v_list:
+                for max_p in max_p_list:
+                    if max_v == 1 and max_p == 5:
+                            fileToCreate.write("ILASP --version=4 ./User" + str(USER) + "/trainFiles/Couple" + str(int(couple[0])) + '-' + str(int(couple[1])) + "-max_v=" + str(max_v) + "-max_p=" + str(max_p) + ".las > ./User" + str(USER) + "/outputTrain/Couple" + str(int(couple[0])) + '-' + str(int(couple[1])) + "-max_v=" + str(max_v) + "-max_p=" + str(max_p) + ".txt;\n")
+                    else:
+                        continue
         fileToCreate.flush()
         fileToCreate.close()
-        fileToCreate = open(train_data_dir + "script_ilasp_commands_equals_and_great_three.sh", "w+")
-        for max_v in max_v_list:
-            for max_p in max_p_list:
-                if max_v <= 3 or max_p <= 3:
-                    continue
-                if max_v == max_p:
-                    fileToCreate.write("ILASP --version=4 ./trainFiles/train_max-v\(" + str(max_v) + "\)-max_p\(" + str(max_p) + "\).las > ./outputTrain/outputTrain_max-v\(" + str(max_v) + "\)-max_p\(" + str(max_p) + "\).txt;\n")
-        fileToCreate.flush()
-        fileToCreate.close()
-        fileToCreate = open(train_data_dir + "script_ilasp_commands_not_equals_and_great_three.sh", "w+")
-        for max_v in max_v_list:
-            for max_p in max_p_list:
-                if max_v <= 3 or max_p <= 3:
-                    continue
-                if max_v != max_p:
-                    fileToCreate.write("ILASP --version=4 ./trainFiles/train_max-v\(" + str(max_v) + "\)-max_p\(" + str(max_p) + "\).las > ./outputTrain/outputTrain_max-v\(" + str(max_v) + "\)-max_p\(" + str(max_p) + "\).txt;\n")
-
-        # fileToCreate = open(test_data_dir + "script_ilasp_commands_equals_and_less_three.sh", "w+")
-        # for max_v in max_v_list:
-        #     for max_p in max_p_list:
-        #         if max_v > 3 or max_p > 3:
-        #             continue
-        #         if max_v == max_p:
-        #             fileToCreate.write("ILASP --version=4 ./testFiles/test_max-v\(" + str(max_v) + "\)-max_p\(" + str(max_p) + "\).las > ./outputTest/outputTest_max-v\(" + str(max_v) + "\)-max_p\(" + str(max_p) + "\).txt;\n")
-        # fileToCreate.flush()
-        # fileToCreate.close()
-        # fileToCreate = open(test_data_dir + "script_ilasp_commands_not_equals_and_less_three.sh", "w+")
-        # for max_v in max_v_list:
-        #     for max_p in max_p_list:
-        #         if max_v > 3 or max_p > 3:
-        #             continue
-        #         if max_v != max_p:
-        #             fileToCreate.write("ILASP --version=4 ./testFiles/test_max-v\(" + str(max_v) + "\)-max_p\(" + str(max_p) + "\).las > ./outputTest/outputTest_max-v\(" + str(max_v) + "\)-max_p\(" + str(max_p) + "\).txt;\n")
-        # fileToCreate.flush()
-        # fileToCreate.close()
-        # fileToCreate = open(test_data_dir + "script_ilasp_commands_equals_and_great_three.sh", "w+")
-        # for max_v in max_v_list:
-        #     for max_p in max_p_list:
-        #         if max_v <= 3 or max_p <= 3:
-        #             continue
-        #         if max_v == max_p:
-        #             fileToCreate.write("ILASP --version=4 ./testFiles/test_max-v\(" + str(max_v) + "\)-max_p\(" + str(max_p) + "\).las > ./outputTest/outputTest_max-v\(" + str(max_v) + "\)-max_p\(" + str(max_p) + "\).txt;\n")
-        # fileToCreate.flush()
-        # fileToCreate.close()
-        # fileToCreate = open(test_data_dir + "script_ilasp_commands_not_equals_and_great_three.sh", "w+")
-        # for max_v in max_v_list:
-        #     for max_p in max_p_list:
-        #         if max_v <= 3 or max_p <= 3:
-        #             continue
-        #         if max_v != max_p:
-        #             fileToCreate.write("ILASP --version=4 ./testFiles/test_max-v\(" + str(max_v) + "\)-max_p\(" + str(max_p) + "\).las > ./outputTest/outputTest_max-v\(" + str(max_v) + "\)-max_p\(" + str(max_p) + "\).txt;\n")
-
-second_list_of_user = [15, 3, 32, 7, 36, 4, 20, 29, 14, 11]
-no_zero_data_dir = "./Data8Component2Std/final/users/no_zero/train/105Couples/"
-zero_data_dir = "./Data8Component2Std/final/users/zero/train/105Couples/"
-fileToCreate = open(no_zero_data_dir + "script_ilasp_for_test_users_commands_equals_until_three.sh", "w+")
-for USER in second_list_of_user:
-    for max_v in max_v_list:
-        for max_p in max_p_list:
-            if max_v == max_p:
-                if max_v > 3:
-                    continue
-                else:
-                    fileToCreate.write("ILASP --version=4 ./User" + str(USER) + "/trainFiles/train_max-v\(" + str(max_v) + "\)-max_p\(" + str(max_p) + "\).las > ./User" + str(USER) + "/outputTrain/outputTrain_max-v\(" + str(max_v) + "\)-max_p\(" + str(max_p) + "\).txt;\n")
-fileToCreate.flush()
-fileToCreate.close()
-
-fileToCreate = open(no_zero_data_dir + "script_ilasp_for_test_users_commands_equals_until_four.sh", "w+")
-for USER in second_list_of_user:
-    for max_v in max_v_list:
-        for max_p in max_p_list:
-            if max_v == max_p:
-                if max_v > 4:
-                    continue
-                else:
-                    fileToCreate.write("ILASP --version=4 ./User" + str(USER) + "/trainFiles/train_max-v\(" + str(max_v) + "\)-max_p\(" + str(max_p) + "\).las > ./User" + str(USER) + "/outputTrain/outputTrain_max-v\(" + str(max_v) + "\)-max_p\(" + str(max_p) + "\).txt;\n")
-fileToCreate.flush()
-fileToCreate.close()
-
-fileToCreate = open(no_zero_data_dir + "script_ilasp_for_test_users_commands_equals_until_five.sh", "w+")
-for USER in second_list_of_user:
-    for max_v in max_v_list:
-        for max_p in max_p_list:
-            if max_v == max_p:
-                if max_v > 5:
-                    continue
-                else:
-                    fileToCreate.write("ILASP --version=4 ./User" + str(USER) + "/trainFiles/train_max-v\(" + str(max_v) + "\)-max_p\(" + str(max_p) + "\).las > ./User" + str(USER) + "/outputTrain/outputTrain_max-v\(" + str(max_v) + "\)-max_p\(" + str(max_p) + "\).txt;\n")
-fileToCreate.flush()
-fileToCreate.close()
-
-fileToCreate = open(no_zero_data_dir + "script_ilasp_for_test_users_commands_equals_only_three.sh", "w+")
-for USER in second_list_of_user:
-    for max_v in max_v_list:
-        for max_p in max_p_list:
-            if max_v == max_p:
-                if max_v == 3:
-                    fileToCreate.write("ILASP --version=4 ./User" + str(USER) + "/trainFiles/train_max-v\(" + str(max_v) + "\)-max_p\(" + str(max_p) + "\).las > ./User" + str(USER) + "/outputTrain/outputTrain_max-v\(" + str(max_v) + "\)-max_p\(" + str(max_p) + "\).txt;\n")
-fileToCreate.flush()
-fileToCreate.close()
-
-fileToCreate = open(no_zero_data_dir + "script_ilasp_for_test_users_commands_equals_only_four.sh", "w+")
-for USER in second_list_of_user:
-    for max_v in max_v_list:
-        for max_p in max_p_list:
-            if max_v == max_p:
-                if max_v == 4:
-                    fileToCreate.write("ILASP --version=4 ./User" + str(USER) + "/trainFiles/train_max-v\(" + str(max_v) + "\)-max_p\(" + str(max_p) + "\).las > ./User" + str(USER) + "/outputTrain/outputTrain_max-v\(" + str(max_v) + "\)-max_p\(" + str(max_p) + "\).txt;\n")
-fileToCreate.flush()
-fileToCreate.close()
-
-fileToCreate = open(no_zero_data_dir + "script_ilasp_for_test_users_commands_equals_only_five.sh", "w+")
-for USER in second_list_of_user:
-    for max_v in max_v_list:
-        for max_p in max_p_list:
-            if max_v == max_p:
-                if max_v == 5:
-                    fileToCreate.write("ILASP --version=4 ./User" + str(USER) + "/trainFiles/train_max-v\(" + str(max_v) + "\)-max_p\(" + str(max_p) + "\).las > ./User" + str(USER) + "/outputTrain/outputTrain_max-v\(" + str(max_v) + "\)-max_p\(" + str(max_p) + "\).txt;\n")
-fileToCreate.flush()
-fileToCreate.close()
-
-fileToCreate = open(zero_data_dir + "script_ilasp_for_test_users_commands_equals_until_three.sh", "w+")
-for USER in second_list_of_user:
-    for max_v in max_v_list:
-        for max_p in max_p_list:
-            if max_v == max_p:
-                if max_v > 3:
-                    continue
-                else:
-                    fileToCreate.write("ILASP --version=4 ./User" + str(USER) + "/trainFiles/train_max-v\(" + str(max_v) + "\)-max_p\(" + str(max_p) + "\).las > ./User" + str(USER) + "/outputTrain/outputTrain_max-v\(" + str(max_v) + "\)-max_p\(" + str(max_p) + "\).txt;\n")
-fileToCreate.flush()
-fileToCreate.close()
-
-fileToCreate = open(zero_data_dir + "script_ilasp_for_test_users_commands_equals_until_four.sh", "w+")
-for USER in second_list_of_user:
-    for max_v in max_v_list:
-        for max_p in max_p_list:
-            if max_v == max_p:
-                if max_v > 4:
-                    continue
-                else:
-                    fileToCreate.write("ILASP --version=4 ./User" + str(USER) + "/trainFiles/train_max-v\(" + str(max_v) + "\)-max_p\(" + str(max_p) + "\).las > ./User" + str(USER) + "/outputTrain/outputTrain_max-v\(" + str(max_v) + "\)-max_p\(" + str(max_p) + "\).txt;\n")
-fileToCreate.flush()
-fileToCreate.close()
-
-fileToCreate = open(zero_data_dir + "script_ilasp_for_test_users_commands_equals_until_five.sh", "w+")
-for USER in second_list_of_user:
-    for max_v in max_v_list:
-        for max_p in max_p_list:
-            if max_v == max_p:
-                if max_v > 5:
-                    continue
-                else:
-                    fileToCreate.write("ILASP --version=4 ./User" + str(USER) + "/trainFiles/train_max-v\(" + str(max_v) + "\)-max_p\(" + str(max_p) + "\).las > ./User" + str(USER) + "/outputTrain/outputTrain_max-v\(" + str(max_v) + "\)-max_p\(" + str(max_p) + "\).txt;\n")
-fileToCreate.flush()
-fileToCreate.close()
-
-fileToCreate = open(zero_data_dir + "script_ilasp_for_test_users_commands_equals_only_three.sh", "w+")
-for USER in second_list_of_user:
-    for max_v in max_v_list:
-        for max_p in max_p_list:
-            if max_v == max_p:
-                if max_v == 3:
-                    fileToCreate.write("ILASP --version=4 ./User" + str(USER) + "/trainFiles/train_max-v\(" + str(max_v) + "\)-max_p\(" + str(max_p) + "\).las > ./User" + str(USER) + "/outputTrain/outputTrain_max-v\(" + str(max_v) + "\)-max_p\(" + str(max_p) + "\).txt;\n")
-fileToCreate.flush()
-fileToCreate.close()
-
-fileToCreate = open(zero_data_dir + "script_ilasp_for_test_users_commands_equals_only_four.sh", "w+")
-for USER in second_list_of_user:
-    for max_v in max_v_list:
-        for max_p in max_p_list:
-            if max_v == max_p:
-                if max_v == 4:
-                    fileToCreate.write("ILASP --version=4 ./User" + str(USER) + "/trainFiles/train_max-v\(" + str(max_v) + "\)-max_p\(" + str(max_p) + "\).las > ./User" + str(USER) + "/outputTrain/outputTrain_max-v\(" + str(max_v) + "\)-max_p\(" + str(max_p) + "\).txt;\n")
-fileToCreate.flush()
-fileToCreate.close()
-
-fileToCreate = open(zero_data_dir + "script_ilasp_for_test_users_commands_equals_only_five.sh", "w+")
-for USER in second_list_of_user:
-    for max_v in max_v_list:
-        for max_p in max_p_list:
-            if max_v == max_p:
-                if max_v == 5:
-                    fileToCreate.write("ILASP --version=4 ./User" + str(USER) + "/trainFiles/train_max-v\(" + str(max_v) + "\)-max_p\(" + str(max_p) + "\).las > ./User" + str(USER) + "/outputTrain/outputTrain_max-v\(" + str(max_v) + "\)-max_p\(" + str(max_p) + "\).txt;\n")
-fileToCreate.flush()
-fileToCreate.close()
-
-# version maxp = 2, maxv from 1 to 10
-
-fileToCreate = open(no_zero_data_dir + "script_ilasp_for_test_users_fixed_maxp.sh", "w+")
-for USER in second_list_of_user:
-    for max_v in max_v_list:
-        for max_p in max_p_list:
-            fileToCreate.write("ILASP --version=4 ./User" + str(USER) + "/trainFiles/train_max-v\(" + str(max_v) + "\)-max_p\(" + str(max_p) + "\).las > ./User" + str(USER) + "/outputTrain/outputTrain_max-v\(" + str(max_v) + "\)-max_p\(" + str(max_p) + "\).txt;\n")
-fileToCreate.flush()
-fileToCreate.close()
-
-fileToCreate = open(zero_data_dir + "script_ilasp_for_test_users_fixed_maxp.sh", "w+")
-for USER in second_list_of_user:
-    for max_v in max_v_list:
-        for max_p in max_p_list:
-            fileToCreate.write("ILASP --version=4 ./User" + str(USER) + "/trainFiles/train_max-v\(" + str(max_v) + "\)-max_p\(" + str(max_p) + "\).las > ./User" + str(USER) + "/outputTrain/outputTrain_max-v\(" + str(max_v) + "\)-max_p\(" + str(max_p) + "\).txt;\n")
-fileToCreate.flush()
-fileToCreate.close()

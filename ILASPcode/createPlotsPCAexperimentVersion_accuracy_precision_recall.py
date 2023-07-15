@@ -18,7 +18,7 @@ for choice in choices:
                 path = './PCAexperiment/testOutput' + scope + str(PCAindex) + '/results_zero.csv'
             else:
                 continue    # temporally
-                # path = './PCAexperiment/testOutput' + scope + str(PCAindex) + '/results_no_zero.csv'
+                # path = './PCAexperiment/testOutput' + scope + str(PCAindex) + '/results_no_zero(variant).csv'
             for user in users:
                 with open(path, newline='\n') as csvFile:
                     reader = csv.reader(csvFile, delimiter=";")

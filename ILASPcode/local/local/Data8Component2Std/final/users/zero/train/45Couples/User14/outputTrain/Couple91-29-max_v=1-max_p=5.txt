@@ -1,0 +1,15 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Pre-processing                          : 0.076s
+%% Hypothesis Space Generation             : 0.051s
+%% Conflict analysis                       : 5.239s
+%%   - Brave Orders                        : 5.239s
+%% Counterexample search                   : 0.434s
+%%   - CDOEs                               : 0.299s
+%%   - CDPIs                               : 0.135s
+%% Hypothesis Search                       : 13.499s
+%% Propagation                             : 10.275s
+%%   - CDOEs                               : 10.275s
+%% Total                                   : 30.397s
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+:~ value(carne,V1).[-V1@4, V1]
+

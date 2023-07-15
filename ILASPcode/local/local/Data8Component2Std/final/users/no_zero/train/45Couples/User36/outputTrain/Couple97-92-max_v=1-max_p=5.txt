@@ -1,0 +1,18 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Pre-processing                          : 0.086s
+%% Hypothesis Space Generation             : 0.057s
+%% Conflict analysis                       : 2.977s
+%%   - Brave Orders                        : 2.977s
+%% Counterexample search                   : 0.147s
+%%   - CDOEs                               : 0.079s
+%%   - CDPIs                               : 0.069s
+%% Hypothesis Search                       : 9.961s
+%% Propagation                             : 5.759s
+%%   - CDOEs                               : 5.759s
+%% Total                                   : 19.927s
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+:~ value(pesce,V1).[-V1@1, V1]
+:~ value(funghi_e_tartufi,V1).[V1@3, V1]
+:~ value(farinacei,V1).[-V1@5, V1]
+:~ value(pasta,V1).[-V1@4, V1]
+

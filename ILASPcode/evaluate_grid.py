@@ -17,7 +17,7 @@ for choice in choices:
     else:
         continue
         # temporally
-        # path = './Data8Component2Std/testOutput/results_no_zero.csv'
+        # path = './Data8Component2Std/testOutput/results_no_zero(variant).csv'
 
     test_not_inserted = True
     for COUPLE in COUPLES:

@@ -1,0 +1,16 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Pre-processing                          : 0.07s
+%% Hypothesis Space Generation             : 0.045s
+%% Conflict analysis                       : 2.828s
+%%   - Brave Orders                        : 2.828s
+%% Counterexample search                   : 0.24s
+%%   - CDOEs                               : 0.167s
+%%   - CDPIs                               : 0.075s
+%% Hypothesis Search                       : 5.788s
+%% Propagation                             : 5.097s
+%%   - CDOEs                               : 5.097s
+%% Total                                   : 14.779s
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+:~ value(pesce,V1).[V1@5, V1]
+:~ value(frittura,V1), category(4).[-V1@4, V1]
+

@@ -2,7 +2,7 @@ import os
 import numpy as np
 import sys
 
-data_dir = "../dataset_100/separated_text_data/"
+data_dir = "../../../dataset_100/separated_text_data/"
 
 fScalar = os.path.join(data_dir, 'scalars.txt')
 fCategories = os.path.join(data_dir, 'categories.txt')
@@ -102,12 +102,42 @@ preparation_dictionary = {0: "bollitura",
                           4: "mantecatura",
                           5: "forno",
                           6: "cottura_a_fiamma",
-                          7: "cottura_a_vapore",
-                          8: "stufato"}
+                          7: "stufato"}
+
+for col in range(food_data_macro_ingredients.shape[1]):
+    maxv = np.max(food_data_macro_ingredients[:, col])
+    print(macro_ingredients_dictionary[col] + ": " + str(maxv))
+print("")
+for col in range(food_data_preparation.shape[1]):
+    maxv = np.max(food_data_preparation[:, col])
+    print(preparation_dictionary[col] + ": " + str(maxv))
+
+# 8PC2STD:
+# cereali: 0.0
+# latticini: 1.0
+# uova: 4.0
+# farinacei: 7.0
+# frutta: 2.0
+# erbe_spezie_e_condimenti: 11.0
+# carne: 5.0
+# funghi_e_tartufi: 3.0
+# pasta: 5.0
+# pesce: 9.0
+# dolcificanti: 1.0
+# verdure_e_ortaggi: 8.0
+#
+# bollitura: 5.0
+# rosolatura: 5.0
+# frittura: 5.0
+# marinatura: 3.0
+# mantecatura: 4.0
+# forno: 5.0
+# cottura_a_fiamma: 5.0
+# stufato: 5.0
 
 
-max_v_list = [10]
-max_p_list = [10]
+max_v_list = [1, 2, 3, 4, 5]
+max_p_list = [1, 2, 3, 4, 5]
 Dir = "Data8Component2Std/recipes/"
 
 for max_v in max_v_list:
@@ -125,20 +155,27 @@ for max_v in max_v_list:
         sys.stdout = open(f_output, 'w')
 
         for i in range(0, 101):
-            if int(food_data_categories[i, 0]) == 2:
-                # item = "#pos(item" + str(i) + ", {}, {}, value(difficulty," + str(int(food_data_categories[i, 2])) + ")."
-                item = "#pos(item" + str(i) + ", {}, {}, {"
-            else:
-                item = "#pos(item" + str(i) + ", {}, {}, {category(" + str(int(food_data_categories[i, 0])) + ")."
-            # item = "#pos(item" + str(i) + ", {}, {}, {category(" + str(int(food_data_categories[i, 0])) + "). value(cost," + str(int(food_data_categories[i, 1])) + "). value(difficulty," + str(int(food_data_categories[i, 2])) + "). value(prepTime," + str(int(food_data_scalars[i, 0])) + ")."
+            # if int(food_data_categories[i, 0]) == 2:
+            #     item = "#pos(item" + str(i) + ", {}, {}, value(difficulty,0)."
+                # item = "#pos(item" + str(i) + ", {}, {}, {"
+            # else:
+                # item = "#pos(item" + str(i) + ", {}, {}, {category(" + str(int(food_data_categories[i, 0])) + ")."
+            item = "#pos(item" + str(i) + ", {}, {}, {category(" + str(int(food_data_categories[i, 0])) + "). value(cost,0). value(difficulty,0). value(prepTime,0)."
             for j, macro_ingredient in enumerate(food_data_macro_ingredients[i]):
                 if macro_ingredient != 0:
                     item = item + " value(" + macro_ingredients_dictionary[j] + "," + str(int(macro_ingredient)) + ")."
+                else:
+                    item = item + " value(" + macro_ingredients_dictionary[j] + ",0)."
             for j, preparation in enumerate(food_data_preparation[i]):
-                if (j <= 1) or (3 <= j <= 4) or (j == 6) or (j == 8):
-                    continue
+                # if (j <= 1) or (3 <= j <= 4) or (j == 6):
+                #     continue
                 if preparation != 0:
-                    item = item + " value(" + preparation_dictionary[j] + "," + str(int(preparation)) + ")."
+                    if (j <= 1) or (3 <= j <= 4) or (j == 6):
+                        item = item + " value(" + preparation_dictionary[j] + ",0)."
+                    else:
+                        item = item + " value(" + preparation_dictionary[j] + "," + str(int(preparation)) + ")."
+                else:
+                    item = item + " value(" + preparation_dictionary[j] + ",0)."
             item = item + "} )."
             print(item)
 
@@ -161,19 +198,20 @@ for max_v in max_v_list:
         print("#constant(val, difficulty).")
         print("#constant(val, prepTime).")
         print("#constant(mg, 1).")
-        # print("#constant(mg, 2).")
+        print("#constant(mg, 2).")
         print("#constant(mg, 3).")
         print("#constant(mg, 4).")
         print("#constant(mg, 5).")
         for key in macro_ingredients_dictionary.keys():
-            if key == 0:
-                continue
+            # if key == 0:
+            #     continue
             print("#constant(val, " + macro_ingredients_dictionary[key] + ").")
         for key in preparation_dictionary.keys():
-            if (key == 0) or (key == 4) or (key == 6) or (key == 7):
-                continue
+            # if (key <= 1) or (3 <= key <= 4) or (key == 6):
+            #     continue
             print("#constant(val, " + preparation_dictionary[key] + ").")
 
 
         sys.stdout = sys.__stdout__
         f.close()
+

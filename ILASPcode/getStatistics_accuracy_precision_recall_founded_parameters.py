@@ -18,7 +18,7 @@ for choice in choices:
     else:
         continue
         # temporally
-        # path = './Data8Component2Std/testOutput/results_no_zero.csv'
+        # path = './Data8Component2Std/testOutput/results_no_zero(variant).csv'
     user_counter = 0
     for user in users:
         # if user in [15, 3, 32, 7, 36, 4, 20, 29, 14, 11]:

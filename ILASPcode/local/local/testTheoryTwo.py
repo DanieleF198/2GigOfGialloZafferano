@@ -5,7 +5,7 @@ import re
 choices = [0, 1]
 for choice in choices:
     if choice == 0:
-        path = './Data/testOutput/results_no_zero.csv'
+        path = './Data/testOutput/results_no_zero(variant).csv'
     else:
         path = './Data/testOutput/results_zero.csv'
     with open(path, 'w+', encoding='UTF8') as f_output:

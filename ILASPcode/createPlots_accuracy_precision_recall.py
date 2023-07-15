@@ -13,7 +13,7 @@ for choice in choices:
         path = './Data8Component2Std/testOutput/results_zero.csv'
     else:
         continue    # temporally
-        # path = './Data8Component2Std/testOutput/results_no_zero.csv'
+        # path = './Data8Component2Std/testOutput/results_no_zero(variant).csv'
     for user in users:
         with open(path, newline='\n') as csvFile:
             reader = csv.reader(csvFile, delimiter=";")

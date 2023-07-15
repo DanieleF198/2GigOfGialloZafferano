@@ -1,0 +1,18 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Pre-processing                          : 0.071s
+%% Hypothesis Space Generation             : 0.058s
+%% Conflict analysis                       : 5.42s
+%%   - Brave Orders                        : 5.42s
+%% Counterexample search                   : 0.432s
+%%   - CDOEs                               : 0.295s
+%%   - CDPIs                               : 0.137s
+%% Hypothesis Search                       : 20.889s
+%% Propagation                             : 12.341s
+%%   - CDOEs                               : 12.341s
+%% Total                                   : 39.947s
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+:~ category(5).[1@5]
+:~ value(pesce,V1).[-V1@4, V1]
+:~ value(forno,V1).[-V1@1, V1]
+:~ value(carne,V1).[-V1@2, V1]
+

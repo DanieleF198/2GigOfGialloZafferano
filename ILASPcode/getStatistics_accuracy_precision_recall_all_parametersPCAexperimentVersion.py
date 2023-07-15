@@ -26,7 +26,7 @@ for choice in choices:
             else:
                 continue
                 # temporally
-                # path = './PCAexperiment/testOutput/results_no_zero.csv'
+                # path = './PCAexperiment/testOutput/results_no_zero(variant).csv'
             for user in users:
                 parameter_base = 0
                 test_not_inserted = True

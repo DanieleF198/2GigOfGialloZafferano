@@ -17,7 +17,7 @@ for choice in choices:
             else:
                 continue
                 # temporally
-                # path = './PCAexperiment/testOutput/results_no_zero.csv'
+                # path = './PCAexperiment/testOutput/results_no_zero(variant).csv'
             counter45 = 0
             counter105 = 0
             counter210 = 0

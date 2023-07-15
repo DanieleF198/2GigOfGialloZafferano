@@ -1,0 +1,16 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Pre-processing                          : 0.081s
+%% Hypothesis Space Generation             : 0.05s
+%% Conflict analysis                       : 3.798s
+%%   - Brave Orders                        : 3.798s
+%% Counterexample search                   : 0.313s
+%%   - CDOEs                               : 0.219s
+%%   - CDPIs                               : 0.095s
+%% Hypothesis Search                       : 18.916s
+%% Propagation                             : 6.697s
+%%   - CDOEs                               : 6.697s
+%% Total                                   : 30.796s
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+:~ value(pesce,V1).[-V1@1, V1]
+:~ value(funghi_e_tartufi,V1).[V1@2, V1]
+

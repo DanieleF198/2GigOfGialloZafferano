@@ -71,7 +71,6 @@ for choice in choices:
                     # train_set = ilasp.preferencesFromFileSpaces(f_train_data)
                     train_set = ilasp.preferencesFromFileSpacesAndSign(f_train_data)
                     test_set = ilasp.preferencesFromFileSign(f_test)
-                    test_set = ilasp.preferencesFromFileSpacesAndSign(f_train_data)
                     # train_size = len(train_set)
                     test_size = len(test_set)
                     if ':~' not in data_train:

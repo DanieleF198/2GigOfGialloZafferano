@@ -10,7 +10,7 @@ data_210_couples_no_zeros = np.zeros((47, 5, 5), dtype='float32')
 
 for choice in choices:
     if choice == 0:
-        path = './Data/testOutput/results_no_zero.csv'
+        path = './Data/testOutput/results_no_zero(variant).csv'
     else:
         continue    # temporally
         # path = './Data17Component2Std/testOutput/results_zero.csv'

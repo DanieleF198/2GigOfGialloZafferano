@@ -1,0 +1,18 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Pre-processing                          : 0.08s
+%% Hypothesis Space Generation             : 0.048s
+%% Conflict analysis                       : 3.55s
+%%   - Brave Orders                        : 3.55s
+%% Counterexample search                   : 0.321s
+%%   - CDOEs                               : 0.222s
+%%   - CDPIs                               : 0.098s
+%% Hypothesis Search                       : 11.37s
+%% Propagation                             : 7.644s
+%%   - CDOEs                               : 7.644s
+%% Total                                   : 23.787s
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+:~ value(stufato,V1).[-V1@3, V1]
+:~ value(uova,V1).[V1@4, V1]
+:~ category(4).[-1@5]
+:~ value(carne,V1).[V1@2, V1]
+
