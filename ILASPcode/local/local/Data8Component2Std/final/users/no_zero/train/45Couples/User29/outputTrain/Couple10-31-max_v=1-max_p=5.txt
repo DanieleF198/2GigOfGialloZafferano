@@ -1,15 +1,17 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%% Pre-processing                          : 0.078s
-%% Hypothesis Space Generation             : 0.055s
-%% Conflict analysis                       : 1.201s
-%%   - Brave Orders                        : 1.201s
-%% Counterexample search                   : 0.11s
-%%   - CDOEs                               : 0.072s
-%%   - CDPIs                               : 0.038s
-%% Hypothesis Search                       : 6.244s
-%% Propagation                             : 2.711s
-%%   - CDOEs                               : 2.711s
-%% Total                                   : 11.156s
+%% Pre-processing                          : 0.084s
+%% Hypothesis Space Generation             : 0.05s
+%% Conflict analysis                       : 2.821s
+%%   - Brave Orders                        : 2.821s
+%% Counterexample search                   : 0.237s
+%%   - CDOEs                               : 0.16s
+%%   - CDPIs                               : 0.075s
+%% Hypothesis Search                       : 9.787s
+%% Propagation                             : 6.739s
+%%   - CDOEs                               : 6.739s
+%% Total                                   : 20.515s
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-:~ value(funghi_e_tartufi,V1).[-V1@5, V1]
+:~ value(funghi_e_tartufi,V1).[-V1@1, V1]
+:~ category(1).[-1@5]
+:~ category(3).[-1@4]
 

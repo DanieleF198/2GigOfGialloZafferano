@@ -1,15 +1,16 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%% Pre-processing                          : 0.099s
-%% Hypothesis Space Generation             : 0.065s
-%% Conflict analysis                       : 1.223s
-%%   - Brave Orders                        : 1.223s
-%% Counterexample search                   : 0.05s
-%%   - CDOEs                               : 0.018s
-%%   - CDPIs                               : 0.033s
-%% Hypothesis Search                       : 4.622s
-%% Propagation                             : 2.437s
-%%   - CDOEs                               : 2.437s
-%% Total                                   : 9.722s
+%% Pre-processing                          : 0.083s
+%% Hypothesis Space Generation             : 0.05s
+%% Conflict analysis                       : 1.284s
+%%   - Brave Orders                        : 1.284s
+%% Counterexample search                   : 0.065s
+%%   - CDOEs                               : 0.028s
+%%   - CDPIs                               : 0.037s
+%% Hypothesis Search                       : 3.222s
+%% Propagation                             : 2.31s
+%%   - CDOEs                               : 2.31s
+%% Total                                   : 8.07s
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-:~ value(forno,V1).[-V1@2, V1]
+:~ category(5).[1@1]
+:~ category(3).[1@2]
 

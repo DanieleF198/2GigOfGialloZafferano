@@ -1,18 +1,19 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%% Pre-processing                          : 0.083s
-%% Hypothesis Space Generation             : 0.055s
-%% Conflict analysis                       : 8.355s
-%%   - Brave Orders                        : 8.355s
-%% Counterexample search                   : 0.629s
-%%   - CDOEs                               : 0.431s
-%%   - CDPIs                               : 0.195s
-%% Hypothesis Search                       : 33.936s
-%% Propagation                             : 18.164s
-%%   - CDOEs                               : 18.164s
-%% Total                                   : 62.061s
+%% Pre-processing                          : 0.088s
+%% Hypothesis Space Generation             : 0.081s
+%% Conflict analysis                       : 10.715s
+%%   - Brave Orders                        : 10.715s
+%% Counterexample search                   : 0.845s
+%%   - CDOEs                               : 0.598s
+%%   - CDPIs                               : 0.244s
+%% Hypothesis Search                       : 46.665s
+%% Propagation                             : 20.624s
+%%   - CDOEs                               : 20.624s
+%% Total                                   : 79.996s
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 :~ value(pasta,V1).[V1@1, V1]
-:~ value(stufato,V1).[V1@5, V1]
-:~ value(frittura,V1).[V1@4, V1]
-:~ value(frutta,V1).[-V1@3, V1]
+:~ value(stufato,V1).[V1@3, V1]
+:~ value(frittura,V1).[V1@2, V1]
+:~ category(3).[-1@4]
+:~ category(2).[-1@5]
 

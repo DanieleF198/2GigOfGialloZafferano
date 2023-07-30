@@ -1,16 +1,17 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%% Pre-processing                          : 0.085s
-%% Hypothesis Space Generation             : 0.057s
-%% Conflict analysis                       : 3.753s
-%%   - Brave Orders                        : 3.753s
-%% Counterexample search                   : 0.315s
-%%   - CDOEs                               : 0.222s
-%%   - CDPIs                               : 0.098s
-%% Hypothesis Search                       : 10.758s
-%% Propagation                             : 7.167s
-%%   - CDOEs                               : 7.167s
-%% Total                                   : 23.133s
+%% Pre-processing                          : 0.093s
+%% Hypothesis Space Generation             : 0.064s
+%% Conflict analysis                       : 5.283s
+%%   - Brave Orders                        : 5.283s
+%% Counterexample search                   : 0.455s
+%%   - CDOEs                               : 0.316s
+%%   - CDPIs                               : 0.142s
+%% Hypothesis Search                       : 14.017s
+%% Propagation                             : 8.692s
+%%   - CDOEs                               : 8.692s
+%% Total                                   : 29.636s
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-:~ value(frutta,V1).[V1@5, V1]
-:~ value(pasta,V1).[V1@4, V1]
+:~ category(5).[1@5]
+:~ value(frittura,V1).[-V1@3, V1]
+:~ category(4).[1@4]
 

@@ -1,0 +1,19 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Pre-processing                          : 0.077s
+%% Hypothesis Space Generation             : 0.057s
+%% Conflict analysis                       : 14.938s
+%%   - Brave Orders                        : 14.938s
+%% Counterexample search                   : 1.13s
+%%   - CDOEs                               : 0.801s
+%%   - CDPIs                               : 0.325s
+%% Hypothesis Search                       : 131.36s
+%% Propagation                             : 32.531s
+%%   - CDOEs                               : 32.531s
+%% Total                                   : 181.023s
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+:~ value(stufato,V1).[V1@4, V1]
+:~ value(frutta,V1).[V1@3, V1]
+:~ value(farinacei,V1).[-V1@2, V1]
+:~ value(erbe_spezie_e_condimenti,V1).[V1@1, V1]
+:~ category(3).[1@5]
+

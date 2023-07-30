@@ -1,16 +1,17 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%% Pre-processing                          : 0.087s
-%% Hypothesis Space Generation             : 0.049s
-%% Conflict analysis                       : 4.263s
-%%   - Brave Orders                        : 4.263s
-%% Counterexample search                   : 0.344s
-%%   - CDOEs                               : 0.242s
-%%   - CDPIs                               : 0.104s
-%% Hypothesis Search                       : 11.337s
-%% Propagation                             : 7.341s
-%%   - CDOEs                               : 7.341s
-%% Total                                   : 24.397s
+%% Pre-processing                          : 0.081s
+%% Hypothesis Space Generation             : 0.046s
+%% Conflict analysis                       : 2.295s
+%%   - Brave Orders                        : 2.295s
+%% Counterexample search                   : 0.211s
+%%   - CDOEs                               : 0.145s
+%%   - CDPIs                               : 0.065s
+%% Hypothesis Search                       : 4.225s
+%% Propagation                             : 5.326s
+%%   - CDOEs                               : 5.326s
+%% Total                                   : 13.088s
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-:~ value(frittura,V1).[V1@5, V1]
-:~ value(erbe_spezie_e_condimenti,V1).[-V1@4, V1]
+:~ category(5).[1@4]
+:~ value(farinacei,V1).[V1@2, V1]
+:~ category(1).[1@5]
 

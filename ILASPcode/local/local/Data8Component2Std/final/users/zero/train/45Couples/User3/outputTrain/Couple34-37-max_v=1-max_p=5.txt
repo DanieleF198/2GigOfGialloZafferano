@@ -1,16 +1,16 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%% Pre-processing                          : 0.07s
-%% Hypothesis Space Generation             : 0.044s
-%% Conflict analysis                       : 3.631s
-%%   - Brave Orders                        : 3.63s
-%% Counterexample search                   : 0.316s
-%%   - CDOEs                               : 0.221s
-%%   - CDPIs                               : 0.097s
-%% Hypothesis Search                       : 18.011s
-%% Propagation                             : 8.561s
-%%   - CDOEs                               : 8.561s
-%% Total                                   : 31.307s
+%% Pre-processing                          : 0.084s
+%% Hypothesis Space Generation             : 0.051s
+%% Conflict analysis                       : 1.225s
+%%   - Brave Orders                        : 1.225s
+%% Counterexample search                   : 0.121s
+%%   - CDOEs                               : 0.08s
+%%   - CDPIs                               : 0.042s
+%% Hypothesis Search                       : 3.011s
+%% Propagation                             : 2.477s
+%%   - CDOEs                               : 2.477s
+%% Total                                   : 8.075s
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-:~ value(funghi_e_tartufi,V1).[-V1@5, V1]
-:~ value(erbe_spezie_e_condimenti,V1).[-V1@1, V1]
+:~ value(forno,V1).[V1@2, V1]
+:~ category(3).[-1@3]
 

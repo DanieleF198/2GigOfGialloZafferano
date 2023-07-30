@@ -1,16 +1,17 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%% Pre-processing                          : 0.074s
-%% Hypothesis Space Generation             : 0.045s
-%% Conflict analysis                       : 4.046s
-%%   - Brave Orders                        : 4.046s
-%% Counterexample search                   : 0.354s
-%%   - CDOEs                               : 0.249s
-%%   - CDPIs                               : 0.108s
-%% Hypothesis Search                       : 19.539s
-%% Propagation                             : 7.746s
-%%   - CDOEs                               : 7.746s
-%% Total                                   : 32.581s
+%% Pre-processing                          : 0.08s
+%% Hypothesis Space Generation             : 0.065s
+%% Conflict analysis                       : 2.496s
+%%   - Brave Orders                        : 2.496s
+%% Counterexample search                   : 0.201s
+%%   - CDOEs                               : 0.136s
+%%   - CDPIs                               : 0.063s
+%% Hypothesis Search                       : 7.845s
+%% Propagation                             : 5.979s
+%%   - CDOEs                               : 5.979s
+%% Total                                   : 17.743s
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-:~ value(uova,V1).[-V1@3, V1]
-:~ value(erbe_spezie_e_condimenti,V1), category(3).[V1@2, V1]
+:~ category(5).[1@5]
+:~ value(pasta,V1).[-V1@3, V1]
+:~ value(erbe_spezie_e_condimenti,V1), category(3).[V1@4, V1]
 

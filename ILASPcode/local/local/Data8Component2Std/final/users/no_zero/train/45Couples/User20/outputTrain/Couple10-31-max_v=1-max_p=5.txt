@@ -1,17 +1,17 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%% Pre-processing                          : 0.081s
-%% Hypothesis Space Generation             : 0.048s
-%% Conflict analysis                       : 4.845s
-%%   - Brave Orders                        : 4.845s
-%% Counterexample search                   : 0.413s
-%%   - CDOEs                               : 0.29s
-%%   - CDPIs                               : 0.125s
-%% Hypothesis Search                       : 24.587s
-%% Propagation                             : 9.341s
-%%   - CDOEs                               : 9.341s
-%% Total                                   : 40.063s
+%% Pre-processing                          : 0.07s
+%% Hypothesis Space Generation             : 0.045s
+%% Conflict analysis                       : 1.562s
+%%   - Brave Orders                        : 1.562s
+%% Counterexample search                   : 0.146s
+%%   - CDOEs                               : 0.098s
+%%   - CDPIs                               : 0.05s
+%% Hypothesis Search                       : 3.384s
+%% Propagation                             : 3.283s
+%%   - CDOEs                               : 3.283s
+%% Total                                   : 9.118s
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-:~ value(stufato,V1).[-V1@4, V1]
-:~ value(frittura,V1).[V1@5, V1]
 :~ value(forno,V1).[V1@1, V1]
+:~ category(2).[-1@3]
+:~ category(1).[1@2]
 

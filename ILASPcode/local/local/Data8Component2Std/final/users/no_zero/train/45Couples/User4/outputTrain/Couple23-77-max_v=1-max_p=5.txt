@@ -1,19 +1,19 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Pre-processing                          : 0.084s
-%% Hypothesis Space Generation             : 0.051s
-%% Conflict analysis                       : 8.515s
-%%   - Brave Orders                        : 8.515s
-%% Counterexample search                   : 0.618s
-%%   - CDOEs                               : 0.437s
-%%   - CDPIs                               : 0.182s
-%% Hypothesis Search                       : 36.769s
-%% Propagation                             : 18.473s
-%%   - CDOEs                               : 18.473s
-%% Total                                   : 65.616s
+%% Hypothesis Space Generation             : 0.05s
+%% Conflict analysis                       : 6.527s
+%%   - Brave Orders                        : 6.527s
+%% Counterexample search                   : 0.471s
+%%   - CDOEs                               : 0.325s
+%%   - CDPIs                               : 0.147s
+%% Hypothesis Search                       : 28.834s
+%% Propagation                             : 11.159s
+%%   - CDOEs                               : 11.159s
+%% Total                                   : 48.377s
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-:~ category(5).[1@4]
-:~ value(pesce,V1).[V1@3, V1]
+:~ category(5).[1@3]
 :~ value(farinacei,V1).[V1@2, V1]
-:~ value(pasta,V1).[V1@5, V1]
 :~ value(carne,V1).[-V1@1, V1]
+:~ category(3).[1@5]
+:~ value(funghi_e_tartufi,V1), category(2).[V1@4, V1]
 

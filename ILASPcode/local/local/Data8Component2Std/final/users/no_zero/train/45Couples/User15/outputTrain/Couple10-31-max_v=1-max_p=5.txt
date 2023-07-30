@@ -1,17 +1,16 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%% Pre-processing                          : 0.114s
-%% Hypothesis Space Generation             : 0.082s
-%% Conflict analysis                       : 1.768s
-%%   - Brave Orders                        : 1.768s
-%% Counterexample search                   : 0.148s
-%%   - CDOEs                               : 0.099s
-%%   - CDPIs                               : 0.05s
-%% Hypothesis Search                       : 3.905s
-%% Propagation                             : 2.725s
-%%   - CDOEs                               : 2.725s
-%% Total                                   : 9.672s
+%% Pre-processing                          : 0.103s
+%% Hypothesis Space Generation             : 0.055s
+%% Conflict analysis                       : 2.124s
+%%   - Brave Orders                        : 2.124s
+%% Counterexample search                   : 0.175s
+%%   - CDOEs                               : 0.114s
+%%   - CDPIs                               : 0.06s
+%% Hypothesis Search                       : 7.978s
+%% Propagation                             : 4.524s
+%%   - CDOEs                               : 4.524s
+%% Total                                   : 15.826s
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-:~ value(pasta,V1).[V1@1, V1]
-:~ value(frutta,V1).[-V1@3, V1]
-:~ category(3).[1@4]
+:~ value(funghi_e_tartufi,V1).[V1@1, V1]
+:~ category(3).[1@3]
 

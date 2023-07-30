@@ -1,15 +1,17 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%% Pre-processing                          : 0.094s
-%% Hypothesis Space Generation             : 0.05s
-%% Conflict analysis                       : 3.791s
-%%   - Brave Orders                        : 3.791s
-%% Counterexample search                   : 0.291s
-%%   - CDOEs                               : 0.203s
-%%   - CDPIs                               : 0.089s
-%% Hypothesis Search                       : 11.741s
-%% Propagation                             : 6.494s
-%%   - CDOEs                               : 6.494s
-%% Total                                   : 23.421s
+%% Pre-processing                          : 0.082s
+%% Hypothesis Space Generation             : 0.07s
+%% Conflict analysis                       : 3.491s
+%%   - Brave Orders                        : 3.491s
+%% Counterexample search                   : 0.329s
+%%   - CDOEs                               : 0.213s
+%%   - CDPIs                               : 0.117s
+%% Hypothesis Search                       : 4.617s
+%% Propagation                             : 6.456s
+%%   - CDOEs                               : 6.456s
+%% Total                                   : 16.089s
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-:~ value(carne,V1).[V1@1, V1]
+:~ value(frittura,V1).[V1@3, V1]
+:~ category(4).[-1@4]
+:~ category(2).[-1@5]
 

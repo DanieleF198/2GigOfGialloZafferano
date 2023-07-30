@@ -1,18 +1,16 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%% Pre-processing                          : 0.089s
-%% Hypothesis Space Generation             : 0.074s
-%% Conflict analysis                       : 5.448s
-%%   - Brave Orders                        : 5.448s
-%% Counterexample search                   : 0.409s
-%%   - CDOEs                               : 0.286s
-%%   - CDPIs                               : 0.123s
-%% Hypothesis Search                       : 20.818s
-%% Propagation                             : 9.157s
-%%   - CDOEs                               : 9.157s
-%% Total                                   : 37.019s
+%% Pre-processing                          : 0.116s
+%% Hypothesis Space Generation             : 0.073s
+%% Conflict analysis                       : 1.472s
+%%   - Brave Orders                        : 1.472s
+%% Counterexample search                   : 0.135s
+%%   - CDOEs                               : 0.09s
+%%   - CDPIs                               : 0.044s
+%% Hypothesis Search                       : 3.128s
+%% Propagation                             : 3.163s
+%%   - CDOEs                               : 3.163s
+%% Total                                   : 9.352s
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-:~ value(pasta,V1).[-V1@1, V1]
-:~ value(pesce,V1).[V1@4, V1]
-:~ value(frutta,V1).[-V1@5, V1]
-:~ value(farinacei,V1).[-V1@2, V1]
+:~ value(pasta,V1).[-V1@4, V1]
+:~ category(4).[-1@5]
 

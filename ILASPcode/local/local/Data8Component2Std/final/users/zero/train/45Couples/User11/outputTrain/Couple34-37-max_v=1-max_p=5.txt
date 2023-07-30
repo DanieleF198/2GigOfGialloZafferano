@@ -1,16 +1,16 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%% Pre-processing                          : 0.071s
-%% Hypothesis Space Generation             : 0.056s
-%% Conflict analysis                       : 4.409s
-%%   - Brave Orders                        : 4.409s
-%% Counterexample search                   : 0.36s
-%%   - CDOEs                               : 0.25s
-%%   - CDPIs                               : 0.112s
-%% Hypothesis Search                       : 18.348s
-%% Propagation                             : 9.45s
-%%   - CDOEs                               : 9.45s
-%% Total                                   : 33.477s
+%% Pre-processing                          : 0.101s
+%% Hypothesis Space Generation             : 0.078s
+%% Conflict analysis                       : 2.483s
+%%   - Brave Orders                        : 2.483s
+%% Counterexample search                   : 0.202s
+%%   - CDOEs                               : 0.135s
+%%   - CDPIs                               : 0.068s
+%% Hypothesis Search                       : 4.331s
+%% Propagation                             : 3.392s
+%%   - CDOEs                               : 3.392s
+%% Total                                   : 11.666s
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 :~ value(pasta,V1).[-V1@4, V1]
-:~ value(uova,V1).[V1@5, V1]
+:~ category(4).[-1@5]
 

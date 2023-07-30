@@ -1,0 +1,18 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Pre-processing                          : 0.073s
+%% Hypothesis Space Generation             : 0.06s
+%% Conflict analysis                       : 7.667s
+%%   - Brave Orders                        : 7.667s
+%% Counterexample search                   : 0.614s
+%%   - CDOEs                               : 0.427s
+%%   - CDPIs                               : 0.184s
+%% Hypothesis Search                       : 26.621s
+%% Propagation                             : 14.173s
+%%   - CDOEs                               : 14.173s
+%% Total                                   : 50.043s
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+:~ value(erbe_spezie_e_condimenti,V1).[V1@2, V1]
+:~ category(1).[-1@5]
+:~ category(2).[-1@4]
+:~ value(funghi_e_tartufi,V1), category(5).[-V1@3, V1]
+

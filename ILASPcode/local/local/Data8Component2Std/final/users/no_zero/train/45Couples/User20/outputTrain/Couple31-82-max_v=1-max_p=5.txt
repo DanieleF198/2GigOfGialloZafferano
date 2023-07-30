@@ -1,0 +1,15 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Pre-processing                          : 0.079s
+%% Hypothesis Space Generation             : 0.049s
+%% Conflict analysis                       : 0.312s
+%%   - Brave Orders                        : 0.312s
+%% Counterexample search                   : 0.037s
+%%   - CDOEs                               : 0.02s
+%%   - CDPIs                               : 0.018s
+%% Hypothesis Search                       : 1.126s
+%% Propagation                             : 0.964s
+%%   - CDOEs                               : 0.964s
+%% Total                                   : 3.311s
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+:~ value(funghi_e_tartufi,V1).[-V1@1, V1]
+

@@ -3,7 +3,6 @@ import numpy as np
 
 max_v_list = [1, 2, 3, 4, 5]
 max_p_list = [1, 2, 3, 4, 5]
-choices = [0, 1]
 list_of_user = [15, 3, 32, 7, 36, 4, 20, 29, 14, 11]
 no_zero = True
 if no_zero:

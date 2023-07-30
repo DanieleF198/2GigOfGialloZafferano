@@ -1,16 +1,17 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%% Pre-processing                          : 0.076s
-%% Hypothesis Space Generation             : 0.064s
-%% Conflict analysis                       : 3.07s
-%%   - Brave Orders                        : 3.07s
-%% Counterexample search                   : 0.24s
-%%   - CDOEs                               : 0.161s
-%%   - CDPIs                               : 0.078s
-%% Hypothesis Search                       : 9.542s
-%% Propagation                             : 6.988s
-%%   - CDOEs                               : 6.988s
-%% Total                                   : 20.895s
+%% Pre-processing                          : 0.086s
+%% Hypothesis Space Generation             : 0.07s
+%% Conflict analysis                       : 2.515s
+%%   - Brave Orders                        : 2.515s
+%% Counterexample search                   : 0.209s
+%%   - CDOEs                               : 0.143s
+%%   - CDPIs                               : 0.068s
+%% Hypothesis Search                       : 4.726s
+%% Propagation                             : 4.612s
+%%   - CDOEs                               : 4.612s
+%% Total                                   : 13.19s
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-:~ category(5).[1@2]
-:~ value(stufato,V1).[V1@1, V1]
+:~ category(5).[1@4]
+:~ value(stufato,V1).[V1@3, V1]
+:~ category(3).[1@5]
 

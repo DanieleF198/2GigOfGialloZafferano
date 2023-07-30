@@ -1,17 +1,17 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%% Pre-processing                          : 0.079s
-%% Hypothesis Space Generation             : 0.055s
-%% Conflict analysis                       : 7.647s
-%%   - Brave Orders                        : 7.647s
-%% Counterexample search                   : 0.556s
-%%   - CDOEs                               : 0.385s
-%%   - CDPIs                               : 0.172s
-%% Hypothesis Search                       : 26.345s
-%% Propagation                             : 14.418s
-%%   - CDOEs                               : 14.418s
-%% Total                                   : 50.014s
+%% Pre-processing                          : 0.082s
+%% Hypothesis Space Generation             : 0.065s
+%% Conflict analysis                       : 2.106s
+%%   - Brave Orders                        : 2.106s
+%% Counterexample search                   : 0.186s
+%%   - CDOEs                               : 0.126s
+%%   - CDPIs                               : 0.06s
+%% Hypothesis Search                       : 4.48s
+%% Propagation                             : 4.688s
+%%   - CDOEs                               : 4.688s
+%% Total                                   : 12.616s
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-:~ value(pesce,V1).[V1@5, V1]
-:~ value(stufato,V1).[-V1@4, V1]
+:~ category(5).[1@5]
 :~ value(funghi_e_tartufi,V1).[-V1@3, V1]
+:~ category(3).[1@4]
 

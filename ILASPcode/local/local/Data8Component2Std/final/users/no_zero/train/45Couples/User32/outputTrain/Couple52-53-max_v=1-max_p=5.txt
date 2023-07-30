@@ -1,0 +1,17 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Pre-processing                          : 0.072s
+%% Hypothesis Space Generation             : 0.046s
+%% Conflict analysis                       : 4.278s
+%%   - Brave Orders                        : 4.278s
+%% Counterexample search                   : 0.38s
+%%   - CDOEs                               : 0.262s
+%%   - CDPIs                               : 0.119s
+%% Hypothesis Search                       : 12.005s
+%% Propagation                             : 9.045s
+%%   - CDOEs                               : 9.045s
+%% Total                                   : 26.537s
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+:~ category(5).[1@5]
+:~ value(uova,V1).[-V1@3, V1]
+:~ value(funghi_e_tartufi,V1), category(3).[V1@4, V1]
+

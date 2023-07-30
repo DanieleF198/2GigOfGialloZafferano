@@ -1,16 +1,18 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%% Pre-processing                          : 0.073s
-%% Hypothesis Space Generation             : 0.077s
-%% Conflict analysis                       : 3.882s
-%%   - Brave Orders                        : 3.882s
-%% Counterexample search                   : 0.341s
-%%   - CDOEs                               : 0.238s
-%%   - CDPIs                               : 0.102s
-%% Hypothesis Search                       : 18.736s
-%% Propagation                             : 8.972s
-%%   - CDOEs                               : 8.972s
-%% Total                                   : 32.916s
+%% Pre-processing                          : 0.087s
+%% Hypothesis Space Generation             : 0.064s
+%% Conflict analysis                       : 3.718s
+%%   - Brave Orders                        : 3.718s
+%% Counterexample search                   : 0.344s
+%%   - CDOEs                               : 0.242s
+%%   - CDPIs                               : 0.101s
+%% Hypothesis Search                       : 7.126s
+%% Propagation                             : 6.959s
+%%   - CDOEs                               : 6.959s
+%% Total                                   : 19.384s
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-:~ value(forno,V1).[-V1@3, V1]
-:~ value(uova,V1).[-V1@5, V1]
+:~ value(pasta,V1).[V1@1, V1]
+:~ category(3).[-1@2]
+:~ category(4).[1@4]
+:~ category(1).[-1@3]
 

@@ -1,0 +1,17 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Pre-processing                          : 0.103s
+%% Hypothesis Space Generation             : 0.059s
+%% Conflict analysis                       : 3.422s
+%%   - Brave Orders                        : 3.422s
+%% Counterexample search                   : 0.271s
+%%   - CDOEs                               : 0.184s
+%%   - CDPIs                               : 0.087s
+%% Hypothesis Search                       : 6.616s
+%% Propagation                             : 7.107s
+%%   - CDOEs                               : 7.107s
+%% Total                                   : 18.406s
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+:~ value(pesce,V1).[-V1@3, V1]
+:~ category(2).[-1@5]
+:~ value(uova,V1), category(4).[-V1@4, V1]
+
