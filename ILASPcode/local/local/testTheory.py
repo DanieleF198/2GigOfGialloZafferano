@@ -50,11 +50,11 @@ with open(path, 'w+', encoding='UTF8') as f_output:
                 if no_zero:
                     output_train_data_dir = "./Data8Component2Std/final/users/no_zero/train/" + str(DIR_COUPLE) + "Couples/User" + str(USER) + "/trainFiles/"
                     output_dir_for_train_data_dir = "./Data8Component2Std/final/users/no_zero/train/" + str(DIR_COUPLE) + "Couples/User" + str(USER) + "/outputTrain/"
-                    output_test_data_dir = "./Data8Component2Std/final/users/no_zero/test/100Couples/User" + str(USER) + "/testFiles/"
+                    output_test_data_dir = "./Data8Component2Std/final/users/no_zero/test/100CouplesForTrain45/User" + str(USER) + "/testFiles/"
                 else:
                     output_train_data_dir = "./Data8Component2Std/final/users/zero/train/" + str(DIR_COUPLE) + "Couples/User" + str(USER) + "/trainFiles/"
                     output_dir_for_train_data_dir = "./Data8Component2Std/final/users/zero/train/" + str(DIR_COUPLE) + "Couples/User" + str(USER) + "/outputTrain/"
-                    output_test_data_dir = "./Data8Component2Std/final/users/zero/test/100Couples/User" + str(USER) + "/testFiles/"
+                    output_test_data_dir = "./Data8Component2Std/final/users/zero/test/100CouplesForTrain45/User" + str(USER) + "/testFiles/"
                 filename = output_dir_for_train_data_dir + 'Couple' + str(int(couple[0])) + '-' + str(int(couple[1])) + '-max_v=' + str(max_v) + '-max_p=' + str(max_p) + '.txt'
                 if int(max_v) > 0 and int(max_p) > 0:
                     items = ilasp.itemsFromFile("Data8Component2Std/recipes/recipes_max_v(" + str(max_v) + ")-max_p(" + str(max_p) + ").las")
@@ -73,7 +73,7 @@ with open(path, 'w+', encoding='UTF8') as f_output:
                 f_train_data = os.path.join(output_train_data_dir, 'Couple' + str(int(couple[0])) + '-' + str(int(couple[1])) + '-max_v=' + str(max_v) + '-max_p=' + str(max_p) + '.las')
                 temp_filename = filename.replace("outputTrain", "testFiles")
                 temp_filename2 = temp_filename.replace("/train/", "/test/")
-                temp_filename3 = temp_filename2.replace("/45Couples", "/100Couples")
+                temp_filename3 = temp_filename2.replace("/45Couples", "/100CouplesForTrain45")
                 f_test = temp_filename3.replace("txt", "las")
                 F_TRAIN = open(f_train)
                 data_train = F_TRAIN.read()
