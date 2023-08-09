@@ -1055,234 +1055,237 @@ def single_prediction(user_id, first_food, second_food):
     del predictions
     return to_print
 
-def create_samples(no_zero, TrainCouple):
+# def create_samples(no_zero, TrainCouple):
 
-    # to recover unexpected error of program
-    if no_zero:
-        Dir = "Data8Component2Std/sampled-recipes-no-zero/Train" + str(TrainCouple) + "/distances/"
-    else:
-        Dir = "Data8Component2Std/sampled-recipes-zero/Train" + str(TrainCouple) + "/distances/"
-    already_done_one = []
-    already_done_two = []
-    for filename in os.listdir(Dir):
-        f = filename
-        already_done_one.append(int(f[17:f.find("-")]))
-        already_done_two.append(int(f[f.find("-") + 1:f.find(".")]))
-    if len(already_done_one) != 0:
-        already_done_np = np.zeros((len(already_done_one), 2), dtype="int32")
-        for already_done_len in range(len(already_done_one)):
-            already_done_np[already_done_len] = [already_done_one[already_done_len], already_done_two[already_done_len]]
-    else:
-        already_done_np = np.zeros(999, dtype="int32")
-    if len(already_done_np) == 999:
-        already_done = 0
-    else:
-        already_done = len(already_done_np)
-    # ----
+no_zero = True
+TrainCouple = 45
 
-    data_dir = "../../../dataset_100/separated_text_data/"
+# to recover unexpected error of program
+if no_zero:
+    Dir = "Data8Component2Std/sampled-recipes-no-zero/Train" + str(TrainCouple) + "/distances/"
+else:
+    Dir = "Data8Component2Std/sampled-recipes-zero/Train" + str(TrainCouple) + "/distances/"
+already_done_one = []
+already_done_two = []
+for filename in os.listdir(Dir):
+    f = filename
+    already_done_one.append(int(f[17:f.find("-")]))
+    already_done_two.append(int(f[f.find("-") + 1:f.find(".")]))
+if len(already_done_one) != 0:
+    already_done_np = np.zeros((len(already_done_one), 2), dtype="int32")
+    for already_done_len in range(len(already_done_one)):
+        already_done_np[already_done_len] = [already_done_one[already_done_len], already_done_two[already_done_len]]
+else:
+    already_done_np = np.zeros(999, dtype="int32")
+if len(already_done_np) == 999:
+    already_done = 0
+else:
+    already_done = len(already_done_np)
+# ----
 
-    fScalar = os.path.join(data_dir, 'scalars.txt')
-    fCategories = os.path.join(data_dir, 'categories.txt')
-    fIngredients = os.path.join(data_dir, 'ingredients.txt')
-    fPreparation = os.path.join(data_dir, 'preparations.txt')
-    fNames = os.path.join(data_dir, 'names.txt')
-    fCouple = os.path.join('../../../Ordinamenti/dataset_coppie.txt')
-    fLabels = os.path.join('../../../Ordinamenti/output-file.txt')
+data_dir = "../../../dataset_100/separated_text_data/"
 
-    fS = open(fScalar)
-    dataS = fS.read()
-    fS.close()
-    fC = open(fCategories)
-    dataC = fC.read()
-    fC.close()
-    fI = open(fIngredients)
-    dataI = fI.read()
-    fI.close()
-    fP = open(fPreparation)
-    dataP = fP.read()
-    fP.close()
-    fN = open(fNames)
-    food_data_names = fN.read()
-    fN.close()
-    fCC = open(fCouple)
-    dataCC = fCC.read()
-    fCC.close()
-    fL = open(fLabels)
-    dataL = fL.read()
-    fL.close()
+fScalar = os.path.join(data_dir, 'scalars.txt')
+fCategories = os.path.join(data_dir, 'categories.txt')
+fIngredients = os.path.join(data_dir, 'ingredients.txt')
+fPreparation = os.path.join(data_dir, 'preparations.txt')
+fNames = os.path.join(data_dir, 'names.txt')
+fCouple = os.path.join('../../../Ordinamenti/dataset_coppie.txt')
+fLabels = os.path.join('../../../Ordinamenti/output-file.txt')
 
-    linesOfS = dataS.split('\n')
-    food_data_scalars = np.zeros((len(linesOfS), 1), dtype='float32')
-    for i, line in enumerate(linesOfS):
-        values = [x for x in line.split(' ')[1:]]
-        food_data_scalars[i, :] = values
+fS = open(fScalar)
+dataS = fS.read()
+fS.close()
+fC = open(fCategories)
+dataC = fC.read()
+fC.close()
+fI = open(fIngredients)
+dataI = fI.read()
+fI.close()
+fP = open(fPreparation)
+dataP = fP.read()
+fP.close()
+fN = open(fNames)
+food_data_names = fN.read()
+fN.close()
+fCC = open(fCouple)
+dataCC = fCC.read()
+fCC.close()
+fL = open(fLabels)
+dataL = fL.read()
+fL.close()
 
-    linesOfC = dataC.split('\n')
-    food_data_categories = np.zeros((len(linesOfC), 3), dtype='float32')
-    for i, line in enumerate(linesOfC):
-        values = [x for x in line.split(' ')[1:]]
-        food_data_categories[i, :] = values
+linesOfS = dataS.split('\n')
+food_data_scalars = np.zeros((len(linesOfS), 1), dtype='float32')
+for i, line in enumerate(linesOfS):
+    values = [x for x in line.split(' ')[1:]]
+    food_data_scalars[i, :] = values
 
-    linesOfI = dataI.split('\n')
-    food_data_ingredients = np.zeros((len(linesOfI), 36), dtype='float32')
-    for i, line in enumerate(linesOfI):
-        values = [x for x in line.split(' ')[1:]]
-        food_data_ingredients[i, :] = values
+linesOfC = dataC.split('\n')
+food_data_categories = np.zeros((len(linesOfC), 3), dtype='float32')
+for i, line in enumerate(linesOfC):
+    values = [x for x in line.split(' ')[1:]]
+    food_data_categories[i, :] = values
 
-    linesOfP = dataP.split('\n')
-    food_data_preparation = np.zeros((len(linesOfP), 8), dtype='float32')
-    for i, line in enumerate(linesOfP):
-        values = [x for x in line.split(' ')[1:]]
-        food_data_preparation[i, :] = values
+linesOfI = dataI.split('\n')
+food_data_ingredients = np.zeros((len(linesOfI), 36), dtype='float32')
+for i, line in enumerate(linesOfI):
+    values = [x for x in line.split(' ')[1:]]
+    food_data_ingredients[i, :] = values
 
-    original_category = food_data_categories[:, 0]
-    original_category = np.reshape(original_category, (101, 1))
+linesOfP = dataP.split('\n')
+food_data_preparation = np.zeros((len(linesOfP), 8), dtype='float32')
+for i, line in enumerate(linesOfP):
+    values = [x for x in line.split(' ')[1:]]
+    food_data_preparation[i, :] = values
 
-    # manipulate categorical data
-    category1HE = food_data_categories[:, 0]
-    food_data_categories = np.delete(food_data_categories, 0, 1)
-    category1HE = np.reshape(category1HE, (101, 1))
-    enc = OneHotEncoder(handle_unknown='ignore')
-    enc.fit(category1HE)
-    finalCategory = enc.transform(category1HE).toarray()
+original_category = food_data_categories[:, 0]
+original_category = np.reshape(original_category, (101, 1))
 
-    # remove ingredients never used
-    food_data_ingredients = np.delete(food_data_ingredients, [1, 16, 23, 26, 32], axis=1)
+# manipulate categorical data
+category1HE = food_data_categories[:, 0]
+food_data_categories = np.delete(food_data_categories, 0, 1)
+category1HE = np.reshape(category1HE, (101, 1))
+enc = OneHotEncoder(handle_unknown='ignore')
+enc.fit(category1HE)
+finalCategory = enc.transform(category1HE).toarray()
 
-    # normalize scaled ingredients and scaled preparation
+# remove ingredients never used
+food_data_ingredients = np.delete(food_data_ingredients, [1, 16, 23, 26, 32], axis=1)
 
-    normalized_food_data_ingredients = np.zeros((101, 31), dtype="float32")
-    normalized_food_data_preparation = np.zeros((101, 8), dtype="float32")
+# normalize scaled ingredients and scaled preparation
 
-    for i, row in enumerate(food_data_ingredients):
-        sum_of_elements = 0
-        for element in row:
-            sum_of_elements = sum_of_elements + element
-        for j, element in enumerate(row):
-            normalized_food_data_ingredients[i, j] = food_data_ingredients[i, j] / sum_of_elements
+normalized_food_data_ingredients = np.zeros((101, 31), dtype="float32")
+normalized_food_data_preparation = np.zeros((101, 8), dtype="float32")
 
-    for i, row in enumerate(food_data_preparation):
-        sum_of_elements = 0
-        for element in row:
-            sum_of_elements = sum_of_elements + element
-        for j, element in enumerate(row):
-            normalized_food_data_preparation[i, j] = food_data_preparation[i, j] / sum_of_elements
+for i, row in enumerate(food_data_ingredients):
+    sum_of_elements = 0
+    for element in row:
+        sum_of_elements = sum_of_elements + element
+    for j, element in enumerate(row):
+        normalized_food_data_ingredients[i, j] = food_data_ingredients[i, j] / sum_of_elements
 
-    # scaling preparation time, cost, difficulty, ingredients and preparations
-    scaler = preprocessing.StandardScaler()
-    scaled_food_data_finalCategory = scaler.fit_transform(finalCategory)
-    scaled_food_data_scalars = scaler.fit_transform(food_data_scalars)
-    scaled_food_data_categories = scaler.fit_transform(food_data_categories)
-    scaled_food_data_ingredients = scaler.fit_transform(normalized_food_data_ingredients)
-    scaled_food_data_preparation = scaler.fit_transform(normalized_food_data_preparation)
+for i, row in enumerate(food_data_preparation):
+    sum_of_elements = 0
+    for element in row:
+        sum_of_elements = sum_of_elements + element
+    for j, element in enumerate(row):
+        normalized_food_data_preparation[i, j] = food_data_preparation[i, j] / sum_of_elements
 
-    # concatenate all data in a numpy tensor
-    all_data = np.concatenate([scaled_food_data_finalCategory, scaled_food_data_categories, scaled_food_data_scalars, scaled_food_data_ingredients, scaled_food_data_preparation], axis=1)
-    all_data_original = np.concatenate([original_category, food_data_categories, food_data_scalars, food_data_ingredients, food_data_preparation], axis=1)
+# scaling preparation time, cost, difficulty, ingredients and preparations
+scaler = preprocessing.StandardScaler()
+scaled_food_data_finalCategory = scaler.fit_transform(finalCategory)
+scaled_food_data_scalars = scaler.fit_transform(food_data_scalars)
+scaled_food_data_categories = scaler.fit_transform(food_data_categories)
+scaled_food_data_ingredients = scaler.fit_transform(normalized_food_data_ingredients)
+scaled_food_data_preparation = scaler.fit_transform(normalized_food_data_preparation)
 
-    # preparation of labels for pandas dataframe
-    foodsLabel = ['F' + str(i) for i in range(1, 101)]
-    categoryLabel = ['CATEGORY' + str(i) for i in range(1, 6)]
-    ingredientsLabel = ['INGREDIENTS' + str(i) for i in range(1, 32)]
-    preparationsLabel = ['PREPARATIONS' + str(i) for i in range(1, 9)]
+# concatenate all data in a numpy tensor
+all_data = np.concatenate([scaled_food_data_finalCategory, scaled_food_data_categories, scaled_food_data_scalars, scaled_food_data_ingredients, scaled_food_data_preparation], axis=1)
+all_data_original = np.concatenate([original_category, food_data_categories, food_data_scalars, food_data_ingredients, food_data_preparation], axis=1)
 
-    # creating pandas dataframe
-    final_data = pd.DataFrame(columns=[*categoryLabel, 'COST', 'DIFFICULTY', 'PREPARATION', *ingredientsLabel, *preparationsLabel], index=foodsLabel)
+# preparation of labels for pandas dataframe
+foodsLabel = ['F' + str(i) for i in range(1, 101)]
+categoryLabel = ['CATEGORY' + str(i) for i in range(1, 6)]
+ingredientsLabel = ['INGREDIENTS' + str(i) for i in range(1, 32)]
+preparationsLabel = ['PREPARATIONS' + str(i) for i in range(1, 9)]
 
-    # fill pandas dataframe with data that we concatenated in line 83
-    for i, food in enumerate(final_data.index):
-        final_data.loc[food] = all_data[i]
+# creating pandas dataframe
+final_data = pd.DataFrame(columns=[*categoryLabel, 'COST', 'DIFFICULTY', 'PREPARATION', *ingredientsLabel, *preparationsLabel], index=foodsLabel)
 
-    # instantiate pca object, then fit on final data
-    # pca = PCA() #(we used this before to understand the number of component to use)
-    pca = decomposition.PCA(n_components=17)
-    pca.fit(final_data)
-    # apply pca on data in pandas_dataframe
-    pca_data = pca.transform(final_data)
+# fill pandas dataframe with data that we concatenated in line 83
+for i, food in enumerate(final_data.index):
+    final_data.loc[food] = all_data[i]
 
-    per_var = np.round(pca.explained_variance_ratio_*101, decimals=1)
-    labels = ['PC' + str(x) for x in range(1, len(per_var)+1)]
-    pca_df = pd.DataFrame(pca_data, columns=labels)
-    list_of_couple = []
-    if already_done != 0:
-        for element in already_done_np:
-            list_of_couple.append([element[0], element[1]])
-        counter_of_couple =  len(already_done_np)
-    else:
-        counter_of_couple = 0
-    while True:
-        if counter_of_couple == 100:
+# instantiate pca object, then fit on final data
+# pca = PCA() #(we used this before to understand the number of component to use)
+pca = decomposition.PCA(n_components=17)
+pca.fit(final_data)
+# apply pca on data in pandas_dataframe
+pca_data = pca.transform(final_data)
+
+per_var = np.round(pca.explained_variance_ratio_*101, decimals=1)
+labels = ['PC' + str(x) for x in range(1, len(per_var)+1)]
+pca_df = pd.DataFrame(pca_data, columns=labels)
+list_of_couple = []
+# if already_done != 0:
+#     for element in already_done_np:
+#         list_of_couple.append([element[0], element[1]])
+#     counter_of_couple =  len(already_done_np)
+# else:
+#     counter_of_couple = 0
+while True:
+    # if counter_of_couple == 100:
+    #     break
+    first_food_id_to_pass = np.random.randint(0, 100, size=1)
+    second_food_id_to_pass = np.random.randint(0, 100, size=1)
+    if first_food_id_to_pass[0] == second_food_id_to_pass[0]:
+        continue
+    if [first_food_id_to_pass[0], second_food_id_to_pass[0]] in list_of_couple:
+        continue
+    if [second_food_id_to_pass[0], first_food_id_to_pass[0]] in list_of_couple:
+        continue
+    to_not_append = False
+    for i in [15, 3, 32, 7, 36, 4, 20, 29, 14, 11]:
+        test_prediction = single_prediction(user_id=i, first_food=pca_data[first_food_id_to_pass[0]], second_food=pca_data[first_food_id_to_pass[0]])
+        if no_zero and (test_prediction == "0"):
+            to_not_append = True
             break
-        first_food_id_to_pass = np.random.randint(0, 100, size=1)
-        second_food_id_to_pass = np.random.randint(0, 100, size=1)
-        if first_food_id_to_pass[0] == second_food_id_to_pass[0]:
-            continue
-        if [first_food_id_to_pass[0], second_food_id_to_pass[0]] in list_of_couple:
-            continue
-        if [second_food_id_to_pass[0], first_food_id_to_pass[0]] in list_of_couple:
-            continue
-        to_not_append = False
-        for i in [15, 3, 32, 7, 36, 4, 20, 29, 14, 11]:
-            test_prediction = single_prediction(user_id=i, first_food=pca_data[first_food_id_to_pass[0]], second_food=pca_data[first_food_id_to_pass[0]])
-            if no_zero and (test_prediction == "0"):
-                to_not_append = True
-                break
-        if to_not_append:
-            continue
-        list_of_couple.append([first_food_id_to_pass[0], second_food_id_to_pass[0]])
-        # print("--------------------couple queried--------------------")
-        # print(str(int(first_food_id_to_pass)) + "," + str(int(second_food_id_to_pass)))
-        # print("--------------------prediction of i-th user's model on queried couple--------------------")
-        # for i in range(0, 48):
-        #     single_prediction(user_id=i, first_food=pca_data[int(first_food_id_to_pass)], second_food=pca_data[int(second_food_id_to_pass)])
-        # print("--------------------generation samples for train--------------------")
-        X_PCA_1, X_PCA_2 = sample_around(first_food=all_data_original[int(first_food_id_to_pass)], second_food=all_data_original[int(second_food_id_to_pass)], all_food=all_data_original, pca_food=pca_data, number_of_sample=105, index_first_food=int(first_food_id_to_pass), index_second_food=int(second_food_id_to_pass), pca_to_pass=pca, no_zero=no_zero, TrainCouple=TrainCouple)
-        # print("--------------------generation label for train--------------------")
+    if to_not_append:
+        continue
+    list_of_couple.append([first_food_id_to_pass[0], second_food_id_to_pass[0]])
+    # print("--------------------couple queried--------------------")
+    # print(str(int(first_food_id_to_pass)) + "," + str(int(second_food_id_to_pass)))
+    # print("--------------------prediction of i-th user's model on queried couple--------------------")
+    # for i in range(0, 48):
+    #     single_prediction(user_id=i, first_food=pca_data[int(first_food_id_to_pass)], second_food=pca_data[int(second_food_id_to_pass)])
+    # print("--------------------generation samples for train--------------------")
+    X_PCA_1, X_PCA_2 = sample_around(first_food=all_data_original[int(first_food_id_to_pass)], second_food=all_data_original[int(second_food_id_to_pass)], all_food=all_data_original, pca_food=pca_data, number_of_sample=105, index_first_food=int(first_food_id_to_pass), index_second_food=int(second_food_id_to_pass), pca_to_pass=pca, no_zero=no_zero, TrainCouple=TrainCouple)
+    # print("--------------------generation label for train--------------------")
 
 
-        for i in [15, 3, 32, 7, 36, 4, 20, 29, 14, 11]:
-            if no_zero:
-                Dir = "Data8Component2Std/sampled-recipes-no-zero/Train" + str(TrainCouple) + "/user_prediction/train"
-            else:
-                Dir = "Data8Component2Std/sampled-recipes-zero/Train" + str(TrainCouple) + "/user_prediction/train"
-            f_output = os.path.join(Dir, 'user' + str(i) + '_Couple' + str(first_food_id_to_pass[0]) + "-" + str(second_food_id_to_pass[0]) + '.txt')
-            f = open(f_output, 'w+')
-            sys.stdout = open(f_output, 'w')
-            for j, (food1, food2) in enumerate(zip(X_PCA_1, X_PCA_2)):
-                train_prediction = single_prediction(user_id=i, first_food=food1, second_food=food2)
-                print(train_prediction)
-            sys.stdout = sys.__stdout__
-            f.close()
-            if no_zero:
-                Dir = "Data8Component2Std/sampled-recipes-no-zero/Train" + str(TrainCouple) + "/user_prediction/test"
-            else:
-                Dir = "Data8Component2Std/sampled-recipes-zero/Train" + str(TrainCouple) + "/user_prediction/test"
-            f_output = os.path.join(Dir, 'user' + str(i) + '_Couple' + str(first_food_id_to_pass[0]) + "-" + str(second_food_id_to_pass[0]) + '.txt')
-            f = open(f_output, 'w+')
-            sys.stdout = open(f_output, 'w')
-            test_prediction = single_prediction(user_id=i, first_food=pca_data[first_food_id_to_pass[0]], second_food=pca_data[first_food_id_to_pass[0]])
-            print(test_prediction)
-            sys.stdout = sys.__stdout__
-            f.close()
-        counter_of_couple += 1
-    if no_zero:
-        f_output = "Data8Component2Std/sampled-recipes-no-zero/Train" + str(TrainCouple) + "/couple.txt"
-    else:
-        f_output = "Data8Component2Std/sampled-recipes-zero/Train" + str(TrainCouple) + "/couple.txt"
-    f = open(f_output, 'w+')
-    sys.stdout = open(f_output, 'w')
-    for couple in list_of_couple:
-        print(str(couple[0]) + ";" + str(couple[1]))
-    sys.stdout = sys.__stdout__
-    f.close()
+    for i in [15, 3, 32, 7, 36, 4, 20, 29, 14, 11]:
+        if no_zero:
+            Dir = "Data8Component2Std/sampled-recipes-no-zero/Train" + str(TrainCouple) + "/user_prediction/train"
+        else:
+            Dir = "Data8Component2Std/sampled-recipes-zero/Train" + str(TrainCouple) + "/user_prediction/train"
+        f_output = os.path.join(Dir, 'user' + str(i) + '_Couple' + str(first_food_id_to_pass[0]) + "-" + str(second_food_id_to_pass[0]) + '.txt')
+        f = open(f_output, 'w+')
+        sys.stdout = open(f_output, 'w')
+        for j, (food1, food2) in enumerate(zip(X_PCA_1, X_PCA_2)):
+            train_prediction = single_prediction(user_id=i, first_food=food1, second_food=food2)
+            print(train_prediction)
+        sys.stdout = sys.__stdout__
+        f.close()
+        if no_zero:
+            Dir = "Data8Component2Std/sampled-recipes-no-zero/Train" + str(TrainCouple) + "/user_prediction/test"
+        else:
+            Dir = "Data8Component2Std/sampled-recipes-zero/Train" + str(TrainCouple) + "/user_prediction/test"
+        f_output = os.path.join(Dir, 'user' + str(i) + '_Couple' + str(first_food_id_to_pass[0]) + "-" + str(second_food_id_to_pass[0]) + '.txt')
+        f = open(f_output, 'w+')
+        sys.stdout = open(f_output, 'w')
+        test_prediction = single_prediction(user_id=i, first_food=pca_data[first_food_id_to_pass[0]], second_food=pca_data[first_food_id_to_pass[0]])
+        print(test_prediction)
+        sys.stdout = sys.__stdout__
+        f.close()
+    # counter_of_couple += 1
+if no_zero:
+    f_output = "Data8Component2Std/sampled-recipes-no-zero/Train" + str(TrainCouple) + "/couple.txt"
+else:
+    f_output = "Data8Component2Std/sampled-recipes-zero/Train" + str(TrainCouple) + "/couple.txt"
+f = open(f_output, 'w+')
+sys.stdout = open(f_output, 'w')
+for couple in list_of_couple:
+    print(str(couple[0]) + ";" + str(couple[1]))
+sys.stdout = sys.__stdout__
+f.close()
 
-if __name__ == '__main__':
-    p_zero = Process(target=create_samples, args=(False, 210))
-    p_no_zero = Process(target=create_samples, args=(True, 210))
-
-    p_zero.start()
-    p_no_zero.start()
-
-    p_zero.join()
-    p_no_zero.join()
+# if __name__ == '__main__':
+#     p_zero = Process(target=create_samples, args=(False, 210))
+#     p_no_zero = Process(target=create_samples, args=(True, 210))
+#
+#     p_zero.start()
+#     p_no_zero.start()
+#
+#     p_zero.join()
+#     p_no_zero.join()

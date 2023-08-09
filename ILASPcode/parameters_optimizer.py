@@ -82,6 +82,8 @@ for i, line in enumerate(linesOfI):
     values = [x for x in line.split(' ')[1:]]
     food_data_ingredients[i, :] = values
 
+food_data_ingredients = np.delete(food_data_ingredients, [1, 16, 23, 26, 32], axis=1)
+
 # convert from classes to macro-classes
 food_data_macro_ingredients = np.zeros((len(linesOfI), 12), dtype='float32')
 for i, row in enumerate(food_data_ingredients):
