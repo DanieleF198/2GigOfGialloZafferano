@@ -110,7 +110,7 @@ for i, food in enumerate(final_data.index):
     final_data.loc[food] = all_data[i]
 
 while True:
-    ingredients_index = [i for i in range(0, 31)]
+    ingredients_index = [i for i in range(0, 36)]
     preparations_index = [i for i in range(0, 8)]
 
     print("--------------------- FOOD 1 ---------------------")
@@ -122,7 +122,7 @@ while True:
     difficulty1 = input()
     print("insert preparation time:")
     prepTime1 = input()
-    ingredients1 = np.zeros(31, dtype="float32")
+    ingredients1 = np.zeros(36, dtype="float32")
     for index in ingredients_index:
         print("insert ingredient " + str(index))
         ingredients1[index] = input()
@@ -140,7 +140,7 @@ while True:
     difficulty2 = input()
     print("insert preparation time:")
     prepTime2 = input()
-    ingredients2 = np.zeros(31, dtype="float32")
+    ingredients2 = np.zeros(36, dtype="float32")
     for index in ingredients_index:
         print("insert ingredient " + str(index))
         ingredients2[index] = input()
@@ -167,7 +167,7 @@ while True:
     food_data_categories2[0, 2] = difficulty1
     food_data_categories2[1, 2] = difficulty2
 
-    food_data_ingredients2 = np.zeros((2, 31), dtype='float32')
+    food_data_ingredients2 = np.zeros((2, 36), dtype='float32')
     food_data_ingredients2[0] = ingredients1
     food_data_ingredients2[1] = ingredients2
 
@@ -187,7 +187,8 @@ while True:
     for index_to_del in reversed(range(2, 7)):
         finalCategory2 = np.delete(finalCategory2, index_to_del, 0)
 
-
+    # remove ingredients never used
+    food_data_ingredients2 = np.delete(food_data_ingredients2, [1, 16, 23, 26, 32], axis=1)
 
     # normalize scaled ingredients and scaled preparation
 
