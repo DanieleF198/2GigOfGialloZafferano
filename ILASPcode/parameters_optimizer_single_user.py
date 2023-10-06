@@ -8,8 +8,8 @@ import pandas as pd
 
 USERS = [i for i in range(0, 54)]
 COUPLES = [45, 105, 210]
-max_v_list = [1]
-max_p_list = [4, 5]
+max_v_list = [5]
+max_p_list = [5]
 
 data_dir = "../dataset_100/separated_text_data/"
 
@@ -58,35 +58,34 @@ for i, row in enumerate(food_data_ingredients):
     for j, ingredient in enumerate(row):
         if (j == 1) or (4 <= j <= 8) or (j == 10) or (j == 14) or (16 <= j <= 19) or (21 <= j <= 24) or (28 <= j <= 29):
             continue
-        if j == 5:
-            food_data_macro_ingredients[i, 0] = food_data_macro_ingredients[i, 0] + ingredient
-        if j == 4 or j == 6 or j == 18 or j == 28 or j == 35:
+        # if j == 4:    # I'll leave commented just in case I want to insert in a second moment
+        #     food_data_macro_ingredients[i, 0] = food_data_macro_ingredients[i, 0] + ingredient
+        if j == 3 or j == 30:
             food_data_macro_ingredients[i, 1] = food_data_macro_ingredients[i, 1] + ingredient
+        # if j == 10:   # I'll leave commented just in case I want to insert in a second moment
+        #     food_data_macro_ingredients[i, 2] = food_data_macro_ingredients[i, 2] + ingredient
         if j == 11:
-            food_data_macro_ingredients[i, 2] = food_data_macro_ingredients[i, 2] + ingredient
-        if j == 2 or j == 12:
             food_data_macro_ingredients[i, 3] = food_data_macro_ingredients[i, 3] + ingredient
-        if j == 1 or j == 8 or j == 21 or j == 24 or j == 30:
+        if j == 26:
             food_data_macro_ingredients[i, 4] = food_data_macro_ingredients[i, 4] + ingredient
-        if j == 3 or j == 9 or j == 15 or j == 29 or j == 34:
+        if j == 2 or j == 25:
             food_data_macro_ingredients[i, 5] = food_data_macro_ingredients[i, 5] + ingredient
-        if j == 0 or j == 7 or j == 22 or j == 23 or j == 26 or j == 32:
+        if j == 0 or j == 20:
             food_data_macro_ingredients[i, 6] = food_data_macro_ingredients[i, 6] + ingredient
-        if j == 20:
-            food_data_macro_ingredients[i, 7] = food_data_macro_ingredients[i, 7] + ingredient
-        if j == 10 or j == 13:
+        # if j == 18:   # I'll leave commented just in case I want to insert in a second moment
+        #     food_data_macro_ingredients[i, 7] = food_data_macro_ingredients[i, 7] + ingredient
+        if j == 9 or j == 12:
             food_data_macro_ingredients[i, 8] = food_data_macro_ingredients[i, 8] + ingredient
-        if j == 16 or j == 19 or j == 25 or j == 27:
-            food_data_macro_ingredients[i, 9] = food_data_macro_ingredients[i, 9] + ingredient
-        if j == 31:
+        # if j == 22 or j == 23:    # I'll leave commented just in case I want to insert in a second moment
+        #     food_data_macro_ingredients[i, 9] = food_data_macro_ingredients[i, 9] + ingredient
+        if j == 27:
             food_data_macro_ingredients[i, 10] = food_data_macro_ingredients[i, 10] + ingredient
-        if j == 14 or j == 17 or j == 33:
+        if j == 13 or j == 15:
             food_data_macro_ingredients[i, 11] = food_data_macro_ingredients[i, 11] + ingredient
 
 linesOfP = dataP.split('\n')
 food_data_preparation = np.zeros((len(linesOfP), 8), dtype='float32')
 for i, line in enumerate(linesOfP):
-
     values = [x for x in line.split(' ')[1:]]
     food_data_preparation[i, :] = values
 
@@ -95,7 +94,7 @@ all_data = np.concatenate([food_data_categories, food_data_scalars, food_data_ma
 macro_ingredients_dictionary = {"cereali": 0,
                                 "latticini": 1,
                                 "uova": 2,
-                                "farinacei":3,
+                                "farinacei": 3,
                                 "frutta": 4,
                                 "erbe_spezie_e_condimenti": 5,
                                 "carne": 6,
@@ -104,7 +103,6 @@ macro_ingredients_dictionary = {"cereali": 0,
                                 "pesce": 9,
                                 "dolcificanti": 10,
                                 "verdure_e_ortaggi": 11}
-
 
 preparation_dictionary = {"bollitura": 0,
                           "rosolatura": 1,
@@ -117,27 +115,28 @@ preparation_dictionary = {"bollitura": 0,
 #
 #
 macro_ingredients_norm_dictionary = {"cereali": 0.0,
-                                "latticini": 1.0,
-                                "uova": 4.0,
-                                "farinacei": 7.0,
-                                "frutta": 2.0,
-                                "erbe_spezie_e_condimenti": 11.0,
-                                "carne": 5.0,
-                                "funghi_e_tartufi": 3.0,
-                                "pasta": 5.0,
-                                "pesce": 9.0,
-                                "dolcificanti": 1.0,
-                                "verdure_e_ortaggi": 8.0}
+                                     "latticini": 3.0,
+                                     "uova": 0.0,
+                                     "farinacei": 5.0,
+                                     "frutta": 2.0,
+                                     "erbe_spezie_e_condimenti": 19.0,
+                                     "carne": 9.0,
+                                     "funghi_e_tartufi": 0.0,
+                                     "pasta": 5.0,
+                                     "pesce": 0.0,
+                                     "dolcificanti": 1.0,
+                                     "verdure_e_ortaggi": 10.0}
 
 preparation_norm_dictionary = {"bollitura": 5.0,
-                          "rosolatura": 5.0,
-                          "frittura": 5.0,
-                          "marinatura": 3.0,
-                          "mantecatura": 4.0,
-                          "forno": 5.0,
-                          "cottura_a_fiamma": 5.0,
-                          "cottura_a_vapore": 5.0,
-                          "stufato": 5.0}
+                               "rosolatura": 5.0,
+                               "frittura": 5.0,
+                               "marinatura": 3.0,
+                               "mantecatura": 4.0,
+                               "forno": 5.0,
+                               "cottura_a_fiamma": 5.0,
+                               "cottura_a_vapore": 5.0,
+                               "stufato": 5.0}
+
 
 def obtain_hpyerparameters(COUPLE, max_v, max_p, USER):
     if COUPLE == 210:
@@ -158,8 +157,8 @@ def obtain_hpyerparameters(COUPLE, max_v, max_p, USER):
             items = ilasp.itemsFromFile("Data8Component2Std/recipes/recipes_max_v(" + str(max_v) + ")-max_p(default).las")
             language_bias = ilasp.languageBiasFromFile("Data8Component2Std/recipes/recipes_max_v(" + str(max_v) + ")-max_p(default).las")
         else:
-            items = ilasp.itemsFromFile("Data8Component2Std/recipes/recipes_max_v(default)-max_p(" + str(max_p) +").las")
-            language_bias = ilasp.languageBiasFromFile("Data8Component2Std/recipes/recipes_max_v(default)-max_p(" + str(max_p) +").las")
+            items = ilasp.itemsFromFile("Data8Component2Std/recipes/recipes_max_v(default)-max_p(" + str(max_p) + ").las")
+            language_bias = ilasp.languageBiasFromFile("Data8Component2Std/recipes/recipes_max_v(default)-max_p(" + str(max_p) + ").las")
     else:
         items = ilasp.itemsFromFile("Data8Component2Std/recipes/recipes_max_v(default)-max_p(default).las")
         language_bias = ilasp.languageBiasFromFile("Data8Component2Std/recipes/recipes_max_v(default)-max_p(default).las")
@@ -174,12 +173,12 @@ def obtain_hpyerparameters(COUPLE, max_v, max_p, USER):
         end_index_max_v_max_p = filename.find(").txt")
         max_v_theory = int(filename[start_index_max_v_max_p:first_middle_index_max_v_max_p])
         max_p_theory = int(filename[second_middle_index_max_v_max_p:end_index_max_v_max_p])
-        if COUPLE == 45:
-            if int(max_v_theory) != 1 or int(max_p_theory) != 4:
-                continue
-        else:
-            if int(max_v_theory) != 1 or int(max_p_theory) != 5:
-                continue
+        # if COUPLE == 45:
+        #     if int(max_v_theory) != 1 or int(max_p_theory) != 4:
+        #         continue
+        # else:
+        if int(max_v_theory) != 5 or int(max_p_theory) != 5:
+            continue
         # if int(max_v_theory) != 3 or int(max_p_theory) != 5:
         #     continue
         f_train = os.path.join(output_dir_for_train_data_dir, filename)
@@ -234,9 +233,11 @@ def obtain_hpyerparameters(COUPLE, max_v, max_p, USER):
         for ii in range(2):
             couple_indexes[index, ii] = int(couple[ii].split('m')[1])
     # note: for my own comfort vector of weight is encoded as [1, 2, 3, 4, 5] but remember that clingo reverse the order, and so encode [5, 4, 3, 2, 1]
-    X = np.zeros((len(list_of_item), max_p), dtype="float32")   # note: respect to the definition in formulation, here i memorize directly (x[i, j]*p[j])/n[j]
+    X = np.zeros((len(list_of_item), max_p), dtype="float32")  # note: respect to the definition in formulation, here i memorize directly (x[i, j]*p[j])/n[j]
     list_to_check = ["@1", "@2", "@3", "@4", "@5"]
     list_checked = [False, False, False, False, False]
+    max_values_per_z = [0, 0, 0, 0, 0]
+    min_values_per_z = [0, 0, 0, 0, 0]
     for iter_check, to_check in enumerate(list_to_check):
         for entry in theory_entries:
             if to_check in entry:
@@ -248,7 +249,7 @@ def obtain_hpyerparameters(COUPLE, max_v, max_p, USER):
                 print("ERROR: there is a weack constraint with more than 2 variables inside")  # I've already checked manually, but i'll insert this if to prevent and handle this kind of error.
                 quit()
             if theory_entries[j].count("), ") > 1:
-                print("ERROR: there is a weack constraint with more than 2 literals inside")    # I've already checked manually, but i'll insert this if to prevent and handle this kind of error.
+                print("ERROR: there is a weack constraint with more than 2 literals inside")  # I've already checked manually, but i'll insert this if to prevent and handle this kind of error.
                 quit()
             if ("category" in theory_entries[j]) and ("), " not in theory_entries[j]):  # there's only category literal
                 literal = theory_entries[j].split(".")[0][3:]
@@ -257,8 +258,8 @@ def obtain_hpyerparameters(COUPLE, max_v, max_p, USER):
                 weight = first_split.split('@')[0]
                 level = first_split.split('@')[1]
                 weight = weight[1:]
-                level = int(level[0:len(level)-1])
-            elif("category" in theory_entries[j]) and ("), " in theory_entries[j]): # there's category literal but is not alone
+                level = int(level[0:len(level) - 1])
+            elif ("category" in theory_entries[j]) and ("), " in theory_entries[j]):  # there's category literal but is not alone
                 first_part = theory_entries[j].split("), ")[0]
                 second_part = theory_entries[j].split("), ")[1]
                 if "category" in first_part:
@@ -288,16 +289,16 @@ def obtain_hpyerparameters(COUPLE, max_v, max_p, USER):
             else:
                 first_split = theory_entries[j].split('(')[1]
                 second_literal = ""
-                if " " in first_split[0:len(first_split)-4]:
+                if " " in first_split[0:len(first_split) - 4]:
                     literal = first_split.split(',')[0]
                     second_literal = first_split.split('), ')[1]
                     second_split = theory_entries[j].split('[')[1]
                 else:
-                    literal = first_split.split(',')[0]   # NOTE: max_v = 1, so we have at most 1 literal
+                    literal = first_split.split(',')[0]  # NOTE: max_v = 1, so we have at most 1 literal
                     second_split = first_split.split('[')[1]
                 third_split = second_split.split(',')[0]
                 if "]" in third_split:
-                    third_split = third_split[0:len(third_split)-1]
+                    third_split = third_split[0:len(third_split) - 1]
                 weight = third_split.split('@')[0]
                 level = int(third_split.split('@')[1])
             if literal in item and second_literal in item:
@@ -305,29 +306,39 @@ def obtain_hpyerparameters(COUPLE, max_v, max_p, USER):
                     if "-" in weight:
                         # X[i, level - 1] = -1
                         if literal in macro_ingredients_dictionary:
-                            X[i, level-1] = -(all_data[recipes_indexes[i], 4 + macro_ingredients_dictionary[literal]])/macro_ingredients_norm_dictionary[literal]
+                            X[i, level - 1] = -(all_data[recipes_indexes[i], 4 + macro_ingredients_dictionary[literal]])  # /macro_ingredients_norm_dictionary[literal]
+                            min_values_per_z[level-1] = macro_ingredients_norm_dictionary[literal]
                         elif literal in preparation_dictionary:
-                            X[i, level-1] = -(all_data[recipes_indexes[i], 4 + len(macro_ingredients_dictionary)+preparation_dictionary[literal]])/preparation_norm_dictionary[literal]
+                            X[i, level - 1] = -(all_data[recipes_indexes[i], 4 + len(macro_ingredients_dictionary) + preparation_dictionary[literal]])  # //preparation_norm_dictionary[literal]
+                            min_values_per_z[level - 1] = preparation_norm_dictionary[literal]
                         elif literal == "cost":
-                            X[i, level-1] = -all_data[recipes_indexes[i], 1]
+                            X[i, level - 1] = -all_data[recipes_indexes[i], 1]
+                            # in this case I left empty space because in 8PC2STD we don't have cost
                         elif literal == "prepTime":
-                            X[i, level - 1] = -(all_data[recipes_indexes[i], 2])/280
+                            X[i, level - 1] = -(all_data[recipes_indexes[i], 2])  # /280
+                            min_values_per_z[level - 1] = 280
                         else:
-                            X[i, level-1] = -all_data[recipes_indexes[i], 2]
+                            X[i, level - 1] = -all_data[recipes_indexes[i], 2]
+                            # same for difficulty
                     else:
                         # X[i, level - 1] = 1
                         if literal in macro_ingredients_dictionary:
-                            X[i, level-1] = (all_data[recipes_indexes[i], 4 + macro_ingredients_dictionary[literal]])/macro_ingredients_norm_dictionary[literal]
+                            X[i, level - 1] = (all_data[recipes_indexes[i], 4 + macro_ingredients_dictionary[literal]])  # /macro_ingredients_norm_dictionary[literal]
+                            max_values_per_z[level-1] = macro_ingredients_norm_dictionary[literal]
                         elif literal in preparation_dictionary:
-                            X[i, level-1] = (all_data[recipes_indexes[i], 4 + len(macro_ingredients_dictionary)+preparation_dictionary[literal]])/preparation_norm_dictionary[literal]
+                            X[i, level - 1] = (all_data[recipes_indexes[i], 4 + len(macro_ingredients_dictionary) + preparation_dictionary[literal]])  # /preparation_norm_dictionary[literal]
+                            max_values_per_z[level - 1] = preparation_norm_dictionary[literal]
                         elif literal == "cost":
-                            X[i, level-1] = all_data[recipes_indexes[i], 1]
+                            X[i, level - 1] = all_data[recipes_indexes[i], 1]
                         elif literal == "prepTime":
-                            X[i, level - 1] = -(all_data[recipes_indexes[i], 2])/280
+                            X[i, level - 1] = -(all_data[recipes_indexes[i], 2])  # /280
+                            max_values_per_z[level - 1] = 280
                         else:
-                            X[i, level-1] = all_data[recipes_indexes[i], 2]
+                            X[i, level - 1] = all_data[recipes_indexes[i], 2]
                 else:
-                    X[i, level - 1] = int(weight)
+                    X[i, level - 1] = int(weight)   # category, it's only 1 or -1
+                    max_values_per_z[level - 1] = 1
+                    min_values_per_z[level - 1] = 1
 
     for iter_check in range(max_p):
         if np.all(X[:, iter_check] == 0):
@@ -344,7 +355,7 @@ def obtain_hpyerparameters(COUPLE, max_v, max_p, USER):
     if COUPLE == 150:
         l = len(couple_indexes)
     gb_model = gb.Model()
-    z = gb_model.addVars(max_p, vtype=gb.GRB.CONTINUOUS, lb=0.0, ub=1.0, name='z')
+    z = gb_model.addVars(max_p, vtype=gb.GRB.CONTINUOUS, lb=0.0, name='z')
     t = gb_model.addVar(vtype=gb.GRB.CONTINUOUS, lb=0.0, ub=0.0, name='t')
     if COUPLE == 150:
         q = gb_model.addVars(l, vtype=gb.GRB.CONTINUOUS, name='q', lb=-gb.GRB.INFINITY)
@@ -382,35 +393,30 @@ def obtain_hpyerparameters(COUPLE, max_v, max_p, USER):
     # there aren't other cases, and v[l] get values correctly respect his definition
     # finally, I use this gurobi guide for constraint definition: https://support.gurobi.com/hc/en-us/articles/4414392016529-How-do-I-model-conditional-statements-in-Gurobi-
 
-
     b1 = gb_model.addVars(l, vtype=gb.GRB.BINARY, name='b1')
     b2 = gb_model.addVars(l, vtype=gb.GRB.BINARY, name='b2')
-    z1 = gb_model.addVars(l, vtype=gb.GRB.BINARY, name='z1')    # support variables
-    z2 = gb_model.addVars(l, vtype=gb.GRB.BINARY, name='z2')    # support variables
+    z1 = gb_model.addVars(l, vtype=gb.GRB.BINARY, name='z1')  # support variables
+    z2 = gb_model.addVars(l, vtype=gb.GRB.BINARY, name='z2')  # support variables
     v = gb_model.addVars(l, vtype=gb.GRB.INTEGER, lb=-1, ub=1, name='v')
     gb_model.update()
     gb_model.write('./Lp_files/model.lp')
 
     # CONSTRAINT DEFINITION
-    gb_model.addConstr(z.sum('*') == 1)     # (1)
-    gb_model.update()
-    gb_model.write('./Lp_files/model.lp')
+    # gb_model.addConstr(z.sum('*') == 1)     # (1)
+    # gb_model.update()
+    # gb_model.write('./Lp_files/model.lp')
     for j in reversed(range(max_p)):
         if j >= 0:
             if list_checked[j]:
                 if j == 0:
                     continue
                 for k in range(0, j):
-                    gb_model.addConstr(z[j] >= z[k])      # (2)
+                    gb_model.addConstr(z[j] >= z[k])  # (2)
             else:
                 gb_model.addConstr(z[j] == 0)  # (2)
-    first_z_reached = False
     for j in range(max_p):
-        if first_z_reached:
-            break
-        elif list_checked[j]:
+        if list_checked[j]:
             gb_model.addConstr(z[j] >= 0.01)
-            first_z_reached = True
     gb_model.update()
     gb_model.write('./Lp_files/model.lp')
     # temp for test
@@ -420,26 +426,35 @@ def obtain_hpyerparameters(COUPLE, max_v, max_p, USER):
     #             gb_model.addConstr(z[j] >= gb.quicksum(z[i] for i in range(j)) + 0.01)
     # TEST:
     # z[j]*max(X[i, j] for each i as food in x) > sum_k(z[k]*max(x[i, k] for each i as food in x)) with k < j
-    # NOTE: here max is intended in abs value
-    max_values_per_z =[0, 0, 0, 0, 0]
+    # to avoid that the sum of z[j] with less priority respect to z[i] (j = 0, ..., i-1) influence the outcome more than z[i] we set that the max apport of z[j] component couldn't exceed the one given by z[i]
+    # max_values_per_z = [0, 0, 0, 0, 0]
+    # min_values_per_z = [0, 0, 0, 0, 0]
     for sample in X:
         for index_value, value in enumerate(sample):
-            if max_values_per_z[index_value] < abs(value):
-                max_values_per_z[index_value] = abs(value)
-    # normalize max_values_per_p so that it does sum up to 1
+            if max_values_per_z[index_value] < value:
+                max_values_per_z[index_value] = value
+    for sample in X:
+        for index_value, value in enumerate(sample):
+            if min_values_per_z[index_value] > value:
+                min_values_per_z[index_value] = value
+    for index_min_value, min_value in enumerate(min_values_per_z):
+        min_values_per_z[index_min_value] = abs(min_values_per_z[index_min_value])
     for j in reversed(range(max_p)):
         if j > 0:
             if list_checked[j]:
-                gb_model.addConstr(z[j] * max_values_per_z[j] >= gb.quicksum(z[i] * max_values_per_z[i] for i in range(j)) + 0.01)
+                if max_values_per_z[j] != 0:
+                    gb_model.addConstr(z[j] >= gb.quicksum(max_values_per_z[i] * z[i] for i in range(j)) + gb.quicksum(min_values_per_z[i] * z[i] for i in range(j)) + 0.01)
+                if min_values_per_z[j] != 0:
+                    gb_model.addConstr(z[j] >= gb.quicksum(min_values_per_z[i] * z[i] for i in range(j)) + gb.quicksum(max_values_per_z[i] * z[i] for i in range(j)) + 0.01)
     gb_model.update()
     gb_model.write('./Lp_files/model.lp')
     for i in range(len(list_of_item)):
-        gb_model.addConstr(q[i] == gb.quicksum(X[i, j] * z[j] for j in range(max_p) if list_checked[j]))     # (3)
+        gb_model.addConstr(q[i] == gb.quicksum(X[i, j] * z[j] for j in range(max_p) if list_checked[j]))  # (3)
     gb_model.update()
     gb_model.write('./Lp_files/model.lp')
     couple_counter = 0
     eps = 0.0000001
-    M = 100
+    M = 10000000
     if COUPLE == 150:
         for couple in couple_indexes:
             inserted = False
@@ -474,7 +489,7 @@ def obtain_hpyerparameters(COUPLE, max_v, max_p, USER):
                 couple_counter += 1
     gb_model.update()
     gb_model.write('./Lp_files/model.lp')
-    gb_model.addConstrs(v[couple_number] == b2[couple_number] - b1[couple_number] for couple_number in range(l))     # (4)
+    gb_model.addConstrs(v[couple_number] == b2[couple_number] - b1[couple_number] for couple_number in range(l))  # (4)
     gb_model.update()
     gb_model.write('./Lp_files/model.lp')
 
@@ -495,7 +510,9 @@ def obtain_hpyerparameters(COUPLE, max_v, max_p, USER):
 
     # objective function
 
-    gb_model.setObjective(gb.quicksum(s), sense=gb.GRB.MAXIMIZE,)
+    gb_model.setObjectiveN(gb.quicksum(s), 0, 1)
+    gb_model.setObjectiveN(-gb.quicksum(z), 1, 0)
+    gb_model.ModelSense = gb.GRB.MAXIMIZE
     gb_model.update()
     gb_model.write('./Lp_files/model.lp')
 
@@ -509,40 +526,43 @@ def obtain_hpyerparameters(COUPLE, max_v, max_p, USER):
         print("infeasible")
         print("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~")
         return -1, [-1, -1, -1, -1, -1, -1]
-        
+
     list_to_return = []
     for i, z_value in enumerate(z):
         list_to_return.append(np.round(z[i].X, decimals=5))
     # for i, v_value in enumerate(v):
-        # print(str(np.round(v[i].X, decimals=5)))
+    # print(str(np.round(v[i].X, decimals=5)))
     return np.round(t.X, decimals=5), [list_to_return]
-                
+
+
 choices = [1]
 for choice in choices:
     if choice == 0:
         continue
-    path = './Data8Component2Std/testOutput/results_zero_after_opt-after-grid(single-user).csv'
+    path = './Data8Component2Std/testOutput/results_zero_after_opt-after-grid(single-user)(training).csv'
     with open(path, 'w+', encoding='UTF8') as f_output:
         f_output.write("USERID;MAXV;MAXP;MAXWC;TRAIN_SIZE;TEST_SIZE;ACCURACYP;PRECISIONP;RECALLP;TRAIN_TIME;THEORY;NUMBER_WC;treshold;F1;F2;F3;F4;F5\n")
         for COUPLE in COUPLES:
             for max_v in max_v_list:
                 for max_p in max_p_list:
                     for USER in USERS:
-                        if COUPLE == 45:
-                            if max_v != 1 or max_p != 4:
-                                continue
-                        else:
-                            if max_v != 1 or max_p != 5:
-                                continue
-                        if COUPLE == 150:
-                            if max_v != 3 or max_p != 5:
-                                continue
+                        # if COUPLE == 45:
+                        #     if max_v != 1 or max_p != 4:
+                        #         continue
+                        # else:
+                        #     if max_v != 1 or max_p != 5:
+                        #         continue
+                        # if COUPLE == 150:
+                        #     if max_v != 3 or max_p != 5:
+                        #         continue
+                        if max_v != 5 or max_p != 5:
+                            continue
                         returned_t, returned_z = obtain_hpyerparameters(COUPLE=COUPLE, max_v=max_v, max_p=max_p, USER=USER)
                         returned_z = returned_z[0]
                         if -1 == returned_z:
                             continue
-                        if len(returned_z) < 5:     # for cases such as 45 COUPLE where we have 4 wc, but in the code then this cause "list index out of range"
-                            returned_z.append(0)
+                        # if len(returned_z) < 5:     # for cases such as 45 COUPLE where we have 4 wc, but in the code then this cause "list index out of range"
+                        #     returned_z.append(0)
                         if int(choice) == 0:
                             output_train_data_dir = "./Data8Component2Std/users_new_version_second/no_zero/train/" + str(COUPLE) + "Couples/"
                             output_dir_for_train_data_dir = "./Data8Component2Std/final/users/no_zero/train/" + str(COUPLE) + "Couples/User" + str(USER) + "/outputTrain/"
@@ -564,15 +584,17 @@ for choice in choices:
                             #     continue
                             # if int(max_v) != int(max_p):
                             #     continue
-                            if COUPLE == 45:
-                                if max_v != 1 or max_p != 4:
-                                    continue
-                            else:
-                                if max_v != 1 or max_p != 5:
-                                    continue
-                            if COUPLE == 150:
-                                if max_v != 3 or max_p != 5:
-                                    continue
+                            # if COUPLE == 45:
+                            #     if max_v != 1 or max_p != 4:
+                            #         continue
+                            # else:
+                            #     if max_v != 1 or max_p != 5:
+                            #         continue
+                            # if COUPLE == 150:
+                            #     if max_v != 3 or max_p != 5:
+                            #         continue
+                            if max_v != 5 or max_p != 5:
+                                continue
                             if int(max_v) > 0 and int(max_p) > 0:
                                 items = ilasp.itemsFromFile("Data8Component2Std/recipes/recipes_max_v(" + str(max_v) + ")-max_p(" + str(max_p) + ").las")
                                 language_bias = ilasp.languageBiasFromFile("Data8Component2Std/recipes/recipes_max_v(" + str(max_v) + ")-max_p(" + str(max_p) + ").las")
@@ -590,15 +612,15 @@ for choice in choices:
                             f_train_data = os.path.join(output_train_data_dir, 'user' + str(USER) + ".txt")
                             temp_filename = filename.replace("outputTrain", "test")
                             test_filename = temp_filename.replace("txt", "las")
-                            test_filename = "test_max-v(2)-max_p(3).las" # picked one random, it's the same
+                            test_filename = "test_max-v(2)-max_p(3).las"  # picked one random, it's the same
                             f_test = os.path.join(output_test_data_dir, test_filename)
                             F_TRAIN = open(f_train)
                             data_train = F_TRAIN.read()
                             F_TRAIN.close()
                             # train_set = ilasp.preferencesFromFileSpaces(f_train_data)
                             train_set = ilasp.preferencesFromFileSpacesAndSign(f_train_data)
-                            test_set = ilasp.preferencesFromFileSign(f_test)
-                            # test_set = ilasp.preferencesFromFileSpacesAndSign(f_train_data)
+                            # test_set = ilasp.preferencesFromFileSign(f_test)
+                            test_set = ilasp.preferencesFromFileSpacesAndSign(f_train_data)
 
                             train_size = len(train_set)
                             test_size = len(test_set)
@@ -679,7 +701,9 @@ for choice in choices:
                                     results = ilasp.test_cm_grid(theory, items, test_set, returned_t, returned_z)
                                     f_output.write(str(USER) + ";" + str(max_v) + ";" + str(max_p) + ";3;" + str(train_size) + ";" + str(test_size) + ";" + str(results["avg_accuracy"]) + ";" + str(results["avg_precision"]) + ";" + str(results["avg_recall"]) + ";" + str(training_time) + ";" + theory.replace("\n", "") + ";" + str(float(wc_counter)) + ";" + str(returned_t) + ";" + str(returned_z[0]) + ";" + str(returned_z[1]) + ";" + str(returned_z[2]) + ";" + str(returned_z[3]) + ";" + str(returned_z[4]) + "\n")
                                 if COUPLE == 45:
-                                    print("error")  # max_p is set to 4 so couldn't be that there are 5 weak constraints
+                                    results = ilasp.test_cm_grid(theory, items, test_set, returned_t, returned_z)  # cases where there are 4 weak constraint but maxp is setted to 5 (in this case the missing weak constraint could be of any level)
+                                    f_output.write(str(USER) + ";" + str(max_v) + ";" + str(max_p) + ";3;" + str(train_size) + ";" + str(test_size) + ";" + str(results["avg_accuracy"]) + ";" + str(results["avg_precision"]) + ";" + str(results["avg_recall"]) + ";" + str(training_time) + ";" + theory.replace("\n", "") + ";" + str(float(wc_counter)) + ";" + str(returned_t) + ";" + str(returned_z[0]) + ";" + str(returned_z[1]) + ";" + str(returned_z[2]) + ";" + str(returned_z[3]) + ";" + str(returned_z[4]) + "\n")
+                                #     print("error")  # max_p is set to 4 so couldn't be that there are 5 weak constraints
                                 if COUPLE == 105:
                                     results = ilasp.test_cm_grid(theory, items, test_set, returned_t, returned_z)  # cases where there are 4 weak constraint but maxp is setted to 5 (in this case the missing weak constraint could be of any level)
                                     f_output.write(str(USER) + ";" + str(max_v) + ";" + str(max_p) + ";3;" + str(train_size) + ";" + str(test_size) + ";" + str(results["avg_accuracy"]) + ";" + str(results["avg_precision"]) + ";" + str(results["avg_recall"]) + ";" + str(training_time) + ";" + theory.replace("\n", "") + ";" + str(float(wc_counter)) + ";" + str(returned_t) + ";" + str(returned_z[0]) + ";" + str(returned_z[1]) + ";" + str(returned_z[2]) + ";" + str(returned_z[3]) + ";" + str(returned_z[4]) + "\n")
@@ -687,3 +711,4 @@ for choice in choices:
                                     results = ilasp.test_cm_grid(theory, items, test_set, returned_t, returned_z)  # cases where there are 4 weak constraint but maxp is setted to 5 (in this case the missing weak constraint could be of any level)
                                     f_output.write(str(USER) + ";" + str(max_v) + ";" + str(max_p) + ";3;" + str(train_size) + ";" + str(test_size) + ";" + str(results["avg_accuracy"]) + ";" + str(results["avg_precision"]) + ";" + str(results["avg_recall"]) + ";" + str(training_time) + ";" + theory.replace("\n", "") + ";" + str(float(wc_counter)) + ";" + str(returned_t) + ";" + str(returned_z[0]) + ";" + str(returned_z[1]) + ";" + str(returned_z[2]) + ";" + str(returned_z[3]) + ";" + str(returned_z[4]) + "\n")
                                 break
+                            print("---")

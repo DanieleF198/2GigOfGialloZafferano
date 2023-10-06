@@ -1,15 +1,15 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%% Pre-processing                          : 0.068s
-%% Hypothesis Space Generation             : 0.013s
-%% Conflict analysis                       : 3.275s
-%%   - Brave Orders                        : 3.275s
-%% Counterexample search                   : 1.462s
-%%   - CDOEs                               : 1.089s
-%%   - CDPIs                               : 0.378s
-%% Hypothesis Search                       : 6.316s
-%% Propagation                             : 11.051s
-%%   - CDOEs                               : 11.051s
-%% Total                                   : 22.292s
+%% Pre-processing                          : 0.085s
+%% Hypothesis Space Generation             : 0.018s
+%% Conflict analysis                       : 7.162s
+%%   - Brave Orders                        : 7.162s
+%% Counterexample search                   : 3.741s
+%%   - CDOEs                               : 2.894s
+%%   - CDPIs                               : 0.856s
+%% Hypothesis Search                       : 19.151s
+%% Propagation                             : 19.239s
+%%   - CDOEs                               : 19.24s
+%% Total                                   : 49.665s
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-:~ value(farinacei,V1).[-V1@1, V1]
+:~ value(carne,V1).[-V1@1, V1]
 

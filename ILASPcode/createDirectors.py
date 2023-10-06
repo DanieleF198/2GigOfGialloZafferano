@@ -2,15 +2,15 @@ import os
 from datetime import datetime
 
 
-pathFinalDirZeroTrain = './Data8Component2Std/final/users/zero/train/'
-# pathFinalDirZeroTest = './Data8Component2Std/final/users/zero/test/'
-pathFinalDirNoZeroTrain = './Data8Component2Std/final/users/no_zero/train/'
-# pathFinalDirNoZeroTest = './Data8Component2Std/final/users/no_zero/test/'
+pathFinalDirZeroTrain = './Data8Component2Std/final_original/users/zero/train/'
+# pathFinalDirZeroTest = './Data8Component2Std/final_original/users/zero/test/'
+pathFinalDirNoZeroTrain = './Data8Component2Std/final_original/users/no_zero/train/'
+# pathFinalDirNoZeroTest = './Data8Component2Std/final_original/users/no_zero/test/'
 
-pathUsersZeroCoupleTrainString = pathFinalDirZeroTrain + '45Couples'
-# pathUsersZeroCoupleTestString = pathFinalDirZeroTest + '105Couples'
-pathUsersNoZeroCoupleTrainString = pathFinalDirNoZeroTrain + '45Couples'
-# pathUsersNoZeroCoupleTestString = pathFinalDirNoZeroTest + '105Couples'
+pathUsersZeroCoupleTrainString = pathFinalDirZeroTrain + '150Couples'
+# pathUsersZeroCoupleTestString = pathFinalDirZeroTest + '50Couples'
+pathUsersNoZeroCoupleTrainString = pathFinalDirNoZeroTrain + '150Couples'
+# pathUsersNoZeroCoupleTestString = pathFinalDirNoZeroTest + '50Couples'
 
 effectivePathUsersZeroCoupleTrainString = os.path.join(pathUsersZeroCoupleTrainString)
 # effectivePathUsersZeroCoupleTestString = os.path.join(pathUsersZeroCoupleTestString)
@@ -22,7 +22,7 @@ effectivePathUsersNoZeroCoupleTrainString = os.path.join(pathUsersNoZeroCoupleTr
 # os.makedirs(effectivePathUsersNoZeroCoupleTrainString)
 # os.makedirs(effectivePathUsersNoZeroCoupleTestString)
 
-for i in range(48, 54):
+for i in range(0, 54):
     pathUsersZeroFinalTrainString = pathUsersZeroCoupleTrainString + '/User' + str(i)
     # pathUsersZeroFinalTestString = pathUsersZeroCoupleTestString + '/User' + str(i)
     pathUsersNoZeroFinalTrainString = pathUsersNoZeroCoupleTrainString + '/User' + str(i)

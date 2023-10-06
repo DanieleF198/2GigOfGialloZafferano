@@ -38,8 +38,8 @@ from CompareStableModels import create_preamble
 
 USERS = [i for i in range(0, 54)]
 COUPLES = [45, 105, 210]
-max_v_list = [1]
-max_p_list = [4, 5]
+max_v_list = [5]
+max_p_list = [5]
 
 # LOAD RECIPES DATA
 
@@ -90,30 +90,31 @@ for i, row in enumerate(food_data_ingredients):
     for j, ingredient in enumerate(row):
         if (j == 1) or (4 <= j <= 8) or (j == 10) or (j == 14) or (16 <= j <= 19) or (21 <= j <= 24) or (28 <= j <= 29):
             continue
-        if j == 5:
-            food_data_macro_ingredients[i, 0] = food_data_macro_ingredients[i, 0] + ingredient
-        if j == 4 or j == 6 or j == 18 or j == 28 or j == 35:
+        # if j == 4:    # I'll leave commented just in case I want to insert in a second moment
+        #     food_data_macro_ingredients[i, 0] = food_data_macro_ingredients[i, 0] + ingredient
+        if j == 3 or j == 30:
             food_data_macro_ingredients[i, 1] = food_data_macro_ingredients[i, 1] + ingredient
+        # if j == 10:   # I'll leave commented just in case I want to insert in a second moment
+        #     food_data_macro_ingredients[i, 2] = food_data_macro_ingredients[i, 2] + ingredient
         if j == 11:
-            food_data_macro_ingredients[i, 2] = food_data_macro_ingredients[i, 2] + ingredient
-        if j == 2 or j == 12:
             food_data_macro_ingredients[i, 3] = food_data_macro_ingredients[i, 3] + ingredient
-        if j == 1 or j == 8 or j == 21 or j == 24 or j == 30:
+        if j == 26:
             food_data_macro_ingredients[i, 4] = food_data_macro_ingredients[i, 4] + ingredient
-        if j == 3 or j == 9 or j == 15 or j == 29 or j == 34:
+        if j == 2 or j == 25:
             food_data_macro_ingredients[i, 5] = food_data_macro_ingredients[i, 5] + ingredient
-        if j == 0 or j == 7 or j == 22 or j == 23 or j == 26 or j == 32:
+        if j == 0 or j == 20:
             food_data_macro_ingredients[i, 6] = food_data_macro_ingredients[i, 6] + ingredient
-        if j == 20:
-            food_data_macro_ingredients[i, 7] = food_data_macro_ingredients[i, 7] + ingredient
-        if j == 10 or j == 13:
+        # if j == 18:   # I'll leave commented just in case I want to insert in a second moment
+        #     food_data_macro_ingredients[i, 7] = food_data_macro_ingredients[i, 7] + ingredient
+        if j == 9 or j == 12:
             food_data_macro_ingredients[i, 8] = food_data_macro_ingredients[i, 8] + ingredient
-        if j == 16 or j == 19 or j == 25 or j == 27:
-            food_data_macro_ingredients[i, 9] = food_data_macro_ingredients[i, 9] + ingredient
-        if j == 31:
+        # if j == 22 or j == 23:    # I'll leave commented just in case I want to insert in a second moment
+        #     food_data_macro_ingredients[i, 9] = food_data_macro_ingredients[i, 9] + ingredient
+        if j == 27:
             food_data_macro_ingredients[i, 10] = food_data_macro_ingredients[i, 10] + ingredient
-        if j == 14 or j == 17 or j == 33:
+        if j == 13 or j == 15:
             food_data_macro_ingredients[i, 11] = food_data_macro_ingredients[i, 11] + ingredient
+
 
 linesOfP = dataP.split('\n')
 food_data_preparation = np.zeros((len(linesOfP), 8), dtype='float32')
@@ -121,6 +122,9 @@ for i, line in enumerate(linesOfP):
 
     values = [x for x in line.split(' ')[1:]]
     food_data_preparation[i, :] = values
+
+food_data_macro_ingredients_T = food_data_macro_ingredients.T
+food_data_preparation_T = food_data_preparation.T
 
 all_data = np.concatenate([food_data_categories, food_data_scalars, food_data_macro_ingredients, food_data_preparation], axis=1)
 
@@ -149,17 +153,17 @@ preparation_dictionary = {"bollitura": 0,
 #
 #
 macro_ingredients_norm_dictionary = {"cereali": 0.0,
-                                "latticini": 1.0,
-                                "uova": 4.0,
-                                "farinacei": 7.0,
+                                "latticini": 3.0,
+                                "uova": 0.0,
+                                "farinacei": 5.0,
                                 "frutta": 2.0,
-                                "erbe_spezie_e_condimenti": 11.0,
-                                "carne": 5.0,
-                                "funghi_e_tartufi": 3.0,
+                                "erbe_spezie_e_condimenti": 19.0,
+                                "carne": 9.0,
+                                "funghi_e_tartufi": 0.0,
                                 "pasta": 5.0,
-                                "pesce": 9.0,
+                                "pesce": 0.0,
                                 "dolcificanti": 1.0,
-                                "verdure_e_ortaggi": 8.0}
+                                "verdure_e_ortaggi": 10.0}
 
 preparation_norm_dictionary = {"bollitura": 5.0,
                           "rosolatura": 5.0,
@@ -177,12 +181,12 @@ for COUPLE in COUPLES:
     for max_v in max_v_list:
         for max_p in max_p_list:
             for USER in USERS:
-                if COUPLE == 45:
-                    if max_v != 1 or max_p != 4:
-                        continue
-                else:
-                    if max_v != 1 or max_p != 5:
-                        continue
+                # if COUPLE == 45:
+                #     if max_v != 1 or max_p != 4:
+                #         continue
+                # else:
+                if max_v != 5 or max_p != 5:
+                    continue
 
                 if COUPLE == 210:
                     print("dataset size = 190;")
@@ -218,14 +222,14 @@ for COUPLE in COUPLES:
                     end_index_max_v_max_p = filename.find(").txt")
                     max_v_theory = int(filename[start_index_max_v_max_p:first_middle_index_max_v_max_p])
                     max_p_theory = int(filename[second_middle_index_max_v_max_p:end_index_max_v_max_p])
-                    if COUPLE == 45:
-                        if int(max_v_theory) != 1 or int(max_p_theory) != 4:
-                            continue
-                    else:
-                        if int(max_v_theory) != 1 or int(max_p_theory) != 5:
-                            continue
-                    # if int(max_v_theory) != 3 or int(max_p_theory) != 5:
-                    #     continue
+                    # if COUPLE == 45:
+                    #     if int(max_v_theory) != 1 or int(max_p_theory) != 4:
+                    #         continue
+                    # else:
+                    #     if int(max_v_theory) != 1 or int(max_p_theory) != 5:
+                    #         continue
+                    if int(max_v_theory) != 5 or int(max_p_theory) != 5:
+                        continue
                     f_train = os.path.join(output_dir_for_train_data_dir, filename)
                     f_train_data = os.path.join(output_train_data_dir, 'user' + str(USER) + ".txt")
                     F_TRAIN = open(f_train)

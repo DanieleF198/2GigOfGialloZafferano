@@ -1,15 +1,15 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%% Pre-processing                          : 0.07s
-%% Hypothesis Space Generation             : 0.014s
-%% Conflict analysis                       : 2.914s
-%%   - Brave Orders                        : 2.914s
-%% Counterexample search                   : 1.252s
-%%   - CDOEs                               : 0.932s
-%%   - CDPIs                               : 0.319s
-%% Hypothesis Search                       : 5.981s
-%% Propagation                             : 8.962s
-%%   - CDOEs                               : 8.963s
-%% Total                                   : 19.291s
+%% Pre-processing                          : 0.104s
+%% Hypothesis Space Generation             : 0.028s
+%% Conflict analysis                       : 6.066s
+%%   - Brave Orders                        : 6.066s
+%% Counterexample search                   : 3.513s
+%%   - CDOEs                               : 2.73s
+%%   - CDPIs                               : 0.78s
+%% Hypothesis Search                       : 15.86s
+%% Propagation                             : 16.916s
+%%   - CDOEs                               : 16.917s
+%% Total                                   : 42.747s
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-:~ category(3).[1@1]
+:~ value(pasta,V1).[V1@1, V1]
 

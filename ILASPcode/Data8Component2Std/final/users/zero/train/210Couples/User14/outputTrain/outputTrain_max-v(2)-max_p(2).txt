@@ -1,16 +1,16 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Pre-processing                          : 0.081s
-%% Hypothesis Space Generation             : 0.053s
-%% Conflict analysis                       : 8.37s
-%%   - Brave Orders                        : 8.37s
-%% Counterexample search                   : 2.36s
-%%   - CDOEs                               : 1.868s
-%%   - CDPIs                               : 0.497s
-%% Hypothesis Search                       : 16.859s
-%% Propagation                             : 25.149s
-%%   - CDOEs                               : 25.151s
-%% Total                                   : 53.066s
+%% Hypothesis Space Generation             : 0.157s
+%% Conflict analysis                       : 20.942s
+%%   - Brave Orders                        : 20.941s
+%% Counterexample search                   : 7.801s
+%%   - CDOEs                               : 6.659s
+%%   - CDPIs                               : 1.152s
+%% Hypothesis Search                       : 111.651s
+%% Propagation                             : 50.815s
+%%   - CDOEs                               : 50.816s
+%% Total                                   : 192.044s
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-:~ value(uova,V1).[-V1@2, V1]
-:~ value(verdure_e_ortaggi,V1).[-1@1, V1]
+:~ value(verdure_e_ortaggi,V1).[V1@1, V1]
+:~ value(pasta,V1), category(3).[V1@2, V1]
 

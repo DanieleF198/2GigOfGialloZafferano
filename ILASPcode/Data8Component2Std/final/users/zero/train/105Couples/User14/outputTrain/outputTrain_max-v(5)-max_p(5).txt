@@ -1,19 +1,19 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%% Pre-processing                          : 0.073s
-%% Hypothesis Space Generation             : 0.543s
-%% Conflict analysis                       : 15.499s
-%%   - Brave Orders                        : 15.499s
-%% Counterexample search                   : 1.376s
-%%   - CDOEs                               : 1.042s
-%%   - CDPIs                               : 0.338s
-%% Hypothesis Search                       : 1660.43s
-%% Propagation                             : 43.982s
-%%   - CDOEs                               : 43.983s
-%% Total                                   : 1722.4s
+%% Pre-processing                          : 0.089s
+%% Hypothesis Space Generation             : 1.201s
+%% Conflict analysis                       : 33.36s
+%%   - Brave Orders                        : 33.36s
+%% Counterexample search                   : 3.868s
+%%   - CDOEs                               : 3.064s
+%%   - CDPIs                               : 0.804s
+%% Hypothesis Search                       : 2121.54s
+%% Propagation                             : 79.702s
+%%   - CDOEs                               : 79.702s
+%% Total                                   : 2241.24s
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-:~ value(verdure_e_ortaggi,V1).[-1@1, V1]
-:~ value(uova,V1).[-V1@4, V1]
-:~ value(farinacei,V1).[-V1@3, V1]
-:~ category(5).[1@5]
-:~ value(forno,V1).[-V1@2, V1]
+:~ value(carne,V1).[-V1@1, V1]
+:~ value(stufato,V1).[V1@3, V1]
+:~ category(4).[1@2]
+:~ value(pasta,V1), category(3).[V1@4, V1]
+:~ value(verdure_e_ortaggi,V1), category(4).[V1@5, V1]
 

@@ -1,17 +1,17 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%% Pre-processing                          : 0.069s
-%% Hypothesis Space Generation             : 0.098s
-%% Conflict analysis                       : 15.285s
-%%   - Brave Orders                        : 15.285s
-%% Counterexample search                   : 2.854s
-%%   - CDOEs                               : 2.247s
-%%   - CDPIs                               : 0.628s
-%% Hypothesis Search                       : 133.506s
-%% Propagation                             : 44.77s
-%%   - CDOEs                               : 44.77s
-%% Total                                   : 196.886s
+%% Pre-processing                          : 0.099s
+%% Hypothesis Space Generation             : 0.263s
+%% Conflict analysis                       : 28.482s
+%%   - Brave Orders                        : 28.481s
+%% Counterexample search                   : 7.695s
+%%   - CDOEs                               : 6.636s
+%%   - CDPIs                               : 1.066s
+%% Hypothesis Search                       : 269.598s
+%% Propagation                             : 69.057s
+%%   - CDOEs                               : 69.058s
+%% Total                                   : 376.081s
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-:~ value(frittura,V1).[V1@3, V1]
-:~ value(erbe_spezie_e_condimenti,V1).[V1@1, V1]
-:~ category(3).[1@2]
+:~ value(carne,V1).[-V1@1, V1]
+:~ category(2).[-1@2]
+:~ value(erbe_spezie_e_condimenti,V1), category(3).[V1@3, V1]
 

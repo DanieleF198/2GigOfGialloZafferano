@@ -1,15 +1,15 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%% Pre-processing                          : 0.076s
-%% Hypothesis Space Generation             : 0.014s
-%% Conflict analysis                       : 0.794s
-%%   - Brave Orders                        : 0.794s
-%% Counterexample search                   : 0.261s
-%%   - CDOEs                               : 0.163s
-%%   - CDPIs                               : 0.097s
-%% Hypothesis Search                       : 1.871s
-%% Propagation                             : 2.643s
-%%   - CDOEs                               : 2.643s
-%% Total                                   : 5.72s
+%% Pre-processing                          : 0.095s
+%% Hypothesis Space Generation             : 0.018s
+%% Conflict analysis                       : 1.877s
+%%   - Brave Orders                        : 1.877s
+%% Counterexample search                   : 0.815s
+%%   - CDOEs                               : 0.536s
+%%   - CDPIs                               : 0.277s
+%% Hypothesis Search                       : 5.113s
+%% Propagation                             : 5.596s
+%%   - CDOEs                               : 5.596s
+%% Total                                   : 13.694s
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-:~ value(erbe_spezie_e_condimenti,V1).[V1@1, V1]
+:~ value(carne,V1).[-V1@1, V1]
 

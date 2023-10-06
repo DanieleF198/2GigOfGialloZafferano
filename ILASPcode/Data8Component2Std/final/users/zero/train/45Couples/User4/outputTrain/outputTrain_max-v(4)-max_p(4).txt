@@ -1,18 +1,17 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%% Pre-processing                          : 0.072s
-%% Hypothesis Space Generation             : 0.287s
-%% Conflict analysis                       : 5.18s
-%%   - Brave Orders                        : 5.18s
-%% Counterexample search                   : 0.399s
-%%   - CDOEs                               : 0.257s
-%%   - CDPIs                               : 0.134s
-%% Hypothesis Search                       : 10.093s
-%% Propagation                             : 13.26s
-%%   - CDOEs                               : 13.26s
-%% Total                                   : 29.601s
+%% Pre-processing                          : 0.091s
+%% Hypothesis Space Generation             : 0.653s
+%% Conflict analysis                       : 10.453s
+%%   - Brave Orders                        : 10.453s
+%% Counterexample search                   : 1.015s
+%%   - CDOEs                               : 0.675s
+%%   - CDPIs                               : 0.34s
+%% Hypothesis Search                       : 25.135s
+%% Propagation                             : 22.049s
+%%   - CDOEs                               : 22.049s
+%% Total                                   : 60.249s
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-:~ value(erbe_spezie_e_condimenti,V1).[-V1@1, V1]
-:~ value(pesce,V1).[1@2, V1]
+:~ value(verdure_e_ortaggi,V1).[V1@2, V1]
+:~ value(erbe_spezie_e_condimenti,V1).[-V1@3, V1]
 :~ category(1).[-1@4]
-:~ value(forno,V1).[1@3, V1]
 

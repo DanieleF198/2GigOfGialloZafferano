@@ -3,10 +3,10 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 choices = [0, 1]
-users = [i for i in range(0, 48)]
-data_45_couples_no_zeros = np.zeros((48, 5, 5), dtype='float32')
-data_105_couples_no_zeros = np.zeros((48, 5, 5), dtype='float32')
-data_210_couples_no_zeros = np.zeros((48, 5, 5), dtype='float32')
+users = [i for i in range(0, 54)]
+data_45_couples_no_zeros = np.zeros((54, 5, 5), dtype='float32')
+data_105_couples_no_zeros = np.zeros((54, 5, 5), dtype='float32')
+data_210_couples_no_zeros = np.zeros((54, 5, 5), dtype='float32')
 
 for choice in choices:
     if choice == 1:
@@ -48,13 +48,11 @@ for choice in choices:
             accuracy_percentages = user_matrix[:, 0]
             precision_percentages = user_matrix[:, 1]
             recall_percentages = user_matrix[:, 2]
-            correct_discarded_percentages = user_matrix[:, 3]
-            train_times = user_matrix[:, 4]
+            train_times = user_matrix[:, 3]
             fig, ax = plt.subplots()
             ax.plot(x, accuracy_percentages, label="accuracy")
             ax.plot(x, precision_percentages, label="precision")
             ax.plot(x, recall_percentages, label="recall")
-            ax.plot(x, correct_discarded_percentages, label="correct over not uncertain")
             ax.set_xlabel('max_v and max_p with max_v == max_p')
             ax.set_ylabel('percentage')
             ax.set_title('user' + str(i) + "-45Couples-Zeros")
@@ -77,13 +75,11 @@ for choice in choices:
             accuracy_percentages = user_matrix[:, 0]
             precision_percentages = user_matrix[:, 1]
             recall_percentages = user_matrix[:, 2]
-            correct_discarded_percentages = user_matrix[:, 3]
-            train_times = user_matrix[:, 4]
+            train_times = user_matrix[:, 3]
             fig, ax = plt.subplots()
             ax.plot(x, accuracy_percentages, label="accuracy")
             ax.plot(x, precision_percentages, label="precision")
             ax.plot(x, recall_percentages, label="recall")
-            ax.plot(x, correct_discarded_percentages, label="correct over not uncertain")
             ax.set_xlabel('max_v and max_p with max_v == max_p')
             ax.set_ylabel('percentage')
             ax.set_title('user' + str(i) + "-105Couples-Zeros")
@@ -161,7 +157,6 @@ for choice in choices:
         ax.plot(x, accuracy_percentages, label="accuracy")
         ax.plot(x, precision_percentages, label="precision")
         ax.plot(x, recall_percentages, label="recall")
-        ax.plot(x, correct_discarded_percentages, label="correct over not uncertain")
         ax.set_xlabel('45/105/210Couple-(max_v and max_p) with max_v == max_p')
         ax.set_ylabel('percentage')
         ax.set_title('user' + str(user_counter) + "-45Couples-105Couples-190Couples-Zeros")
@@ -181,9 +176,9 @@ for choice in choices:
             user_counter += 1
             continue
         x = ["45-1", "45-2", "45-3", "45-4", "45-5", "105-1", "105-2", "105-3", "105-4", "105-5", "190-1", "190-2", "190-3", "190-4", "190-5"]
-        train_times_45 = user_matrix_45[:, 4]
-        train_times_105 = user_matrix_105[:, 4]
-        train_times_210 = user_matrix_210[:, 4]
+        train_times_45 = user_matrix_45[:, 3]
+        train_times_105 = user_matrix_105[:, 3]
+        train_times_210 = user_matrix_210[:, 3]
         train_times_temp = np.concatenate((train_times_45, train_times_105))
         train_times = np.concatenate((train_times_temp, train_times_210))
         fig, ax = plt.subplots()

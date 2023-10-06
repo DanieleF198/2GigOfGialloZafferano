@@ -27,7 +27,7 @@ if __name__ == "__main__":
                     items = ilasp.itemsFromFile("Data8Component2Std/recipes/recipes_max_v(default)-max_p(default).las")
                     language_bias = ilasp.languageBiasFromFile("Data8Component2Std/recipes/recipes_max_v(default)-max_p(default).las")
 
-                USERS = [str(i) for i in range(0,48)]
+                USERS = [str(i) for i in range(0, 54)]
 
                 for USER in USERS:
                     if int(choice) == 0:

@@ -1,18 +1,18 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%% Pre-processing                          : 0.088s
-%% Hypothesis Space Generation             : 0.245s
-%% Conflict analysis                       : 23.486s
-%%   - Brave Orders                        : 23.485s
-%% Counterexample search                   : 3.523s
-%%   - CDOEs                               : 2.749s
-%%   - CDPIs                               : 0.788s
-%% Hypothesis Search                       : 2217.88s
-%% Propagation                             : 59.555s
-%%   - CDOEs                               : 59.555s
-%% Total                                   : 2305.7s
+%% Pre-processing                          : 0.085s
+%% Hypothesis Space Generation             : 0.751s
+%% Conflict analysis                       : 47.63s
+%%   - Brave Orders                        : 47.63s
+%% Counterexample search                   : 9.476s
+%%   - CDOEs                               : 8.158s
+%%   - CDPIs                               : 1.313s
+%% Hypothesis Search                       : 63520.6s
+%% Propagation                             : 111.82s
+%%   - CDOEs                               : 111.82s
+%% Total                                   : 63691.7s
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-:~ value(verdure_e_ortaggi,V1).[-V1@4, V1]
-:~ category(3).[1@2]
-:~ value(erbe_spezie_e_condimenti,V1).[-V1@1, V1]
-:~ value(pesce,V1), category(4).[V1@3, V1]
+:~ value(pasta,V1).[-V1@3, V1]
+:~ value(verdure_e_ortaggi,V1).[V1@1, V1]
+:~ value(erbe_spezie_e_condimenti,V1).[-V1@4, V1]
+:~ value(carne,V1).[-V1@2, V1]
 

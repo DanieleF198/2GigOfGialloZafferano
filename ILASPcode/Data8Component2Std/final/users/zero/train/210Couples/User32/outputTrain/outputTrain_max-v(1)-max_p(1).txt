@@ -1,15 +1,15 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%% Pre-processing                          : 0.071s
-%% Hypothesis Space Generation             : 0.012s
-%% Conflict analysis                       : 4.221s
-%%   - Brave Orders                        : 4.221s
-%% Counterexample search                   : 2.369s
-%%   - CDOEs                               : 1.844s
-%%   - CDPIs                               : 0.506s
-%% Hypothesis Search                       : 10.215s
-%% Propagation                             : 14.109s
-%%   - CDOEs                               : 14.109s
-%% Total                                   : 31.085s
+%% Pre-processing                          : 0.084s
+%% Hypothesis Space Generation             : 0.018s
+%% Conflict analysis                       : 8.963s
+%%   - Brave Orders                        : 8.963s
+%% Counterexample search                   : 6.661s
+%%   - CDOEs                               : 5.693s
+%%   - CDPIs                               : 0.971s
+%% Hypothesis Search                       : 37.709s
+%% Propagation                             : 23.907s
+%%   - CDOEs                               : 23.907s
+%% Total                                   : 77.662s
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-:~ value(farinacei,V1).[-V1@1, V1]
+:~ value(pasta,V1).[V1@1, V1]
 

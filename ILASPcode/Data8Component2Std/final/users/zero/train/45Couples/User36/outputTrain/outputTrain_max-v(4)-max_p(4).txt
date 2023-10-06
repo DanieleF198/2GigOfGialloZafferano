@@ -1,17 +1,16 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%% Pre-processing                          : 0.071s
-%% Hypothesis Space Generation             : 0.278s
-%% Conflict analysis                       : 3.045s
-%%   - Brave Orders                        : 3.045s
-%% Counterexample search                   : 0.243s
-%%   - CDOEs                               : 0.151s
-%%   - CDPIs                               : 0.097s
-%% Hypothesis Search                       : 5.685s
-%% Propagation                             : 8.688s
-%%   - CDOEs                               : 8.688s
-%% Total                                   : 18.332s
+%% Pre-processing                          : 0.095s
+%% Hypothesis Space Generation             : 0.66s
+%% Conflict analysis                       : 7.101s
+%%   - Brave Orders                        : 7.101s
+%% Counterexample search                   : 0.692s
+%%   - CDOEs                               : 0.46s
+%%   - CDPIs                               : 0.235s
+%% Hypothesis Search                       : 22.716s
+%% Propagation                             : 15.563s
+%%   - CDOEs                               : 15.563s
+%% Total                                   : 47.697s
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-:~ value(pesce,V1).[-V1@1, V1]
-:~ value(pesce,V1).[1@3, V1]
-:~ value(farinacei,V1).[-1@4, V1]
+:~ value(farinacei,V1).[-V1@1, V1]
+:~ category(3).[1@4]
 

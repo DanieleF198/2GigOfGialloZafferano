@@ -1,17 +1,17 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%% Pre-processing                          : 0.075s
-%% Hypothesis Space Generation             : 0.126s
-%% Conflict analysis                       : 7.09s
-%%   - Brave Orders                        : 7.09s
-%% Counterexample search                   : 1.421s
-%%   - CDOEs                               : 1.128s
-%%   - CDPIs                               : 0.296s
-%% Hypothesis Search                       : 24.426s
-%% Propagation                             : 21.659s
-%%   - CDOEs                               : 21.659s
-%% Total                                   : 55.024s
+%% Pre-processing                          : 0.082s
+%% Hypothesis Space Generation             : 0.269s
+%% Conflict analysis                       : 17.393s
+%%   - Brave Orders                        : 17.393s
+%% Counterexample search                   : 4.808s
+%%   - CDOEs                               : 4.137s
+%%   - CDPIs                               : 0.672s
+%% Hypothesis Search                       : 80.678s
+%% Propagation                             : 43.446s
+%%   - CDOEs                               : 43.446s
+%% Total                                   : 147.384s
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-:~ value(verdure_e_ortaggi,V1).[-1@1, V1]
-:~ value(farinacei,V1).[-V1@2, V1]
-:~ category(3).[1@3]
+:~ value(farinacei,V1).[-V1@3, V1]
+:~ category(3).[1@2]
+:~ value(verdure_e_ortaggi,V1), category(3).[-V1@1, V1]
 

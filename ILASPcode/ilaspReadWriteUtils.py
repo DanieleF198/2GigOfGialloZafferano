@@ -265,7 +265,7 @@ def test_cm(theory, items, test_set):
     #   o p  >  |   5   |   6   |   4      class 1
     #   u u  =  |   8   |   9   |   7      class 0
     #   t t  <  |   2   |   3   |   1      class -1
-    # NOTE: label > here is intended as ILASP syntax in brave ordering, and so a > b means that b is preferred over b (cause it activates a greater amount of weights from wc)
+    # NOTE: label > here is intended as ILASP syntax in brave ordering, and so a > b means that b is preferred over a (cause it activates a greater amount of weights from wc)
     #       similarly a < b means that a is preferred over b.
     for preference in test_set:
         c = compare_cm(items[preference[0]], items[preference[1]], preference[2], theory)

@@ -43,35 +43,64 @@ for i, line in enumerate(linesOfI):
 
 food_data_ingredients = np.delete(food_data_ingredients, [1, 16, 23, 26, 32], axis=1)
 
-# convert from classes to macro-classes
+# convert from classes to macro-classes 8PC2STD
+# food_data_macro_ingredients = np.zeros((len(linesOfI), 12), dtype='float32')
+# for i, row in enumerate(food_data_ingredients):
+#     for j, ingredient in enumerate(row):
+#         if (j == 1) or (4 <= j <= 8) or (j == 10) or (j == 14) or (16 <= j <= 19) or (21 <= j <= 24) or (28 <= j <= 29):
+#             continue
+#         # if j == 4:    # I'll leave commented just in case I want to insert in a second moment
+#         #     food_data_macro_ingredients[i, 0] = food_data_macro_ingredients[i, 0] + ingredient
+#         if j == 3 or j == 30:
+#             food_data_macro_ingredients[i, 1] = food_data_macro_ingredients[i, 1] + ingredient
+#         # if j == 10:   # I'll leave commented just in case I want to insert in a second moment
+#         #     food_data_macro_ingredients[i, 2] = food_data_macro_ingredients[i, 2] + ingredient
+#         if j == 11:
+#             food_data_macro_ingredients[i, 3] = food_data_macro_ingredients[i, 3] + ingredient
+#         if j == 26:
+#             food_data_macro_ingredients[i, 4] = food_data_macro_ingredients[i, 4] + ingredient
+#         if j == 2 or j == 25:
+#             food_data_macro_ingredients[i, 5] = food_data_macro_ingredients[i, 5] + ingredient
+#         if j == 0 or j == 20:
+#             food_data_macro_ingredients[i, 6] = food_data_macro_ingredients[i, 6] + ingredient
+#         # if j == 18:   # I'll leave commented just in case I want to insert in a second moment
+#         #     food_data_macro_ingredients[i, 7] = food_data_macro_ingredients[i, 7] + ingredient
+#         if j == 9 or j == 12:
+#             food_data_macro_ingredients[i, 8] = food_data_macro_ingredients[i, 8] + ingredient
+#         # if j == 22 or j == 23:    # I'll leave commented just in case I want to insert in a second moment
+#         #     food_data_macro_ingredients[i, 9] = food_data_macro_ingredients[i, 9] + ingredient
+#         if j == 27:
+#             food_data_macro_ingredients[i, 10] = food_data_macro_ingredients[i, 10] + ingredient
+#         if j == 13 or j == 15:
+#             food_data_macro_ingredients[i, 11] = food_data_macro_ingredients[i, 11] + ingredient
+
+# convert from classes to macro-classes ALL Features
 food_data_macro_ingredients = np.zeros((len(linesOfI), 12), dtype='float32')
 for i, row in enumerate(food_data_ingredients):
     for j, ingredient in enumerate(row):
-        if (j == 1) or (4 <= j <= 8) or (j == 10) or (j == 14) or (16 <= j <= 19) or (21 <= j <= 24) or (28 <= j <= 29):
-            continue
-        if j == 5:
+        if j == 4:    # I'll leave commented just in case I want to insert in a second moment
             food_data_macro_ingredients[i, 0] = food_data_macro_ingredients[i, 0] + ingredient
-        if j == 4 or j == 6 or j == 18 or j == 28 or j == 35:
+        if j == 3 or j == 5 or j == 16 or j == 24 or j == 30:
             food_data_macro_ingredients[i, 1] = food_data_macro_ingredients[i, 1] + ingredient
-        if j == 11:
+        if j == 10:
             food_data_macro_ingredients[i, 2] = food_data_macro_ingredients[i, 2] + ingredient
-        if j == 2 or j == 12:
+        if j == 1 or j == 11:
             food_data_macro_ingredients[i, 3] = food_data_macro_ingredients[i, 3] + ingredient
-        if j == 1 or j == 8 or j == 21 or j == 24 or j == 30:
+        if j == 7 or j == 19 or j == 21 or j == 26:
             food_data_macro_ingredients[i, 4] = food_data_macro_ingredients[i, 4] + ingredient
-        if j == 3 or j == 9 or j == 15 or j == 29 or j == 34:
+        if j == 2 or j == 8 or j == 14 or j == 25 or j == 29:
             food_data_macro_ingredients[i, 5] = food_data_macro_ingredients[i, 5] + ingredient
-        if j == 0 or j == 7 or j == 22 or j == 23 or j == 26 or j == 32:
+        if j == 0 or j == 6 or j == 20:
             food_data_macro_ingredients[i, 6] = food_data_macro_ingredients[i, 6] + ingredient
-        if j == 20:
+        if j == 18:
             food_data_macro_ingredients[i, 7] = food_data_macro_ingredients[i, 7] + ingredient
-        if j == 10 or j == 13:
+        if j == 9 or j == 12:
             food_data_macro_ingredients[i, 8] = food_data_macro_ingredients[i, 8] + ingredient
-        if j == 16 or j == 19 or j == 25 or j == 27:
+        if j == 17 or j == 22 or j == 23:
             food_data_macro_ingredients[i, 9] = food_data_macro_ingredients[i, 9] + ingredient
-        if j == 31:
+        if j == 27:
             food_data_macro_ingredients[i, 10] = food_data_macro_ingredients[i, 10] + ingredient
-        if j == 14 or j == 17 or j == 33:
+        if j == 13 or j == 15 or j == 28:
             food_data_macro_ingredients[i, 11] = food_data_macro_ingredients[i, 11] + ingredient
 
 linesOfP = dataP.split('\n')
@@ -140,7 +169,7 @@ for col in range(food_data_preparation.shape[1]):
 
 max_v_list = [1, 2, 3, 4, 5]
 max_p_list = [1, 2, 3, 4, 5]
-Dir = "Data8Component2Std/recipes/"
+Dir = "Data/recipes/"
 
 for max_v in max_v_list:
     for max_p in max_p_list:
@@ -157,20 +186,29 @@ for max_v in max_v_list:
         sys.stdout = open(f_output, 'w')
 
         for i in range(0, 101):
-            if int(food_data_categories[i, 0]) == 2:
-                # item = "#pos(item" + str(i) + ", {}, {}, value(difficulty," + str(int(food_data_categories[i, 2])) + ")."
-                item = "#pos(item" + str(i) + ", {}, {}, {"
-            else:
-                item = "#pos(item" + str(i) + ", {}, {}, {category(" + str(int(food_data_categories[i, 0])) + ")."
-            # item = "#pos(item" + str(i) + ", {}, {}, {category(" + str(int(food_data_categories[i, 0])) + "). value(cost," + str(int(food_data_categories[i, 1])) + "). value(difficulty," + str(int(food_data_categories[i, 2])) + "). value(prepTime," + str(int(food_data_scalars[i, 0])) + ")."
+            # if int(food_data_categories[i, 0]) == 2:
+            #     item = "#pos(item" + str(i) + ", {}, {}, value(difficulty,0)."
+                # item = "#pos(item" + str(i) + ", {}, {}, {"
+            # else:
+                # item = "#pos(item" + str(i) + ", {}, {}, {category(" + str(int(food_data_categories[i, 0])) + ")."
+            # item = "#pos(item" + str(i) + ", {}, {}, {category(" + str(int(food_data_categories[i, 0])) + "). value(cost,0). value(difficulty,0). value(prepTime,0)."   # PC82STD
+            item = "#pos(item" + str(i) + ", {}, {}, {category(" + str(int(food_data_categories[i, 0])) + "). value(cost," + str(int(food_data_categories[i, 1])) + "). value(difficulty," + str(int(food_data_categories[i, 2])) + "). value(prepTime," + str(int(food_data_scalars[i, 0])) + ")."   # All Features
             for j, macro_ingredient in enumerate(food_data_macro_ingredients[i]):
                 if macro_ingredient != 0:
                     item = item + " value(" + macro_ingredients_dictionary[j] + "," + str(int(macro_ingredient)) + ")."
+                else:
+                    item = item + " value(" + macro_ingredients_dictionary[j] + ",0)."
             for j, preparation in enumerate(food_data_preparation[i]):
-                if (j <= 1) or (3 <= j <= 4) or (j == 6):
-                    continue
+                # if (j <= 1) or (3 <= j <= 4) or (j == 6):
+                #     continue
                 if preparation != 0:
+                    # if (j <= 1) or (3 <= j <= 4) or (j == 6): # PC82STD
+                    #     item = item + " value(" + preparation_dictionary[j] + ",0)."
+                    # else:
+                    #     item = item + " value(" + preparation_dictionary[j] + "," + str(int(preparation)) + ")."
                     item = item + " value(" + preparation_dictionary[j] + "," + str(int(preparation)) + ")."
+                else:
+                    item = item + " value(" + preparation_dictionary[j] + ",0)."
             item = item + "} )."
             print(item)
 
@@ -193,17 +231,17 @@ for max_v in max_v_list:
         print("#constant(val, difficulty).")
         print("#constant(val, prepTime).")
         print("#constant(mg, 1).")
-        # print("#constant(mg, 2).")
+        print("#constant(mg, 2).")
         print("#constant(mg, 3).")
         print("#constant(mg, 4).")
         print("#constant(mg, 5).")
         for key in macro_ingredients_dictionary.keys():
-            if key == 0:
-                continue
+            # if key == 0:
+            #     continue
             print("#constant(val, " + macro_ingredients_dictionary[key] + ").")
         for key in preparation_dictionary.keys():
-            if (key <= 1) or (3 <= key <= 4) or (key == 6):
-                continue
+            # if (key <= 1) or (3 <= key <= 4) or (key == 6):
+            #     continue
             print("#constant(val, " + preparation_dictionary[key] + ").")
 
 

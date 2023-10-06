@@ -4,19 +4,19 @@ import numpy as np
 import re
 no_zero = True
 if no_zero:
-    NNoutput_dir = "Data8Component2Std/sampled-recipes-no-zero/Train105"
+    NNoutput_dir = "Data8Component2Std/sampled-recipes-no-zero/Train45"
 else:
-    NNoutput_dir = "Data8Component2Std/sampled-recipes-zero/Train105"
+    NNoutput_dir = "Data8Component2Std/sampled-recipes-zero/Train45"
 
-zero_dir_train = "Data8Component2Std/final/users/zero/train/105Couples/"
-no_zero_dir_train = "./Data8Component2Std/final/users/no_zero/train/105Couples/"
-zero_dir_test = "Data8Component2Std/final/users/zero/test/100CouplesForTrain105/"
-no_zero_dir_test = "Data8Component2Std/final/users/no_zero/test/100CouplesForTrain105/"
+zero_dir_train = "Data8Component2Std/final/users/zero/train/45Couples/"
+no_zero_dir_train = "./Data8Component2Std/final/users/no_zero/train/45Couples/"
+zero_dir_test = "Data8Component2Std/final/users/zero/test/45CouplesForTrain45/"
+no_zero_dir_test = "Data8Component2Std/final/users/no_zero/test/45CouplesForTrain45/"
 
-output_dir_for_zero_train_data_dir = "./Data8Component2Std/final/users/zero/train/105Couples/"
-output_dir_for_no_zero_train_data_dir = "./Data8Component2Std/final/users/no_zero/train/105Couples/"
-output_dir_for_zero_test_data_dir = "Data8Component2Std/final/users/zero/test/100CouplesForTrain105/"
-output_dir_for_no_zero_test_data_dir = "Data8Component2Std/final/users/no_zero/test/100CouplesForTrain105/"
+output_dir_for_zero_train_data_dir = "./Data8Component2Std/final/users/zero/train/45Couples/"
+output_dir_for_no_zero_train_data_dir = "./Data8Component2Std/final/users/no_zero/train/45Couples/"
+output_dir_for_zero_test_data_dir = "Data8Component2Std/final/users/zero/test/45CouplesForTrain45/"
+output_dir_for_no_zero_test_data_dir = "Data8Component2Std/final/users/no_zero/test/45CouplesForTrain45/"
 
 dir_labels_train = os.path.join(NNoutput_dir, 'user_prediction/train/')
 dir_labels_test = os.path.join(NNoutput_dir, 'user_prediction/test/')
@@ -39,7 +39,7 @@ for i, line in enumerate(linesOfCouples):
             continue
         couples[i, j] = value
 
-distances = np.zeros((len(couples), 105), dtype='float32')
+distances = np.zeros((len(couples), 45), dtype='float32')
 
 for k, couple in enumerate(couples):
     f_distance = os.path.join(dir_distances_train, 'recipes_distances' + str(int(couple[0])) + '-' + str(int(couple[1])) + ".txt")
@@ -72,8 +72,8 @@ for k, couple in enumerate(couples):
     dataLasFiles = re.sub(regex_string2, replace_string2, dataLasFiles)
     dict_of_las_files[str(int(couple[0])) + '-' + str(int(couple[1]))] = dataLasFiles
 
-couple_label_train = np.zeros((10, 100, 105), dtype="int32")
-couple_label_test = np.zeros((10, 100, 1), dtype="int32")
+couple_label_train = np.zeros((10, 45, 45), dtype="int32")
+couple_label_test = np.zeros((10, 45, 1), dtype="int32")
 for u_counter, u in enumerate([15, 3, 32, 7, 36, 4, 20, 29, 14, 11]):
     for k, couple in enumerate(couples):
         f_label_train_file = os.path.join(dir_labels_train, 'user' + str(u) + "_Couple" + str(int(couple[0])) + '-' + str(int(couple[1])) + '.txt')
@@ -183,7 +183,7 @@ for u_counter, u in enumerate([15, 3, 32, 7, 36, 4, 20, 29, 14, 11]):
                 print("#constant(val, " + preparation_dictionary[key] + ").")
             print("")
             counter = 0
-            for j, sub_couple in enumerate(range(0, 105)):
+            for j, sub_couple in enumerate(range(0, 45)):
                 if couple_label_train[u_counter, k, j] == 1:
                     print("#brave_ordering(o" + str(counter + 1) + "@" + str(int(distances[k, j])) + ", sampled" + str(int(couple[0])) + "s" + str(j) + ", sampled" + str(int(couple[1])) + "s" + str(j) + ", <).")
                     counter = counter + 1
@@ -271,7 +271,7 @@ for u_counter, u in enumerate([15, 3, 32, 7, 36, 4, 20, 29, 14, 11]):
                 print("#constant(val, " + preparation_dictionary[key] + ").")
             print("")
             counter = 0
-            for j, sub_couple in enumerate(range(0, 105)):
+            for j, sub_couple in enumerate(range(0, 45)):
                 if couple_label_train[u_counter, k, j] == 1:
                     print("#brave_ordering(o" + str(counter + 1) + "@" + str(int(distances[k, j])) + ", sampled" + str(int(couple[0])) + "s" + str(j) + ", sampled" + str(int(couple[1])) + "s" + str(j) + ", <).")
                     counter = counter + 1

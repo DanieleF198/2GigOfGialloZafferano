@@ -1,15 +1,15 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%% Pre-processing                          : 0.067s
-%% Hypothesis Space Generation             : 0.012s
-%% Conflict analysis                       : 0.949s
-%%   - Brave Orders                        : 0.949s
-%% Counterexample search                   : 0.341s
-%%   - CDOEs                               : 0.204s
-%%   - CDPIs                               : 0.131s
-%% Hypothesis Search                       : 1.806s
-%% Propagation                             : 3.202s
-%%   - CDOEs                               : 3.202s
-%% Total                                   : 6.43s
+%% Pre-processing                          : 0.12s
+%% Hypothesis Space Generation             : 0.019s
+%% Conflict analysis                       : 1.624s
+%%   - Brave Orders                        : 1.623s
+%% Counterexample search                   : 0.696s
+%%   - CDOEs                               : 0.463s
+%%   - CDPIs                               : 0.235s
+%% Hypothesis Search                       : 4.029s
+%% Propagation                             : 4.484s
+%%   - CDOEs                               : 4.484s
+%% Total                                   : 11.15s
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-:~ value(erbe_spezie_e_condimenti,V1), category(3).[V1@1, V1]
+:~ value(pasta,V1).[V1@1, V1]
 

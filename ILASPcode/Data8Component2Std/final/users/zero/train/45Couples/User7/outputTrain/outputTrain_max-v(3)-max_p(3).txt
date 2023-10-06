@@ -1,17 +1,17 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%% Pre-processing                          : 0.072s
-%% Hypothesis Space Generation             : 0.144s
-%% Conflict analysis                       : 3.351s
-%%   - Brave Orders                        : 3.351s
-%% Counterexample search                   : 0.37s
-%%   - CDOEs                               : 0.237s
-%%   - CDPIs                               : 0.128s
-%% Hypothesis Search                       : 5.362s
-%% Propagation                             : 9.69s
-%%   - CDOEs                               : 9.69s
-%% Total                                   : 19.211s
+%% Pre-processing                          : 0.078s
+%% Hypothesis Space Generation             : 0.344s
+%% Conflict analysis                       : 6.442s
+%%   - Brave Orders                        : 6.442s
+%% Counterexample search                   : 0.862s
+%%   - CDOEs                               : 0.587s
+%%   - CDPIs                               : 0.272s
+%% Hypothesis Search                       : 14.356s
+%% Propagation                             : 14.822s
+%%   - CDOEs                               : 14.822s
+%% Total                                   : 37.51s
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-:~ value(erbe_spezie_e_condimenti,V1).[V1@1, V1]
-:~ value(farinacei,V1).[-1@2, V1]
-:~ category(1).[1@3]
+:~ value(carne,V1).[-V1@1, V1]
+:~ value(forno,V1).[V1@3, V1]
+:~ category(2).[-1@2]
 

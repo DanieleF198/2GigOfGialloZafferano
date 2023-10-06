@@ -49,29 +49,29 @@ for i, row in enumerate(food_data_ingredients):
     for j, ingredient in enumerate(row):
         if (j == 1) or (4 <= j <= 8) or (j == 10) or (j == 14) or (16 <= j <= 19) or (21 <= j <= 24) or (28 <= j <= 29):
             continue
-        if j == 5:
-            food_data_macro_ingredients[i, 0] = food_data_macro_ingredients[i, 0] + ingredient
-        if j == 4 or j == 6 or j == 18 or j == 28 or j == 35:
+        # if j == 4:    # I'll leave commented just in case I want to insert in a second moment
+        #     food_data_macro_ingredients[i, 0] = food_data_macro_ingredients[i, 0] + ingredient
+        if j == 3 or j == 30:
             food_data_macro_ingredients[i, 1] = food_data_macro_ingredients[i, 1] + ingredient
+        # if j == 10:   # I'll leave commented just in case I want to insert in a second moment
+        #     food_data_macro_ingredients[i, 2] = food_data_macro_ingredients[i, 2] + ingredient
         if j == 11:
-            food_data_macro_ingredients[i, 2] = food_data_macro_ingredients[i, 2] + ingredient
-        if j == 2 or j == 12:
             food_data_macro_ingredients[i, 3] = food_data_macro_ingredients[i, 3] + ingredient
-        if j == 1 or j == 8 or j == 21 or j == 24 or j == 30:
+        if j == 26:
             food_data_macro_ingredients[i, 4] = food_data_macro_ingredients[i, 4] + ingredient
-        if j == 3 or j == 9 or j == 15 or j == 29 or j == 34:
+        if j == 2 or j == 25:
             food_data_macro_ingredients[i, 5] = food_data_macro_ingredients[i, 5] + ingredient
-        if j == 0 or j == 7 or j == 22 or j == 23 or j == 26 or j == 32:
+        if j == 0 or j == 20:
             food_data_macro_ingredients[i, 6] = food_data_macro_ingredients[i, 6] + ingredient
-        if j == 20:
-            food_data_macro_ingredients[i, 7] = food_data_macro_ingredients[i, 7] + ingredient
-        if j == 10 or j == 13:
+        # if j == 18:   # I'll leave commented just in case I want to insert in a second moment
+        #     food_data_macro_ingredients[i, 7] = food_data_macro_ingredients[i, 7] + ingredient
+        if j == 9 or j == 12:
             food_data_macro_ingredients[i, 8] = food_data_macro_ingredients[i, 8] + ingredient
-        if j == 16 or j == 19 or j == 25 or j == 27:
-            food_data_macro_ingredients[i, 9] = food_data_macro_ingredients[i, 9] + ingredient
-        if j == 31:
+        # if j == 22 or j == 23:    # I'll leave commented just in case I want to insert in a second moment
+        #     food_data_macro_ingredients[i, 9] = food_data_macro_ingredients[i, 9] + ingredient
+        if j == 27:
             food_data_macro_ingredients[i, 10] = food_data_macro_ingredients[i, 10] + ingredient
-        if j == 14 or j == 17 or j == 33:
+        if j == 13 or j == 15:
             food_data_macro_ingredients[i, 11] = food_data_macro_ingredients[i, 11] + ingredient
 
 linesOfP = dataP.split('\n')

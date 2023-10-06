@@ -1,18 +1,18 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%% Pre-processing                          : 0.069s
-%% Hypothesis Space Generation             : 0.212s
-%% Conflict analysis                       : 12.334s
-%%   - Brave Orders                        : 12.334s
-%% Counterexample search                   : 1.92s
-%%   - CDOEs                               : 1.499s
-%%   - CDPIs                               : 0.42s
-%% Hypothesis Search                       : 468.497s
-%% Propagation                             : 38.109s
-%%   - CDOEs                               : 38.109s
-%% Total                                   : 521.452s
+%% Pre-processing                          : 0.084s
+%% Hypothesis Space Generation             : 0.686s
+%% Conflict analysis                       : 32.559s
+%%   - Brave Orders                        : 32.559s
+%% Counterexample search                   : 6.627s
+%%   - CDOEs                               : 5.739s
+%%   - CDPIs                               : 0.887s
+%% Hypothesis Search                       : 369.763s
+%% Propagation                             : 78.088s
+%%   - CDOEs                               : 78.088s
+%% Total                                   : 489.034s
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 :~ value(verdure_e_ortaggi,V1).[-V1@1, V1]
-:~ category(4).[1@2]
-:~ value(pesce,V1).[1@4, V1]
-:~ category(3).[1@3]
+:~ value(carne,V1).[-V1@2, V1]
+:~ category(2).[-1@4]
+:~ value(frittura,V1), category(4).[-V1@3, V1]
 

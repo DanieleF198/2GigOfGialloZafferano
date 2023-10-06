@@ -1,18 +1,17 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%% Pre-processing                          : 0.07s
-%% Hypothesis Space Generation             : 0.241s
-%% Conflict analysis                       : 4.536s
-%%   - Brave Orders                        : 4.536s
-%% Counterexample search                   : 0.363s
-%%   - CDOEs                               : 0.234s
-%%   - CDPIs                               : 0.129s
-%% Hypothesis Search                       : 9.76s
-%% Propagation                             : 11.715s
-%%   - CDOEs                               : 11.715s
-%% Total                                   : 26.98s
+%% Pre-processing                          : 0.074s
+%% Hypothesis Space Generation             : 0.653s
+%% Conflict analysis                       : 9.677s
+%%   - Brave Orders                        : 9.677s
+%% Counterexample search                   : 0.875s
+%%   - CDOEs                               : 0.574s
+%%   - CDPIs                               : 0.3s
+%% Hypothesis Search                       : 24.719s
+%% Propagation                             : 20.658s
+%%   - CDOEs                               : 20.658s
+%% Total                                   : 57.418s
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-:~ value(pesce,V1).[-V1@2, V1]
-:~ value(pesce,V1).[1@4, V1]
-:~ category(1).[-1@1]
+:~ value(pasta,V1).[V1@4, V1]
+:~ value(verdure_e_ortaggi,V1).[V1@2, V1]
 :~ category(3).[1@3]
 
