@@ -7,31 +7,6 @@ max_v = 1
 max_p = 5
 no_zero = False
 if no_zero:
-    NNoutput_dir = "Data8Component2Std/sampled-recipes-no-zero/"
-else:
-    NNoutput_dir = "Data8Component2Std/sampled-recipes-zero/"
-f_couples = os.path.join(NNoutput_dir, 'couple.txt')
-
-fCouples = open(f_couples)
-dataCouples = fCouples.read()
-fCouples.close()
-
-linesOfCouples = dataCouples.split('\n')
-couples = np.zeros((len(linesOfCouples), 2), dtype='float32')
-for i, line in enumerate(linesOfCouples):
-    if line == '':
-        continue
-    values = [x for x in line.split(';')[:]]
-    for j, value in enumerate(values):
-        if value == '':
-            continue
-        couples[i, j] = value
-
-for_statistics = np.zeros((10, 4), dtype="float32")
-
-
-
-if no_zero:
     path = 'Data8Component2Std/testOutput/results_no_zero.csv'
 else:
     path = './Data8Component2Std/testOutput/results_zero.csv'
@@ -44,17 +19,40 @@ with open(path, 'w+', encoding='UTF8') as f_output:
     DIR_COUPLES = [45]
     for DIR_COUPLE in DIR_COUPLES:
         train_size = DIR_COUPLE
+        if no_zero:
+            NNoutput_dir = "Data8Component2Std/sampled-recipes-no-zero/Train" + str(DIR_COUPLE)
+        else:
+            NNoutput_dir = "Data8Component2Std/sampled-recipes-zero/Train" + str(DIR_COUPLE)
+            for_statistics = np.zeros((10, 4), dtype="float32")
+
         for U_counter, USER in enumerate([15, 3, 32, 7, 36, 4, 20, 29, 14, 11]):
             confusion_matrix = np.zeros((3, 3), dtype='float32')
+            f_couples = os.path.join(NNoutput_dir, 'couple.txt')
+
+            fCouples = open(f_couples)
+            dataCouples = fCouples.read()
+            fCouples.close()
+
+            linesOfCouples = dataCouples.split('\n')
+            couples = np.zeros((len(linesOfCouples), 2), dtype='float32')
+            for i, line in enumerate(linesOfCouples):
+                if line == '':
+                    continue
+                values = [x for x in line.split(';')[:]]
+                for j, value in enumerate(values):
+                    if value == '':
+                        continue
+                    couples[i, j] = value
+
             for c_counter, couple in enumerate(couples):
                 if no_zero:
                     output_train_data_dir = "./Data8Component2Std/final/users/no_zero/train/" + str(DIR_COUPLE) + "Couples/User" + str(USER) + "/trainFiles/"
                     output_dir_for_train_data_dir = "./Data8Component2Std/final/users/no_zero/train/" + str(DIR_COUPLE) + "Couples/User" + str(USER) + "/outputTrain/"
-                    output_test_data_dir = "./Data8Component2Std/final/users/no_zero/test/100CouplesForTrain45/User" + str(USER) + "/testFiles/"
+                    output_test_data_dir = "./Data8Component2Std/final/users/no_zero/test/45CouplesForTrain45/User" + str(USER) + "/testFiles/"
                 else:
                     output_train_data_dir = "./Data8Component2Std/final/users/zero/train/" + str(DIR_COUPLE) + "Couples/User" + str(USER) + "/trainFiles/"
                     output_dir_for_train_data_dir = "./Data8Component2Std/final/users/zero/train/" + str(DIR_COUPLE) + "Couples/User" + str(USER) + "/outputTrain/"
-                    output_test_data_dir = "./Data8Component2Std/final/users/zero/test/100CouplesForTrain45/User" + str(USER) + "/testFiles/"
+                    output_test_data_dir = "./Data8Component2Std/final/users/zero/test/45CouplesForTrain45/User" + str(USER) + "/testFiles/"
                 filename = output_dir_for_train_data_dir + 'Couple' + str(int(couple[0])) + '-' + str(int(couple[1])) + '-max_v=' + str(max_v) + '-max_p=' + str(max_p) + '.txt'
                 if int(max_v) > 0 and int(max_p) > 0:
                     items = ilasp.itemsFromFile("Data8Component2Std/recipes/recipes_max_v(" + str(max_v) + ")-max_p(" + str(max_p) + ").las")
@@ -73,7 +71,7 @@ with open(path, 'w+', encoding='UTF8') as f_output:
                 f_train_data = os.path.join(output_train_data_dir, 'Couple' + str(int(couple[0])) + '-' + str(int(couple[1])) + '-max_v=' + str(max_v) + '-max_p=' + str(max_p) + '.las')
                 temp_filename = filename.replace("outputTrain", "testFiles")
                 temp_filename2 = temp_filename.replace("/train/", "/test/")
-                temp_filename3 = temp_filename2.replace("/45Couples", "/100CouplesForTrain45")
+                temp_filename3 = temp_filename2.replace("/45Couples", "/45CouplesForTrain45")
                 f_test = temp_filename3.replace("txt", "las")
                 F_TRAIN = open(f_train)
                 data_train = F_TRAIN.read()

@@ -12,7 +12,7 @@ list_theory_105_couple = []
 list_theory_210_couple = []
 for choice in choices:
     if choice == 1:
-        path = './Data8Component2Std/testOutput/results_zero.csv'
+        path = './Data8Component2Std/testOutput_original/results_zero.csv'
     else:
         continue
         # temporally
@@ -49,14 +49,14 @@ for choice in choices:
 
     user_counter = 0
     insert_counter = 0
-    final_accuracy_percentages = np.zeros((54, 15))
-    final_precision_percentages = np.zeros((54, 15))
-    final_recall_percentages = np.zeros((54, 15))
-    final_training_times = np.zeros((54, 15))
+    final_accuracy_percentages = np.zeros((10, 15))
+    final_precision_percentages = np.zeros((10, 15))
+    final_recall_percentages = np.zeros((10, 15))
+    final_training_times = np.zeros((10, 15))
     for user_matrix_45, user_matrix_105, user_matrix_210 in zip(data_45_couples_no_zeros, data_105_couples_no_zeros, data_210_couples_no_zeros):
-        # if user_counter not in [15, 3, 32, 7, 36, 4, 20, 29, 14, 11]:
-        #     user_counter += 1
-        #     continue
+        if user_counter not in [15, 3, 32, 7, 36, 4, 20, 29, 14, 11]:
+            user_counter += 1
+            continue
         accuracy_percentages_45 = user_matrix_45[:, 0]
         precision_percentages_45 = user_matrix_45[:, 1]
         recall_percentages_45 = user_matrix_45[:, 2]

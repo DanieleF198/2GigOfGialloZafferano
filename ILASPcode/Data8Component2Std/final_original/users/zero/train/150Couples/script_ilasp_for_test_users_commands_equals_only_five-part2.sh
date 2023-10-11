@@ -1,11 +1,3 @@
-ILASP --version=4 ./User12/trainFiles/train_max-v\(5\)-max_p\(5\).las > ./User12/outputTrain/outputTrain_max-v\(5\)-max_p\(5\).txt;
-ILASP --version=4 ./User13/trainFiles/train_max-v\(5\)-max_p\(5\).las > ./User13/outputTrain/outputTrain_max-v\(5\)-max_p\(5\).txt;
-ILASP --version=4 ./User14/trainFiles/train_max-v\(5\)-max_p\(5\).las > ./User14/outputTrain/outputTrain_max-v\(5\)-max_p\(5\).txt;
-ILASP --version=4 ./User15/trainFiles/train_max-v\(5\)-max_p\(5\).las > ./User15/outputTrain/outputTrain_max-v\(5\)-max_p\(5\).txt;
-ILASP --version=4 ./User16/trainFiles/train_max-v\(5\)-max_p\(5\).las > ./User16/outputTrain/outputTrain_max-v\(5\)-max_p\(5\).txt;
-ILASP --version=4 ./User17/trainFiles/train_max-v\(5\)-max_p\(5\).las > ./User17/outputTrain/outputTrain_max-v\(5\)-max_p\(5\).txt;
-ILASP --version=4 ./User18/trainFiles/train_max-v\(5\)-max_p\(5\).las > ./User18/outputTrain/outputTrain_max-v\(5\)-max_p\(5\).txt;
-ILASP --version=4 ./User19/trainFiles/train_max-v\(5\)-max_p\(5\).las > ./User19/outputTrain/outputTrain_max-v\(5\)-max_p\(5\).txt;
 ILASP --version=4 ./User20/trainFiles/train_max-v\(5\)-max_p\(5\).las > ./User20/outputTrain/outputTrain_max-v\(5\)-max_p\(5\).txt;
 ILASP --version=4 ./User21/trainFiles/train_max-v\(5\)-max_p\(5\).las > ./User21/outputTrain/outputTrain_max-v\(5\)-max_p\(5\).txt;
 ILASP --version=4 ./User22/trainFiles/train_max-v\(5\)-max_p\(5\).las > ./User22/outputTrain/outputTrain_max-v\(5\)-max_p\(5\).txt;

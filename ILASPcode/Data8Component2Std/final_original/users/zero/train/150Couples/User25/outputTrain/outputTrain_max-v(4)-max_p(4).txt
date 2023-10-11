@@ -1,0 +1,18 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Pre-processing                          : 0.146s
+%% Hypothesis Space Generation             : 0.941s
+%% Conflict analysis                       : 65.06s
+%%   - Brave Orders                        : 65.06s
+%% Counterexample search                   : 11.791s
+%%   - CDOEs                               : 9.617s
+%%   - CDPIs                               : 2.175s
+%% Hypothesis Search                       : 114016s
+%% Propagation                             : 156.572s
+%%   - CDOEs                               : 156.572s
+%% Total                                   : 114253s
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+:~ value(farinacei,V1).[-V1@1, V1]
+:~ value(forno,V1).[-V1@3, V1]
+:~ value(erbe_spezie_e_condimenti,V1), category(3).[-V1@2, V1]
+:~ value(verdure_e_ortaggi,V1), category(1).[V1@4, V1]
+

@@ -1314,15 +1314,15 @@ per_var = np.round(pca.explained_variance_ratio_*101, decimals=1)
 labels = ['PC' + str(x) for x in range(1, len(per_var)+1)]
 pca_df = pd.DataFrame(pca_data, columns=labels)
 list_of_couple = []
-# if already_done != 0:
-#     for element in already_done_np:
-#         list_of_couple.append([element[0], element[1]])
-#     counter_of_couple =  len(already_done_np)
-# else:
-#     counter_of_couple = 0
+if already_done != 0:
+    for element in already_done_np:
+        list_of_couple.append([element[0], element[1]])
+    counter_of_couple = len(already_done_np)
+else:
+    counter_of_couple = 0
 while True:
-    # if counter_of_couple == 100:
-    #     break
+    if counter_of_couple == 100:
+        break
     first_food_id_to_pass = np.random.randint(0, 100, size=1)
     second_food_id_to_pass = np.random.randint(0, 100, size=1)
     if first_food_id_to_pass[0] == second_food_id_to_pass[0]:
@@ -1374,7 +1374,7 @@ while True:
         print(test_prediction)
         sys.stdout = sys.__stdout__
         f.close()
-    # counter_of_couple += 1
+    counter_of_couple += 1
 if no_zero:
     f_output = "Data8Component2Std/sampled-recipes-no-zero/Train" + str(TrainCouple) + "/couple.txt"
 else:

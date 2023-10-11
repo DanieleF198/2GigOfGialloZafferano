@@ -4,29 +4,29 @@ import re
 
 choices = [1]
 for choice in choices:
-    directory = "./Data8Component2Std/testOutput/"
+    directory = "./Data8Component2Std/testOutput_original/"
     if choice == 0:
-        path = './Data8Component2Std/testOutput/results_no_zero(training).csv'
+        path = './Data8Component2Std/testOutput_original/results_no_zero.csv'
     else:
-        path = './Data8Component2Std/testOutput/results_zero(training).csv'
+        path = './Data8Component2Std/testOutput_original/results_zero.csv'
     with open(path, 'w+', encoding='UTF8') as f_output:
         # f_output.write("USERID;MAXV;MAXP;MAXWC;TRAIN_SIZE;TEST_SIZE;CORRECT;UNCERTAIN;INCORRECT;CORRECTP;UNCERTAINP;INCORRECTP;CORRECT_UDISCARDEDP;TRAIN_TIME;THEORY\n")
         f_output.write("USERID;MAXV;MAXP;MAXWC;TRAIN_SIZE;TEST_SIZE;ACCURACYP;PRECISIONP;RECALLP;TRAIN_TIME;THEORY\n")
         USERS = [i for i in range(0, 54)]
-        COUPLES = [45, 105, 210]
+        COUPLES = [150]
         for COUPLE in COUPLES:
             train_size = COUPLE
             for USER in USERS:
                 # if USER not in [15, 3, 32, 7, 36, 4, 20, 29, 14, 11]:
                 #     continue
                 if int(choice) == 0:
-                    output_train_data_dir = "./Data8Component2Std/users_new_version_second/no_zero/train/" + str(COUPLE) + "Couples/"
-                    output_dir_for_train_data_dir = "./Data8Component2Std/final/users/no_zero/train/" + str(COUPLE) + "Couples/User" + str(USER) + "/outputTrain/"
-                    output_test_data_dir = "./Data8Component2Std/final/users/no_zero/test/105Couples/User" + str(USER) + "/testFiles/"
+                    output_train_data_dir = "./Data8Component2Std/users_original/no_zero/train/" + str(COUPLE) + "Couples/"
+                    output_dir_for_train_data_dir = "./Data8Component2Std/final_original/users/no_zero/train/" + str(COUPLE) + "Couples/User" + str(USER) + "/outputTrain/"
+                    output_test_data_dir = "./Data8Component2Std/final_original/users/no_zero/test/50Couples/User" + str(USER) + "/testFiles/"
                 else:
-                    output_train_data_dir = "./Data8Component2Std/users_new_version_second/zero/train/" + str(COUPLE) + "Couples/"
-                    output_dir_for_train_data_dir = "./Data8Component2Std/final/users/zero/train/" + str(COUPLE) + "Couples/User" + str(USER) + "/outputTrain/"
-                    output_test_data_dir = "./Data8Component2Std/final/users/zero/test/105Couples/User" + str(USER) + "/testFiles/"
+                    output_train_data_dir = "./Data8Component2Std/users_original/zero/train/" + str(COUPLE) + "Couples/"
+                    output_dir_for_train_data_dir = "./Data8Component2Std/final_original/users/zero/train/" + str(COUPLE) + "Couples/User" + str(USER) + "/outputTrain/"
+                    output_test_data_dir = "./Data8Component2Std/final_original/users/zero/test/50Couples/User" + str(USER) + "/testFiles/"
                 for filename in os.listdir(output_dir_for_train_data_dir):
                     if "default" in filename:
                         continue
@@ -46,8 +46,8 @@ for choice in choices:
                     #     continue
                     # if int(max_v) != 3 or int(max_p) != 5:
                     #     continue
-                    if int(max_v) != 5 or int(max_p) != 5:
-                        continue
+                    # if int(max_v) != 5 or int(max_p) != 5:
+                    #     continue
                     if int(max_v) > 0 and int(max_p) > 0:
                         items = ilasp.itemsFromFile("Data8Component2Std/recipes/recipes_max_v(" + str(max_v) + ")-max_p(" + str(max_p) + ").las")
                         language_bias = ilasp.languageBiasFromFile("Data8Component2Std/recipes/recipes_max_v(" + str(max_v) + ")-max_p(" + str(max_p) + ").las")
@@ -72,8 +72,8 @@ for choice in choices:
                     F_TRAIN.close()
                     # train_set = ilasp.preferencesFromFileSpaces(f_train_data)
                     train_set = ilasp.preferencesFromFileSpacesAndSign(f_train_data)
-                    # test_set = ilasp.preferencesFromFileSign(f_test)
-                    test_set = ilasp.preferencesFromFileSpacesAndSign(f_train_data)
+                    test_set = ilasp.preferencesFromFileSign(f_test)
+                    # test_set = ilasp.preferencesFromFileSpacesAndSign(f_train_data)
                     # train_size = len(train_set)
                     test_size = len(test_set)
                     if ':~' not in data_train:

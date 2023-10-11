@@ -1,0 +1,19 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Pre-processing                          : 0.131s
+%% Hypothesis Space Generation             : 1.31s
+%% Conflict analysis                       : 51.964s
+%%   - Brave Orders                        : 51.964s
+%% Counterexample search                   : 7.147s
+%%   - CDOEs                               : 5.937s
+%%   - CDPIs                               : 1.206s
+%% Hypothesis Search                       : 38062.9s
+%% Propagation                             : 114.991s
+%%   - CDOEs                               : 114.991s
+%% Total                                   : 38240.5s
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+:~ value(pasta,V1).[V1@2, V1]
+:~ value(carne,V1).[-V1@1, V1]
+:~ category(5).[-1@4]
+:~ category(4).[-1@5]
+:~ value(verdure_e_ortaggi,V1), category(3).[-V1@3, V1]
+
