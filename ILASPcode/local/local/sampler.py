@@ -614,7 +614,8 @@ def sample_around(first_food, second_food, all_food, pca_food, number_of_sample,
 
     return food_1_neighbor, food_2_neighbor
 
-def sample_around_gauss_2(first_food, second_food, all_food, pca_food, number_of_sample, index_first_food, index_second_food, pca_to_pass, no_zero, TrainCouple):
+def sample_around_gauss(first_food, second_food, all_food, pca_food, number_of_sample, index_first_food, index_second_food, pca_to_pass, no_zero, TrainCouple):
+
     macro_ingredients_dictionary = {0: "cereali",
                                     1: "latticini",
                                     2: "uova",
@@ -637,231 +638,6 @@ def sample_around_gauss_2(first_food, second_food, all_food, pca_food, number_of
                               6: "cottura_a_fiamma",
                               7: "stufato"}
 
-    counter = 0
-    list_food_1_neighbor = []
-    list_food_2_neighbor = []
-    list_food_1_neighbor_ILASP = []
-    list_food_2_neighbor_ILASP = []
-    while counter < TrainCouple:
-        food1_neighbor = np.zeros(len(first_food) + 4, dtype="float32")
-
-        # note: n = 42 toss, p = 0.0025 for single toss. So:
-        # P(0) = (42! / (0! * (42-0)!) * 0.0025^0 * 0.9975^42 = 1 * 1 * 0.9975^42 ~ 0.90 = 90%
-        # P(1) = (42! / (1! * (42-1)!) * 0.0025^1 * 0.9975^41 = 42 * 0.0025 * 0.9975^41 ~ 0.09 = 9%
-        # P(2) = (42! / (2! * (42-2)!) * 0.0025^2 * 0.9975^40 = 861 * 0.00000625 * 0.9975^40 ~ 0.004 = 0.4%
-        # ...
-        # VAR(X) = n*p*(1-p) = 0.1047375
-        # std(X) = sqrt(VAR(X)) ~ 0.32
-        # ------------------------------------------------------
-        # identical items not admitted. this case is the best trade-off of low std and low execution time to find the sampled couple (p < 0.01 make code execute for very long time even for only 1 of the 100 couple)
-        changes = 0
-        for index_element_food_1, element_food_1 in enumerate(first_food):
-            change = np.random.binomial(1, 0.0025)
-            if change == 1:
-                changes += 1
-                if index_element_food_1 == 0:
-                    change_in_set = False
-                    while True:
-                        if change_in_set:
-                            break
-                        change_in = np.round(np.random.uniform(1, 5))
-                        if change_in == 2.0:
-                            continue
-                        if change_in != element_food_1:
-                            change_in_set = True
-                    food1_neighbor[index_element_food_1 + int(change_in) - 1] = 1
-                else:
-                    change_up = np.random.binomial(1, 0.5)
-                    if change_up != 0:
-                        food1_neighbor[index_element_food_1 + 4] = element_food_1 + 1
-                    else:
-                        if element_food_1 != 0:
-                            food1_neighbor[index_element_food_1 + 4] = element_food_1 - 1
-                        else:
-                            food1_neighbor[index_element_food_1 + 4] = element_food_1 + 1
-            else:
-                if index_element_food_1 == 0:
-                    food1_neighbor[index_element_food_1 + int(first_food[0]) - 1] = 1
-                else:
-                    food1_neighbor[index_element_food_1 + 4] = element_food_1
-        if changes == 0:
-            continue
-
-        food1_neighbor_ILASP_temp = np.zeros(24, dtype="float32")
-        category_decoded_food1 = 0
-
-        found = False
-        for element_index, element_neighbor_1_original in enumerate(food1_neighbor):
-            if element_index > 4 or found:
-                break
-            if element_neighbor_1_original != 0:
-                category_decoded_food1 = element_index + 1
-                found = True
-
-        food1_neighbor_ILASP_temp[0] = category_decoded_food1
-        food1_neighbor_ILASP_temp[1:4] = food1_neighbor[5:8]
-
-        food_1_neighbor_ILASP_macro_ingredients = np.zeros(12, dtype='float32')
-
-        for element_index, element_neighbor_1_original in enumerate(food1_neighbor):
-            if element_index < 8 or element_index >= 39:
-                continue
-            j_index = element_index - 8
-            if (j_index == 1) or (4 <= j_index <= 8) or (j_index == 10) or (j_index == 14) or (16 <= j_index <= 19) or (21 <= j_index <= 24) or (28 <= j_index <= 29):
-                continue
-            # if j_index == 4:                      # I'll leave commented just in case I want to insert in a second moment
-            #     food_1_neighbor_ILASP_macro_ingredients[0] = food_1_neighbor_ILASP_macro_ingredients[0] + element_neighbor_1_original
-            if j_index == 3 or j_index == 30:
-                food_1_neighbor_ILASP_macro_ingredients[1] = food_1_neighbor_ILASP_macro_ingredients[1] + element_neighbor_1_original
-            # if j_index == 10:                     # I'll leave commented just in case I want to insert in a second moment
-            #     food_1_neighbor_ILASP_macro_ingredients[2] = food_1_neighbor_ILASP_macro_ingredients[2] + element_neighbor_1_original
-            if j_index == 11:
-                food_1_neighbor_ILASP_macro_ingredients[3] = food_1_neighbor_ILASP_macro_ingredients[3] + element_neighbor_1_original
-            if j_index == 26:
-                food_1_neighbor_ILASP_macro_ingredients[4] = food_1_neighbor_ILASP_macro_ingredients[4] + element_neighbor_1_original
-            if j_index == 2 or j_index == 25:
-                food_1_neighbor_ILASP_macro_ingredients[5] = food_1_neighbor_ILASP_macro_ingredients[5] + element_neighbor_1_original
-            if j_index == 0 or j_index == 20:
-                food_1_neighbor_ILASP_macro_ingredients[6] = food_1_neighbor_ILASP_macro_ingredients[6] + element_neighbor_1_original
-            # if j_index == 18:                     # I'll leave commented just in case I want to insert in a second moment
-            #     food_1_neighbor_ILASP_macro_ingredients[7] = food_1_neighbor_ILASP_macro_ingredients[7] + element_neighbor_1_original
-            if j_index == 9 or j_index == 12:
-                food_1_neighbor_ILASP_macro_ingredients[8] = food_1_neighbor_ILASP_macro_ingredients[8] + element_neighbor_1_original
-            # if j_index == 22 or j_index == 23:    # I'll leave commented just in case I want to insert in a second moment
-            #     food_1_neighbor_ILASP_macro_ingredients[9] = food_1_neighbor_ILASP_macro_ingredients[9] + element_neighbor_1_original
-            if j_index == 27:
-                food_1_neighbor_ILASP_macro_ingredients[10] = food_1_neighbor_ILASP_macro_ingredients[10] + element_neighbor_1_original
-            if j_index == 13 or j_index == 15:
-                food_1_neighbor_ILASP_macro_ingredients[11] = food_1_neighbor_ILASP_macro_ingredients[11] + element_neighbor_1_original
-        # 0 1 3 4 6
-        food1_neighbor_ILASP_temp[4:16] = food_1_neighbor_ILASP_macro_ingredients
-        food1_neighbor_ILASP_temp[16:24] = food1_neighbor[39:47]
-        guard_identical_element = False
-        excluded_indexes = [1, 2, 3, 16, 17, 19, 20, 22]  # in PC82STD cost, difficult, preparation and some preparation are removed, removed ingredient already done
-        if len(list_food_1_neighbor_ILASP) != 0:
-            for element_in_list in list_food_1_neighbor_ILASP:
-                counter_identical_element = 0
-                for index_factual_element, factual_element in enumerate(element_in_list):
-                    if index_factual_element in excluded_indexes:
-                        continue
-                    if factual_element == food1_neighbor_ILASP_temp[index_factual_element]:
-                        counter_identical_element += 1
-                if counter_identical_element == len(food1_neighbor_ILASP_temp) - len(excluded_indexes):
-                    guard_identical_element = True
-                    break
-        if guard_identical_element:
-            continue
-        list_food_1_neighbor_ILASP.append(food1_neighbor_ILASP_temp)
-        list_food_1_neighbor.append(food1_neighbor)
-        counter += 1
-    counter = 0
-    tentative_made = 0
-    while counter < TrainCouple:
-        food2_neighbor = np.zeros(len(second_food) + 4, dtype="float32")
-        changes = 0
-        for index_element_food_2, element_food_2 in enumerate(second_food):
-            change = np.random.binomial(1, 0.0025)
-            if change == 1:
-                changes += 1
-                if index_element_food_2 == 0:
-                    change_in_set = False
-                    while True:
-                        if change_in_set:
-                            break
-                        change_in = np.random.uniform(1, 5)
-                        if change_in != element_food_2:
-                            change_in_set = True
-                    food2_neighbor[index_element_food_2 + int(change_in) - 1] = 1
-                else:
-                    change_up = np.random.binomial(1, 0.5)
-                    if change_up != 0:
-                        food2_neighbor[index_element_food_2 + 4] = element_food_2 + 1
-                    else:
-                        if element_food_2 != 0:
-                            food2_neighbor[index_element_food_2 + 4] = element_food_2 - 1
-                        else:
-                            food2_neighbor[index_element_food_2 + 4] = element_food_2 + 1
-            else:
-                if index_element_food_2 == 0:
-                    food2_neighbor[index_element_food_2 + int(first_food[0]) - 1] = 1
-                else:
-                    food2_neighbor[index_element_food_2 + 4] = element_food_2
-        if changes == 0:
-            continue
-        food2_neighbor_ILASP_temp = np.zeros(24, dtype="float32")
-        category_decoded_food2 = 0
-
-        found = False
-        for element_index, element_neighbor_1_original in enumerate(food2_neighbor):
-            if element_index > 4 or found:
-                break
-            if element_neighbor_1_original != 0:
-                category_decoded_food2 = element_index + 1
-                found = True
-
-        food2_neighbor_ILASP_temp[0] = category_decoded_food2
-        food2_neighbor_ILASP_temp[1:4] = food2_neighbor[5:8]
-
-        food_2_neighbor_ILASP_macro_ingredients = np.zeros(12, dtype='float32')
-
-        for element_index, element_neighbor_2_original in enumerate(food2_neighbor):
-            if element_index < 8 or element_index >= 39:
-                continue
-            j_index = element_index - 8
-            if (j_index == 1) or (4 <= j_index <= 8) or (j_index == 10) or (j_index == 14) or (16 <= j_index <= 19) or (21 <= j_index <= 24) or (28 <= j_index <= 29):
-                continue
-            # if j_index == 4:                      # I'll leave commented just in case I want to insert in a second moment
-            #     food_2_neighbor_ILASP_macro_ingredients[0] = food_2_neighbor_ILASP_macro_ingredients[0] + element_neighbor_2_original
-            if j_index == 3 or j_index == 30:
-                food_2_neighbor_ILASP_macro_ingredients[1] = food_2_neighbor_ILASP_macro_ingredients[1] + element_neighbor_2_original
-            # if j_index == 10:                     # I'll leave commented just in case I want to insert in a second moment
-            #     food_2_neighbor_ILASP_macro_ingredients[2] = food_2_neighbor_ILASP_macro_ingredients[2] + element_neighbor_2_original
-            if j_index == 11:
-                food_2_neighbor_ILASP_macro_ingredients[3] = food_2_neighbor_ILASP_macro_ingredients[3] + element_neighbor_2_original
-            if j_index == 26:
-                food_2_neighbor_ILASP_macro_ingredients[4] = food_2_neighbor_ILASP_macro_ingredients[4] + element_neighbor_2_original
-            if j_index == 2 or j_index == 25:
-                food_2_neighbor_ILASP_macro_ingredients[5] = food_2_neighbor_ILASP_macro_ingredients[5] + element_neighbor_2_original
-            if j_index == 0 or j_index == 20:
-                food_2_neighbor_ILASP_macro_ingredients[6] = food_2_neighbor_ILASP_macro_ingredients[6] + element_neighbor_2_original
-            # if j_index == 18:                     # I'll leave commented just in case I want to insert in a second moment
-            #     food_2_neighbor_ILASP_macro_ingredients[7] = food_2_neighbor_ILASP_macro_ingredients[7] + element_neighbor_2_original
-            if j_index == 9 or j_index == 12:
-                food_2_neighbor_ILASP_macro_ingredients[8] = food_2_neighbor_ILASP_macro_ingredients[8] + element_neighbor_2_original
-            # if j_index == 22 or j_index == 23:    # I'll leave commented just in case I want to insert in a second moment
-            #     food_2_neighbor_ILASP_macro_ingredients[9] = food_2_neighbor_ILASP_macro_ingredients[9] + element_neighbor_2_original
-            if j_index == 27:
-                food_2_neighbor_ILASP_macro_ingredients[10] = food_2_neighbor_ILASP_macro_ingredients[10] + element_neighbor_2_original
-            if j_index == 13 or j_index == 15:
-                food_2_neighbor_ILASP_macro_ingredients[11] = food_2_neighbor_ILASP_macro_ingredients[11] + element_neighbor_2_original
-
-        food2_neighbor_ILASP_temp[4:16] = food_2_neighbor_ILASP_macro_ingredients
-        food2_neighbor_ILASP_temp[16:24] = food2_neighbor[39:47]
-
-        counter_identical_element = 0
-        guard_identical_element = False
-        excluded_indexes = [1, 2, 3, 16, 17, 19, 20, 22]  # in PC82STD cost, difficult, preparation and some preparation are removed, removed ingredient already done
-        if len(list_food_2_neighbor_ILASP) != 0:
-            for element_in_list in list_food_2_neighbor_ILASP:
-                counter_identical_element = 0
-                for index_factual_element, factual_element in enumerate(element_in_list):
-                    if index_factual_element in excluded_indexes:
-                        continue
-                    if factual_element == food2_neighbor_ILASP_temp[index_factual_element]:
-                        counter_identical_element += 1
-                if counter_identical_element == len(food2_neighbor_ILASP_temp) - len(excluded_indexes):
-                    guard_identical_element = True
-                    break
-        if guard_identical_element:
-            continue
-        list_food_2_neighbor_ILASP.append(food2_neighbor_ILASP_temp)
-        list_food_2_neighbor.append(food2_neighbor)
-        counter += 1
-    food_1_neighbor_original = np.array(list_food_1_neighbor)
-    food_2_neighbor_original = np.array(list_food_2_neighbor)
-    food1_neighbor_ILASP = np.array(list_food_1_neighbor_ILASP)
-    food2_neighbor_ILASP = np.array(list_food_2_neighbor_ILASP)
-
     # NOTE: the code work if we consider 8PC2STD case, if we are working with other case you have to adjust the part in which we save sampled dataset (e.g.: cost is not always 0 or something like this)
 
     first_food_ILASP = np.zeros(24, dtype="float32")
@@ -874,31 +650,29 @@ def sample_around_gauss_2(first_food, second_food, all_food, pca_food, number_of
         if element_index < 4 or element_index >= 35:
             continue
         j_index = element_index - 4
-        if (j_index == 1) or (4 <= j_index <= 8) or (j_index == 10) or (j_index == 14) or (16 <= j_index <= 19) or (21 <= j_index <= 24) or (28 <= j_index <= 29):
-            continue
-        # if j_index == 4:                      # I'll leave commented just in case I want to insert in a second moment
-        #     food_1_neighbor_ILASP_macro_ingredients[0] = food_1_neighbor_ILASP_macro_ingredients[0] + element_neighbor_1_original
-        if j_index == 3 or j_index == 30:
+        if j_index == 4:
+            food_1_neighbor_ILASP_macro_ingredients[0] = food_1_neighbor_ILASP_macro_ingredients[0] + element_neighbor_1_original
+        if j_index == 3 or j_index == 5 or j_index == 16 or j_index == 24 or j_index == 30:
             food_1_neighbor_ILASP_macro_ingredients[1] = food_1_neighbor_ILASP_macro_ingredients[1] + element_neighbor_1_original
-        # if j_index == 10:                     # I'll leave commented just in case I want to insert in a second moment
-        #     food_1_neighbor_ILASP_macro_ingredients[2] = food_1_neighbor_ILASP_macro_ingredients[2] + element_neighbor_1_original
-        if j_index == 11:
+        if j_index == 10:
+            food_1_neighbor_ILASP_macro_ingredients[2] = food_1_neighbor_ILASP_macro_ingredients[2] + element_neighbor_1_original
+        if j_index == 1 or j_index == 11:
             food_1_neighbor_ILASP_macro_ingredients[3] = food_1_neighbor_ILASP_macro_ingredients[3] + element_neighbor_1_original
-        if j_index == 26:
+        if j_index == 7 or j_index == 19 or j_index == 21 or j_index == 26:
             food_1_neighbor_ILASP_macro_ingredients[4] = food_1_neighbor_ILASP_macro_ingredients[4] + element_neighbor_1_original
-        if j_index == 2 or j_index == 25:
+        if j_index == 2 or j_index == 8 or j_index == 14 or j_index == 25 or j_index == 29:
             food_1_neighbor_ILASP_macro_ingredients[5] = food_1_neighbor_ILASP_macro_ingredients[5] + element_neighbor_1_original
-        if j_index == 0 or j_index == 20:
+        if j_index == 0 or j_index == 6 or j_index == 20:
             food_1_neighbor_ILASP_macro_ingredients[6] = food_1_neighbor_ILASP_macro_ingredients[6] + element_neighbor_1_original
-        # if j_index == 18:                     # I'll leave commented just in case I want to insert in a second moment
-        #     food_1_neighbor_ILASP_macro_ingredients[7] = food_1_neighbor_ILASP_macro_ingredients[7] + element_neighbor_1_original
+        if j_index == 18:
+            food_1_neighbor_ILASP_macro_ingredients[7] = food_1_neighbor_ILASP_macro_ingredients[7] + element_neighbor_1_original
         if j_index == 9 or j_index == 12:
             food_1_neighbor_ILASP_macro_ingredients[8] = food_1_neighbor_ILASP_macro_ingredients[8] + element_neighbor_1_original
-        # if j_index == 22 or j_index == 23:    # I'll leave commented just in case I want to insert in a second moment
-        #     food_1_neighbor_ILASP_macro_ingredients[9] = food_1_neighbor_ILASP_macro_ingredients[9] + element_neighbor_1_original
+        if j_index == 17 or j_index == 22 or j_index == 23:
+            food_1_neighbor_ILASP_macro_ingredients[9] = food_1_neighbor_ILASP_macro_ingredients[9] + element_neighbor_1_original
         if j_index == 27:
             food_1_neighbor_ILASP_macro_ingredients[10] = food_1_neighbor_ILASP_macro_ingredients[10] + element_neighbor_1_original
-        if j_index == 13 or j_index == 15:
+        if j_index == 13 or j_index == 15 or j_index == 28:
             food_1_neighbor_ILASP_macro_ingredients[11] = food_1_neighbor_ILASP_macro_ingredients[11] + element_neighbor_1_original
 
     first_food_ILASP[4:16] = food_1_neighbor_ILASP_macro_ingredients
@@ -914,35 +688,299 @@ def sample_around_gauss_2(first_food, second_food, all_food, pca_food, number_of
         if element_index < 4 or element_index >= 35:
             continue
         j_index = element_index - 4
-        if (j_index == 1) or (4 <= j_index <= 8) or (j_index == 10) or (j_index == 14) or (16 <= j_index <= 19) or (21 <= j_index <= 24) or (28 <= j_index <= 29):
-            continue
-        # if j_index == 4:                      # I'll leave commented just in case I want to insert in a second moment
-        #     food_2_neighbor_ILASP_macro_ingredients[0] = food_2_neighbor_ILASP_macro_ingredients[0] + element_neighbor_2_original
-        if j_index == 3 or j_index == 30:
+        if j_index == 4:
+            food_2_neighbor_ILASP_macro_ingredients[0] = food_2_neighbor_ILASP_macro_ingredients[0] + element_neighbor_2_original
+        if j_index == 3 or j_index == 5 or j_index == 16 or j_index == 24 or j_index == 30:
             food_2_neighbor_ILASP_macro_ingredients[1] = food_2_neighbor_ILASP_macro_ingredients[1] + element_neighbor_2_original
-        # if j_index == 10:                     # I'll leave commented just in case I want to insert in a second moment
-        #     food_2_neighbor_ILASP_macro_ingredients[2] = food_2_neighbor_ILASP_macro_ingredients[2] + element_neighbor_2_original
-        if j_index == 11:
+        if j_index == 10:
+            food_2_neighbor_ILASP_macro_ingredients[2] = food_2_neighbor_ILASP_macro_ingredients[2] + element_neighbor_2_original
+        if j_index == 1 or j_index == 11:
             food_2_neighbor_ILASP_macro_ingredients[3] = food_2_neighbor_ILASP_macro_ingredients[3] + element_neighbor_2_original
-        if j_index == 26:
+        if j_index == 7 or j_index == 19 or j_index == 21 or j_index == 26:
             food_2_neighbor_ILASP_macro_ingredients[4] = food_2_neighbor_ILASP_macro_ingredients[4] + element_neighbor_2_original
-        if j_index == 2 or j_index == 25:
+        if j_index == 2 or j_index == 8 or j_index == 14 or j_index == 25 or j_index == 29:
             food_2_neighbor_ILASP_macro_ingredients[5] = food_2_neighbor_ILASP_macro_ingredients[5] + element_neighbor_2_original
-        if j_index == 0 or j_index == 20:
+        if j_index == 0 or j_index == 6 or j_index == 20:
             food_2_neighbor_ILASP_macro_ingredients[6] = food_2_neighbor_ILASP_macro_ingredients[6] + element_neighbor_2_original
-        # if j_index == 18:                     # I'll leave commented just in case I want to insert in a second moment
-        #     food_2_neighbor_ILASP_macro_ingredients[7] = food_2_neighbor_ILASP_macro_ingredients[7] + element_neighbor_2_original
+        if j_index == 18:
+            food_2_neighbor_ILASP_macro_ingredients[7] = food_2_neighbor_ILASP_macro_ingredients[7] + element_neighbor_2_original
         if j_index == 9 or j_index == 12:
             food_2_neighbor_ILASP_macro_ingredients[8] = food_2_neighbor_ILASP_macro_ingredients[8] + element_neighbor_2_original
-        # if j_index == 22 or j_index == 23:    # I'll leave commented just in case I want to insert in a second moment
-        #     food_2_neighbor_ILASP_macro_ingredients[9] = food_2_neighbor_ILASP_macro_ingredients[9] + element_neighbor_2_original
+        if j_index == 17 or j_index == 22 or j_index == 23:
+            food_2_neighbor_ILASP_macro_ingredients[9] = food_2_neighbor_ILASP_macro_ingredients[9] + element_neighbor_2_original
         if j_index == 27:
             food_2_neighbor_ILASP_macro_ingredients[10] = food_2_neighbor_ILASP_macro_ingredients[10] + element_neighbor_2_original
-        if j_index == 13 or j_index == 15:
+        if j_index == 13 or j_index == 15 or j_index == 28:
             food_2_neighbor_ILASP_macro_ingredients[11] = food_2_neighbor_ILASP_macro_ingredients[11] + element_neighbor_2_original
 
     second_food_ILASP[4:16] = food_2_neighbor_ILASP_macro_ingredients
     second_food_ILASP[16:24] = second_food[35:43]
+
+    counter = 0
+    list_food_1_neighbor = []
+    list_food_2_neighbor = []
+    list_food_1_neighbor_ILASP = []
+    list_food_2_neighbor_ILASP = []
+    list_food_1_neighbor_ILASP_to_print = []
+    list_food_2_neighbor_ILASP_to_print = []
+    not_modifiable_features = [1, 2, 3, 5, 8, 9, 10, 11, 12, 14, 18, 20, 21, 22, 23, 25, 26, 27, 28, 32, 33, 35, 36, 38, 39, 41]
+
+
+    while counter < TrainCouple:
+        food1_neighbor = np.zeros(len(first_food)+4, dtype="float32")
+        food1_neighbor[int(first_food[0])-1] = 1
+        food1_neighbor[5:-1] = np.copy(first_food[1:-1])
+        s = np.random.normal(0, 0.01, len(food1_neighbor))
+        s_min = abs(np.min(s))
+        s += s_min
+        for not_modifiable_feature in not_modifiable_features:
+            s[not_modifiable_feature] = 0
+        food1_neighbor += s
+
+        food1_neighbor_ILASP_temp = np.zeros(24, dtype="float32")
+        food1_neighbor_ILASP_temp_to_print = np.zeros(24, dtype="float32")
+
+        category_decoded_food1 = 0
+
+        found = False
+        for element_index, element_neighbor_1_original in enumerate(food1_neighbor):
+            if element_index > 4 or found:
+                break
+            if element_neighbor_1_original > 1:
+                category_decoded_food1 = element_index + 1
+                found = True
+
+        food1_neighbor_ILASP_temp[0] = category_decoded_food1
+        food1_neighbor_ILASP_temp[1:4] = food1_neighbor[5:8]
+        food1_neighbor_ILASP_temp_to_print[0] = category_decoded_food1
+        food1_neighbor_ILASP_temp_to_print[1:4] = food1_neighbor[5:8]
+
+        food_1_neighbor_ILASP_macro_ingredients = np.zeros(12, dtype='float32')
+        food_1_neighbor_ILASP_macro_ingredients_to_print = np.zeros(12, dtype='float32')
+        # 1, 16, 23, 26, 32
+        for element_index, element_neighbor_1_original in enumerate(food1_neighbor):
+            if element_index < 8 or element_index >= 39:
+                continue
+            j_index = element_index - 8
+            if j_index == 4:
+                food_1_neighbor_ILASP_macro_ingredients[0] = food_1_neighbor_ILASP_macro_ingredients[0] + element_neighbor_1_original
+            if j_index == 3 or j_index == 5 or j_index == 16 or j_index == 24 or j_index == 30:
+                food_1_neighbor_ILASP_macro_ingredients[1] = food_1_neighbor_ILASP_macro_ingredients[1] + element_neighbor_1_original
+            if j_index == 10:
+                food_1_neighbor_ILASP_macro_ingredients[2] = food_1_neighbor_ILASP_macro_ingredients[2] + element_neighbor_1_original
+            if j_index == 1 or j_index == 11:
+                food_1_neighbor_ILASP_macro_ingredients[3] = food_1_neighbor_ILASP_macro_ingredients[3] + element_neighbor_1_original
+            if j_index == 7 or j_index == 19 or j_index == 21 or j_index == 26:
+                food_1_neighbor_ILASP_macro_ingredients[4] = food_1_neighbor_ILASP_macro_ingredients[4] + element_neighbor_1_original
+            if j_index == 2 or j_index == 8 or j_index == 14 or j_index == 25 or j_index == 29:
+                food_1_neighbor_ILASP_macro_ingredients[5] = food_1_neighbor_ILASP_macro_ingredients[5] + element_neighbor_1_original
+            if j_index == 0 or j_index == 6 or j_index == 20:
+                food_1_neighbor_ILASP_macro_ingredients[6] = food_1_neighbor_ILASP_macro_ingredients[6] + element_neighbor_1_original
+            if j_index == 18:
+                food_1_neighbor_ILASP_macro_ingredients[7] = food_1_neighbor_ILASP_macro_ingredients[7] + element_neighbor_1_original
+            if j_index == 9 or j_index == 12:
+                food_1_neighbor_ILASP_macro_ingredients[8] = food_1_neighbor_ILASP_macro_ingredients[8] + element_neighbor_1_original
+            if j_index == 17 or j_index == 22 or j_index == 23:
+                food_1_neighbor_ILASP_macro_ingredients[9] = food_1_neighbor_ILASP_macro_ingredients[9] + element_neighbor_1_original
+            if j_index == 27:
+                food_1_neighbor_ILASP_macro_ingredients[10] = food_1_neighbor_ILASP_macro_ingredients[10] + element_neighbor_1_original
+            if j_index == 13 or j_index == 15 or j_index == 28:
+                food_1_neighbor_ILASP_macro_ingredients[11] = food_1_neighbor_ILASP_macro_ingredients[11] + element_neighbor_1_original
+
+        for element_index, element_neighbor_1_original in enumerate(food1_neighbor):
+            if element_index < 4 or element_index >= 35:
+                continue
+            j_index = element_index - 8
+            if (j_index == 1) or (4 <= j_index <= 8) or (j_index == 10) or (j_index == 14) or (16 <= j_index <= 19) or (21 <= j_index <= 24) or (28 <= j_index <= 29):
+                continue
+            # if j_index == 4:                      # I'll leave commented just in case I want to insert in a second moment
+            #     food_1_neighbor_ILASP_macro_ingredients_to_print[0] = food_1_neighbor_ILASP_macro_ingredients_to_print[0] + element_neighbor_1_original
+            if j_index == 3 or j_index == 30:
+                food_1_neighbor_ILASP_macro_ingredients_to_print[1] = food_1_neighbor_ILASP_macro_ingredients_to_print[1] + element_neighbor_1_original
+            # if j_index == 10:                     # I'll leave commented just in case I want to insert in a second moment
+            #     food_1_neighbor_ILASP_macro_ingredients_to_print[2] = food_1_neighbor_ILASP_macro_ingredients_to_print[2] + element_neighbor_1_original
+            if j_index == 11:
+                food_1_neighbor_ILASP_macro_ingredients_to_print[3] = food_1_neighbor_ILASP_macro_ingredients_to_print[3] + element_neighbor_1_original
+            if j_index == 26:
+                food_1_neighbor_ILASP_macro_ingredients_to_print[4] = food_1_neighbor_ILASP_macro_ingredients_to_print[4] + element_neighbor_1_original
+            if j_index == 2 or j_index == 25:
+                food_1_neighbor_ILASP_macro_ingredients_to_print[5] = food_1_neighbor_ILASP_macro_ingredients_to_print[5] + element_neighbor_1_original
+            if j_index == 0 or j_index == 20:
+                food_1_neighbor_ILASP_macro_ingredients_to_print[6] = food_1_neighbor_ILASP_macro_ingredients_to_print[6] + element_neighbor_1_original
+            # if j_index == 18:                     # I'll leave commented just in case I want to insert in a second moment
+            #     food_1_neighbor_ILASP_macro_ingredients_to_print[7] = food_1_neighbor_ILASP_macro_ingredients_to_print[7] + element_neighbor_1_original
+            if j_index == 9 or j_index == 12:
+                food_1_neighbor_ILASP_macro_ingredients_to_print[8] = food_1_neighbor_ILASP_macro_ingredients_to_print[8] + element_neighbor_1_original
+            # if j_index == 22 or j_index == 23:    # I'll leave commented just in case I want to insert in a second moment
+            #     food_1_neighbor_ILASP_macro_ingredients_to_print[9] = food_1_neighbor_ILASP_macro_ingredients_to_print[9] + element_neighbor_1_original
+            if j_index == 27:
+                food_1_neighbor_ILASP_macro_ingredients_to_print[10] = food_1_neighbor_ILASP_macro_ingredients_to_print[10] + element_neighbor_1_original
+            if j_index == 13 or j_index == 15:
+                food_1_neighbor_ILASP_macro_ingredients_to_print[11] = food_1_neighbor_ILASP_macro_ingredients_to_print[11] + element_neighbor_1_original
+
+        # 0 1 3 4 6
+        food1_neighbor_ILASP_temp[4:16] = food_1_neighbor_ILASP_macro_ingredients
+        food1_neighbor_ILASP_temp[16:24] = food1_neighbor[39:47]
+        food1_neighbor_ILASP_temp_to_print[4:16] = food_1_neighbor_ILASP_macro_ingredients_to_print
+        food1_neighbor_ILASP_temp_to_print[16:24] = food1_neighbor[39:47]
+        guard_identical_element = False
+        excluded_indexes = [1, 2, 3, 16, 17, 19, 20, 22]  # in PC82STD cost, difficult, preparation and some preparation are removed, removed ingredient already done
+        if len(list_food_1_neighbor_ILASP) != 0:
+            for element_in_list in list_food_1_neighbor_ILASP:
+                counter_identical_element = 0
+                for index_factual_element, factual_element in enumerate(element_in_list):
+                    if index_factual_element in excluded_indexes:
+                        continue
+                    if factual_element == food1_neighbor_ILASP_temp[index_factual_element]:
+                        counter_identical_element += 1
+                if counter_identical_element == len(food1_neighbor_ILASP_temp) - len(excluded_indexes):
+                    guard_identical_element = True
+                    break
+        if guard_identical_element:
+            continue
+        for index_to_adjust in range(0, len(food1_neighbor_ILASP_temp)):
+            if index_to_adjust == 0:
+                continue
+            else:
+                food1_neighbor_ILASP_temp[index_to_adjust] = int(food1_neighbor_ILASP_temp[index_to_adjust] * 10)
+                food1_neighbor_ILASP_temp_to_print[index_to_adjust] = int(food1_neighbor_ILASP_temp_to_print[index_to_adjust] * 10)
+        list_food_1_neighbor_ILASP.append(food1_neighbor_ILASP_temp)
+        list_food_1_neighbor_ILASP_to_print.append(food1_neighbor_ILASP_temp_to_print)
+
+        list_food_1_neighbor.append(food1_neighbor)
+        counter += 1
+    counter = 0
+
+    while counter < TrainCouple:
+        food2_neighbor = np.zeros(len(second_food)+4, dtype="float32")
+        food2_neighbor[int(second_food[0])-1] = 1
+        food2_neighbor[5:-1] = np.copy(second_food[1:-1])
+        s = np.random.normal(0, 0.01, len(food2_neighbor))
+        s_min = abs(np.min(s))
+        s += s_min
+        for not_modifiable_feature in not_modifiable_features:
+            s[not_modifiable_feature] = 0
+        food2_neighbor += s
+
+        food2_neighbor_ILASP_temp = np.zeros(24, dtype="float32")
+        food2_neighbor_ILASP_temp_to_print = np.zeros(24, dtype="float32")
+        category_decoded_food2 = 0
+
+
+        found = False
+        for element_index, element_neighbor_2_original in enumerate(food2_neighbor):
+            if element_index > 4 or found:
+                break
+            if element_neighbor_2_original > 1:
+                category_decoded_food2 = element_index + 1
+                found = True
+
+        food2_neighbor_ILASP_temp[0] = category_decoded_food2
+        food2_neighbor_ILASP_temp[1:4] = food2_neighbor[5:8]
+        food2_neighbor_ILASP_temp_to_print[0] = category_decoded_food2
+        food2_neighbor_ILASP_temp_to_print[1:4] = food2_neighbor[5:8]
+
+        food_2_neighbor_ILASP_macro_ingredients = np.zeros(12, dtype='float32')
+        food_2_neighbor_ILASP_macro_ingredients_to_print = np.zeros(12, dtype='float32')
+
+        for element_index, element_neighbor_2_original in enumerate(food2_neighbor):
+            if element_index < 8 or element_index >= 39:
+                continue
+            j_index = element_index - 8
+            if j_index == 4:
+                food_2_neighbor_ILASP_macro_ingredients[0] = food_2_neighbor_ILASP_macro_ingredients[0] + element_neighbor_2_original
+            if j_index == 3 or j_index == 5 or j_index == 16 or j_index == 24 or j_index == 30:
+                food_2_neighbor_ILASP_macro_ingredients[1] = food_2_neighbor_ILASP_macro_ingredients[1] + element_neighbor_2_original
+            if j_index == 10:
+                food_2_neighbor_ILASP_macro_ingredients[2] = food_2_neighbor_ILASP_macro_ingredients[2] + element_neighbor_2_original
+            if j_index == 1 or j_index == 11:
+                food_2_neighbor_ILASP_macro_ingredients[3] = food_2_neighbor_ILASP_macro_ingredients[3] + element_neighbor_2_original
+            if j_index == 7 or j_index == 19 or j_index == 21 or j_index == 26:
+                food_2_neighbor_ILASP_macro_ingredients[4] = food_2_neighbor_ILASP_macro_ingredients[4] + element_neighbor_2_original
+            if j_index == 2 or j_index == 8 or j_index == 14 or j_index == 25 or j_index == 29:
+                food_2_neighbor_ILASP_macro_ingredients[5] = food_2_neighbor_ILASP_macro_ingredients[5] + element_neighbor_2_original
+            if j_index == 0 or j_index == 6 or j_index == 20:
+                food_2_neighbor_ILASP_macro_ingredients[6] = food_2_neighbor_ILASP_macro_ingredients[6] + element_neighbor_2_original
+            if j_index == 18:
+                food_2_neighbor_ILASP_macro_ingredients[7] = food_2_neighbor_ILASP_macro_ingredients[7] + element_neighbor_2_original
+            if j_index == 9 or j_index == 12:
+                food_2_neighbor_ILASP_macro_ingredients[8] = food_2_neighbor_ILASP_macro_ingredients[8] + element_neighbor_2_original
+            if j_index == 17 or j_index == 22 or j_index == 23:
+                food_2_neighbor_ILASP_macro_ingredients[9] = food_2_neighbor_ILASP_macro_ingredients[9] + element_neighbor_2_original
+            if j_index == 27:
+                food_2_neighbor_ILASP_macro_ingredients[10] = food_2_neighbor_ILASP_macro_ingredients[10] + element_neighbor_2_original
+            if j_index == 13 or j_index == 15 or j_index == 28:
+                food_2_neighbor_ILASP_macro_ingredients[11] = food_2_neighbor_ILASP_macro_ingredients[11] + element_neighbor_2_original
+
+        for element_index, element_neighbor_2_original in enumerate(food2_neighbor):
+            if element_index < 4 or element_index >= 35:
+                continue
+            j_index = element_index - 8
+            if (j_index == 1) or (4 <= j_index <= 8) or (j_index == 10) or (j_index == 14) or (16 <= j_index <= 19) or (21 <= j_index <= 24) or (28 <= j_index <= 29):
+                continue
+            # if j_index == 4:                      # I'll leave commented just in case I want to insert in a second moment
+            #     food_2_neighbor_ILASP_macro_ingredients_to_print[0] = food_2_neighbor_ILASP_macro_ingredients_to_print[0] + element_neighbor_2_original
+            if j_index == 3 or j_index == 30:
+                food_2_neighbor_ILASP_macro_ingredients_to_print[1] = food_2_neighbor_ILASP_macro_ingredients_to_print[1] + element_neighbor_2_original
+            # if j_index == 10:                     # I'll leave commented just in case I want to insert in a second moment
+            #     food_2_neighbor_ILASP_macro_ingredients_to_print[2] = food_2_neighbor_ILASP_macro_ingredients_to_print[2] + element_neighbor_2_original
+            if j_index == 11:
+                food_2_neighbor_ILASP_macro_ingredients_to_print[3] = food_2_neighbor_ILASP_macro_ingredients_to_print[3] + element_neighbor_2_original
+            if j_index == 26:
+                food_2_neighbor_ILASP_macro_ingredients_to_print[4] = food_2_neighbor_ILASP_macro_ingredients_to_print[4] + element_neighbor_2_original
+            if j_index == 2 or j_index == 25:
+                food_2_neighbor_ILASP_macro_ingredients_to_print[5] = food_2_neighbor_ILASP_macro_ingredients_to_print[5] + element_neighbor_2_original
+            if j_index == 0 or j_index == 20:
+                food_2_neighbor_ILASP_macro_ingredients_to_print[6] = food_2_neighbor_ILASP_macro_ingredients_to_print[6] + element_neighbor_2_original
+            # if j_index == 18:                     # I'll leave commented just in case I want to insert in a second moment
+            #     food_2_neighbor_ILASP_macro_ingredients_to_print[7] = food_2_neighbor_ILASP_macro_ingredients_to_print[7] + element_neighbor_2_original
+            if j_index == 9 or j_index == 12:
+                food_2_neighbor_ILASP_macro_ingredients_to_print[8] = food_2_neighbor_ILASP_macro_ingredients_to_print[8] + element_neighbor_2_original
+            # if j_index == 22 or j_index == 23:    # I'll leave commented just in case I want to insert in a second moment
+            #     food_2_neighbor_ILASP_macro_ingredients_to_print[9] = food_2_neighbor_ILASP_macro_ingredients_to_print[9] + element_neighbor_2_original
+            if j_index == 27:
+                food_2_neighbor_ILASP_macro_ingredients_to_print[10] = food_2_neighbor_ILASP_macro_ingredients_to_print[10] + element_neighbor_2_original
+            if j_index == 13 or j_index == 15:
+                food_2_neighbor_ILASP_macro_ingredients_to_print[11] = food_2_neighbor_ILASP_macro_ingredients_to_print[11] + element_neighbor_2_original
+
+        food2_neighbor_ILASP_temp[4:16] = food_2_neighbor_ILASP_macro_ingredients
+        food2_neighbor_ILASP_temp[16:24] = food2_neighbor[39:47]
+        food2_neighbor_ILASP_temp_to_print[4:16] = food_2_neighbor_ILASP_macro_ingredients_to_print
+        food2_neighbor_ILASP_temp_to_print[16:24] = food2_neighbor[39:47]
+
+        counter_identical_element = 0
+        guard_identical_element = False
+        excluded_indexes = [1, 2, 3, 16, 17, 19, 20, 22]  # in PC82STD cost, difficult, preparation time and some preparation are removed, removed ingredient already done
+        if len(list_food_2_neighbor_ILASP) != 0:
+            for element_in_list in list_food_2_neighbor_ILASP:
+                counter_identical_element = 0
+                for index_factual_element, factual_element in enumerate(element_in_list):
+                    if index_factual_element in excluded_indexes:
+                        continue
+                    if factual_element == food2_neighbor_ILASP_temp[index_factual_element]:
+                        counter_identical_element += 1
+                if counter_identical_element == len(food2_neighbor_ILASP_temp) - len(excluded_indexes):
+                    guard_identical_element = True
+                    break
+        if guard_identical_element:
+            continue
+        for index_to_adjust in range(0, len(food2_neighbor_ILASP_temp)):
+            if index_to_adjust == 0:
+                continue
+            else:
+                food2_neighbor_ILASP_temp[index_to_adjust] = int(food2_neighbor_ILASP_temp[index_to_adjust] * 10)
+                food2_neighbor_ILASP_temp_to_print[index_to_adjust] = int(food2_neighbor_ILASP_temp_to_print[index_to_adjust] * 10)
+        list_food_2_neighbor_ILASP.append(food2_neighbor_ILASP_temp)
+        list_food_2_neighbor_ILASP_to_print.append(food2_neighbor_ILASP_temp_to_print)
+
+        list_food_2_neighbor.append(food2_neighbor)
+        counter += 1
+    food_1_neighbor_original = np.array(list_food_1_neighbor)
+    food_2_neighbor_original = np.array(list_food_2_neighbor)
+    food1_neighbor_ILASP = np.array(list_food_1_neighbor_ILASP)
+    food2_neighbor_ILASP = np.array(list_food_2_neighbor_ILASP)
+    food1_neighbor_ILASP_to_print = np.array(list_food_1_neighbor_ILASP_to_print)
+    food2_neighbor_ILASP_to_print = np.array(list_food_2_neighbor_ILASP_to_print)
 
     distances_metric = np.zeros((TrainCouple, 3), dtype="float32")
 
@@ -969,7 +1007,7 @@ def sample_around_gauss_2(first_food, second_food, all_food, pca_food, number_of
         distances_metric[neighbor_couple_index, 1] = round(temp1 + temp2)
     max_distance = np.max(distances_metric[:, 1])
     for distance_index, distance in enumerate(distances_metric):
-        distances_metric[distance_index, 2] = distance[1] / max_distance
+        distances_metric[distance_index, 2] = distance[1]/max_distance
 
     # I've considered to give priority by divide samples respect to how many std/means (of all samples r.t distance to original point) they are distant from original point, but as can be easily see with the chosen parameter, don't allow to
     # divide samples for more than 2 or 3 groups, while we want something more capillar, possibly
@@ -994,55 +1032,59 @@ def sample_around_gauss_2(first_food, second_food, all_food, pca_food, number_of
         distances_dict[str(distance)] = number_of_distances
         number_of_distances -= 1
 
+    # before to print i have to convert ingredients for 8PC2STD conversion
+
+
+
     max_v_list = [1, 2, 3, 4, 5]
     max_p_list = [1, 2, 3, 4, 5]
     if no_zero:
-        Dir = "Data8Component2Std/sampled-recipes-no-zero/Train" + str(TrainCouple) + "/las_files"
+        Dir = "Data8Component2Std/sampled-recipes-no-zero/Train" + str(TrainCouple) + "_gauss/las_files"
     else:
-        Dir = "Data8Component2Std/sampled-recipes-zero/Train" + str(TrainCouple) + "/las_files"
-    f_output = os.path.join(Dir, 'recipes_sampled_' + str(index_first_food) + '-' + str(index_second_food) + '.las')
+        Dir = "Data8Component2Std/sampled-recipes-zero/Train" + str(TrainCouple) + "_gauss/las_files"
+    f_output = os.path.join(Dir, 'recipes_sampled_'+str(index_first_food)+'-'+str(index_second_food)+'.las')
     f = open(f_output, 'w+')
     sys.stdout = open(f_output, 'w')
 
-    for index_food1_index, food1_neighbor_to_print in enumerate(food1_neighbor_ILASP):
+    for index_food1_index, food1_neighbor_to_print in enumerate(food1_neighbor_ILASP_to_print):
         if int(food1_neighbor_to_print[0]) == 2:
             item = "#pos(sampled" + str(index_first_food) + "-" + str(index_food1_index) + ", {}, {}, {category(0). value(cost,0). value(difficulty,0). value(prepTime,0)."
         else:
             item = "#pos(sampled" + str(index_first_food) + "-" + str(index_food1_index) + ", {}, {}, {category(" + str(int(food1_neighbor_to_print[0])) + "). value(cost,0). value(difficulty,0). value(prepTime,0)."
         for j_index in range(4, 16):
             if food1_neighbor_to_print[j_index] != 0:
-                item = item + " value(" + macro_ingredients_dictionary[j_index - 4] + "," + str(int(food1_neighbor_to_print[j_index])) + ")."
+                item = item + " value(" + macro_ingredients_dictionary[j_index-4] + "," + str(int(food1_neighbor_to_print[j_index])) + ")."
             else:
-                item = item + " value(" + macro_ingredients_dictionary[j_index - 4] + ",0)."
+                item = item + " value(" + macro_ingredients_dictionary[j_index-4] + ",0)."
         for j_index in range(16, 24):
             if food1_neighbor_to_print[j_index] != 0:
-                if (j_index - 16 <= 1) or (3 <= j_index - 16 <= 4) or (j_index - 16 == 6):
-                    item = item + " value(" + preparation_dictionary[j_index - 16] + ",0)."
+                if (j_index-16 <= 1) or (3 <= j_index-16 <= 4) or (j_index-16 == 6):
+                    item = item + " value(" + preparation_dictionary[j_index-16] + ",0)."
                 else:
-                    item = item + " value(" + preparation_dictionary[j_index - 16] + "," + str(int(food1_neighbor_to_print[j_index])) + ")."
+                    item = item + " value(" + preparation_dictionary[j_index-16] + "," + str(int(food1_neighbor_to_print[j_index])) + ")."
             else:
-                item = item + " value(" + preparation_dictionary[j_index - 16] + ",0)."
+                item = item + " value(" + preparation_dictionary[j_index-16] + ",0)."
         item = item + "} )."
         print(item)
 
-    for index_food2_index, food2_neighbor_to_print in enumerate(food2_neighbor_ILASP):
+    for index_food2_index, food2_neighbor_to_print in enumerate(food2_neighbor_ILASP_to_print):
         if int(food2_neighbor_to_print[0]) == 2:
             item = "#pos(sampled" + str(index_second_food) + "-" + str(index_food2_index) + ", {}, {}, {category(0). value(cost,0). value(difficulty,0). value(prepTime,0)."
         else:
             item = "#pos(sampled" + str(index_second_food) + "-" + str(index_food2_index) + ", {}, {}, {category(" + str(int(food2_neighbor_to_print[0])) + "). value(cost,0). value(difficulty,0). value(prepTime,0)."
         for j_index in range(4, 16):
             if food2_neighbor_to_print[j_index] != 0:
-                item = item + " value(" + macro_ingredients_dictionary[j_index - 4] + "," + str(int(food2_neighbor_to_print[j_index])) + ")."
+                item = item + " value(" + macro_ingredients_dictionary[j_index-4] + "," + str(int(food2_neighbor_to_print[j_index])) + ")."
             else:
-                item = item + " value(" + macro_ingredients_dictionary[j_index - 4] + ",0)."
+                item = item + " value(" + macro_ingredients_dictionary[j_index-4] + ",0)."
         for j_index in range(16, 24):
             if food2_neighbor_to_print[j_index] != 0:
-                if (j_index - 16 <= 1) or (3 <= j_index - 16 <= 4) or (j_index - 16 == 6):
-                    item = item + " value(" + preparation_dictionary[j_index - 16] + ",0)."
+                if (j_index-16 <= 1) or (3 <= j_index-16 <= 4) or (j_index-16 == 6):
+                    item = item + " value(" + preparation_dictionary[j_index-16] + ",0)."
                 else:
-                    item = item + " value(" + preparation_dictionary[j_index - 16] + "," + str(int(food2_neighbor_to_print[j_index])) + ")."
+                    item = item + " value(" + preparation_dictionary[j_index-16] + "," + str(int(food2_neighbor_to_print[j_index])) + ")."
             else:
-                item = item + " value(" + preparation_dictionary[j_index - 16] + ",0)."
+                item = item + " value(" + preparation_dictionary[j_index-16] + ",0)."
         item = item + "} )."
         print(item)
 
@@ -1050,9 +1092,9 @@ def sample_around_gauss_2(first_food, second_food, all_food, pca_food, number_of
     f.close()
 
     if no_zero:
-        Dir = "Data8Component2Std/sampled-recipes-no-zero/Train" + str(TrainCouple) + "/distances"
+        Dir = "Data8Component2Std/sampled-recipes-no-zero/Train" + str(TrainCouple) + "_gauss/distances"
     else:
-        Dir = "Data8Component2Std/sampled-recipes-zero/Train" + str(TrainCouple) + "/distances"
+        Dir = "Data8Component2Std/sampled-recipes-zero/Train" + str(TrainCouple) + "_gauss/distances"
     f_output = os.path.join(Dir, 'recipes_distances' + str(index_first_food) + '-' + str(index_second_food) + '.txt')
     f = open(f_output, 'w+')
     sys.stdout = open(f_output, 'w')
@@ -1097,6 +1139,7 @@ def sample_around_gauss_2(first_food, second_food, all_food, pca_food, number_of
 
     food_1_neighbor = pca_to_pass.transform(food_1_neighbor_scaled)
     food_2_neighbor = pca_to_pass.transform(food_2_neighbor_scaled)
+
 
     plt.scatter(food_1_neighbor[:, 0], food_1_neighbor[:, 1])
     plt.scatter(food_2_neighbor[:, 0], food_2_neighbor[:, 1])
@@ -1165,12 +1208,13 @@ def single_prediction(user_id, first_food, second_food):
 
 no_zero = False
 TrainCouple = 45
+gauss_note = "_gauss"
 
 # to recover unexpected error of program
 if no_zero:
-    Dir = "Data8Component2Std/sampled-recipes-no-zero/Train" + str(TrainCouple) + "/distances/"
+    Dir = "Data8Component2Std/sampled-recipes-no-zero/Train" + str(TrainCouple) + gauss_note + "/distances/"
 else:
-    Dir = "Data8Component2Std/sampled-recipes-zero/Train" + str(TrainCouple) + "/distances/"
+    Dir = "Data8Component2Std/sampled-recipes-zero/Train" + str(TrainCouple) + gauss_note + "/distances/"
 already_done_one = []
 already_done_two = []
 for filename in os.listdir(Dir):
@@ -1321,7 +1365,7 @@ if already_done != 0:
 else:
     counter_of_couple = 0
 while True:
-    if counter_of_couple == 100:
+    if counter_of_couple == 45:
         break
     first_food_id_to_pass = np.random.randint(0, 100, size=1)
     second_food_id_to_pass = np.random.randint(0, 100, size=1)
@@ -1346,15 +1390,15 @@ while True:
     # for i in range(0, 48):
     #     single_prediction(user_id=i, first_food=pca_data[int(first_food_id_to_pass)], second_food=pca_data[int(second_food_id_to_pass)])
     # print("--------------------generation samples for train--------------------")
-    X_PCA_1, X_PCA_2 = sample_around(first_food=all_data_original[int(first_food_id_to_pass)], second_food=all_data_original[int(second_food_id_to_pass)], all_food=all_data_original, pca_food=pca_data, number_of_sample=45, index_first_food=int(first_food_id_to_pass), index_second_food=int(second_food_id_to_pass), pca_to_pass=pca, no_zero=no_zero, TrainCouple=TrainCouple)
+    X_PCA_1, X_PCA_2 = sample_around_gauss(first_food=all_data_original[int(first_food_id_to_pass)], second_food=all_data_original[int(second_food_id_to_pass)], all_food=all_data_original, pca_food=pca_data, number_of_sample=45, index_first_food=int(first_food_id_to_pass), index_second_food=int(second_food_id_to_pass), pca_to_pass=pca, no_zero=no_zero, TrainCouple=TrainCouple)
     # print("--------------------generation label for train--------------------")
 
 
     for i in [15, 3, 32, 7, 36, 4, 20, 29, 14, 11]:
         if no_zero:
-            Dir = "Data8Component2Std/sampled-recipes-no-zero/Train" + str(TrainCouple) + "/user_prediction/train"
+            Dir = "Data8Component2Std/sampled-recipes-no-zero/Train" + str(TrainCouple) + gauss_note + "/user_prediction/train"
         else:
-            Dir = "Data8Component2Std/sampled-recipes-zero/Train" + str(TrainCouple) + "/user_prediction/train"
+            Dir = "Data8Component2Std/sampled-recipes-zero/Train" + str(TrainCouple) + gauss_note + "/user_prediction/train"
         f_output = os.path.join(Dir, 'user' + str(i) + '_Couple' + str(first_food_id_to_pass[0]) + "-" + str(second_food_id_to_pass[0]) + '.txt')
         f = open(f_output, 'w+')
         sys.stdout = open(f_output, 'w')
@@ -1364,9 +1408,9 @@ while True:
         sys.stdout = sys.__stdout__
         f.close()
         if no_zero:
-            Dir = "Data8Component2Std/sampled-recipes-no-zero/Train" + str(TrainCouple) + "/user_prediction/test"
+            Dir = "Data8Component2Std/sampled-recipes-no-zero/Train" + str(TrainCouple) + gauss_note + "/user_prediction/test"
         else:
-            Dir = "Data8Component2Std/sampled-recipes-zero/Train" + str(TrainCouple) + "/user_prediction/test"
+            Dir = "Data8Component2Std/sampled-recipes-zero/Train" + str(TrainCouple) + gauss_note + "/user_prediction/test"
         f_output = os.path.join(Dir, 'user' + str(i) + '_Couple' + str(first_food_id_to_pass[0]) + "-" + str(second_food_id_to_pass[0]) + '.txt')
         f = open(f_output, 'w+')
         sys.stdout = open(f_output, 'w')
@@ -1376,9 +1420,9 @@ while True:
         f.close()
     counter_of_couple += 1
 if no_zero:
-    f_output = "Data8Component2Std/sampled-recipes-no-zero/Train" + str(TrainCouple) + "/couple.txt"
+    f_output = "Data8Component2Std/sampled-recipes-no-zero/Train" + str(TrainCouple) + gauss_note + "/couple.txt"
 else:
-    f_output = "Data8Component2Std/sampled-recipes-zero/Train" + str(TrainCouple) + "/couple.txt"
+    f_output = "Data8Component2Std/sampled-recipes-zero/Train" + str(TrainCouple) + gauss_note + "/couple.txt"
 f = open(f_output, 'w+')
 sys.stdout = open(f_output, 'w')
 for couple in list_of_couple:

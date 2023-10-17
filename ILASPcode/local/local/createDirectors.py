@@ -5,10 +5,10 @@ pathFinalDirZeroTest = './Data8Component2Std/final/users/zero/test/'
 pathFinalDirNoZeroTrain = './Data8Component2Std/final/users/no_zero/train/'
 pathFinalDirNoZeroTest = './Data8Component2Std/final/users/no_zero/test/'
 
-pathUsersZeroCoupleTrainString = pathFinalDirZeroTrain + '45Couples'
-pathUsersZeroCoupleTestString = pathFinalDirZeroTest + '45CouplesForTrain45'
-pathUsersNoZeroCoupleTrainString = pathFinalDirNoZeroTrain + '45Couples'
-pathUsersNoZeroCoupleTestString = pathFinalDirNoZeroTest + '45CouplesForTrain45'
+pathUsersZeroCoupleTrainString = pathFinalDirZeroTrain + '45Couples_gauss'
+pathUsersZeroCoupleTestString = pathFinalDirZeroTest + '45CouplesForTrain45_gauss'
+pathUsersNoZeroCoupleTrainString = pathFinalDirNoZeroTrain + '45Couples_gauss'
+pathUsersNoZeroCoupleTestString = pathFinalDirNoZeroTest + '45CouplesForTrain45_gauss'
 
 effectivePathUsersZeroCoupleTrainString = os.path.join(pathUsersZeroCoupleTrainString)
 effectivePathUsersZeroCoupleTestString = os.path.join(pathUsersZeroCoupleTestString)

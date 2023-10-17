@@ -1,0 +1,15 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Pre-processing                          : 0.057s
+%% Hypothesis Space Generation             : 0.103s
+%% Conflict analysis                       : 1.178s
+%%   - Brave Orders                        : 1.178s
+%% Counterexample search                   : 0.167s
+%%   - CDOEs                               : 0.099s
+%%   - CDPIs                               : 0.069s
+%% Hypothesis Search                       : 6.864s
+%% Propagation                             : 4.557s
+%%   - CDOEs                               : 4.557s
+%% Total                                   : 14.181s
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+:~ value(frittura,V1).[-V1@1, V1]
+
