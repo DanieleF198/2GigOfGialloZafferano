@@ -1,0 +1,19 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Pre-processing                          : 0.058s
+%% Hypothesis Space Generation             : 0.105s
+%% Conflict analysis                       : 23.432s
+%%   - Brave Orders                        : 23.432s
+%% Counterexample search                   : 3.039s
+%%   - CDOEs                               : 2.079s
+%%   - CDPIs                               : 0.958s
+%% Hypothesis Search                       : 93.621s
+%% Propagation                             : 72.107s
+%%   - CDOEs                               : 72.107s
+%% Total                                   : 193.815s
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+:~ value(frittura,V1).[-V1@5, V1]
+:~ value(frutta,V1).[-V1@3, V1]
+:~ value(farinacei,V1).[V1@4, V1]
+:~ category(3).[-1@1]
+:~ value(carne,V1).[-V1@2, V1]
+

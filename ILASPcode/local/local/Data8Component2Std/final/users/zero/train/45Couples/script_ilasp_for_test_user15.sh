@@ -43,4 +43,3 @@ ILASP --version=4 ./User15/trainFiles/Couple56-57-max_v=1-max_p=5.las > ./User15
 ILASP --version=4 ./User15/trainFiles/Couple90-89-max_v=1-max_p=5.las > ./User15/outputTrain/Couple90-89-max_v=1-max_p=5.txt;
 ILASP --version=4 ./User15/trainFiles/Couple20-89-max_v=1-max_p=5.las > ./User15/outputTrain/Couple20-89-max_v=1-max_p=5.txt;
 ILASP --version=4 ./User15/trainFiles/Couple28-1-max_v=1-max_p=5.las > ./User15/outputTrain/Couple28-1-max_v=1-max_p=5.txt;
-ILASP --version=4 ./User15/trainFiles/Couple0-0-max_v=1-max_p=5.las > ./User15/outputTrain/Couple0-0-max_v=1-max_p=5.txt;

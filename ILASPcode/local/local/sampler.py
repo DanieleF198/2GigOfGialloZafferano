@@ -723,14 +723,14 @@ def sample_around_gauss(first_food, second_food, all_food, pca_food, number_of_s
     list_food_2_neighbor_ILASP = []
     list_food_1_neighbor_ILASP_to_print = []
     list_food_2_neighbor_ILASP_to_print = []
-    not_modifiable_features = [1, 2, 3, 5, 8, 9, 10, 11, 12, 14, 18, 20, 21, 22, 23, 25, 26, 27, 28, 32, 33, 35, 36, 38, 39, 41]
+    not_modifiable_features = [5, 6, 7, 9, 12, 13, 14, 15, 16, 18, 22, 24, 25, 27, 28, 29, 30, 31, 32, 36, 37, 39, 40, 42, 43, 45]
 
 
     while counter < TrainCouple:
         food1_neighbor = np.zeros(len(first_food)+4, dtype="float32")
         food1_neighbor[int(first_food[0])-1] = 1
         food1_neighbor[5:-1] = np.copy(first_food[1:-1])
-        s = np.random.normal(0, 0.01, len(food1_neighbor))
+        s = np.random.normal(0, 0.1, len(food1_neighbor))
         s_min = abs(np.min(s))
         s += s_min
         for not_modifiable_feature in not_modifiable_features:
@@ -746,7 +746,7 @@ def sample_around_gauss(first_food, second_food, all_food, pca_food, number_of_s
         for element_index, element_neighbor_1_original in enumerate(food1_neighbor):
             if element_index > 4 or found:
                 break
-            if element_neighbor_1_original > 1:
+            if element_neighbor_1_original >= 1:
                 category_decoded_food1 = element_index + 1
                 found = True
 
@@ -842,8 +842,11 @@ def sample_around_gauss(first_food, second_food, all_food, pca_food, number_of_s
             if index_to_adjust == 0:
                 continue
             else:
-                food1_neighbor_ILASP_temp[index_to_adjust] = int(food1_neighbor_ILASP_temp[index_to_adjust] * 10)
-                food1_neighbor_ILASP_temp_to_print[index_to_adjust] = int(food1_neighbor_ILASP_temp_to_print[index_to_adjust] * 10)
+                food1_neighbor_ILASP_temp[index_to_adjust] = float(food1_neighbor_ILASP_temp[index_to_adjust] * 10)
+                food1_neighbor_ILASP_temp_to_print[index_to_adjust] = float(food1_neighbor_ILASP_temp_to_print[index_to_adjust] * 10)
+                food1_neighbor_ILASP_temp[index_to_adjust] = int(round(food1_neighbor_ILASP_temp[index_to_adjust]))
+                food1_neighbor_ILASP_temp_to_print[index_to_adjust] = int(round(food1_neighbor_ILASP_temp_to_print[index_to_adjust]))
+
         list_food_1_neighbor_ILASP.append(food1_neighbor_ILASP_temp)
         list_food_1_neighbor_ILASP_to_print.append(food1_neighbor_ILASP_temp_to_print)
 
@@ -855,7 +858,7 @@ def sample_around_gauss(first_food, second_food, all_food, pca_food, number_of_s
         food2_neighbor = np.zeros(len(second_food)+4, dtype="float32")
         food2_neighbor[int(second_food[0])-1] = 1
         food2_neighbor[5:-1] = np.copy(second_food[1:-1])
-        s = np.random.normal(0, 0.01, len(food2_neighbor))
+        s = np.random.normal(0, 0.1, len(food2_neighbor))
         s_min = abs(np.min(s))
         s += s_min
         for not_modifiable_feature in not_modifiable_features:
@@ -871,7 +874,7 @@ def sample_around_gauss(first_food, second_food, all_food, pca_food, number_of_s
         for element_index, element_neighbor_2_original in enumerate(food2_neighbor):
             if element_index > 4 or found:
                 break
-            if element_neighbor_2_original > 1:
+            if element_neighbor_2_original >= 1:
                 category_decoded_food2 = element_index + 1
                 found = True
 
@@ -968,8 +971,10 @@ def sample_around_gauss(first_food, second_food, all_food, pca_food, number_of_s
             if index_to_adjust == 0:
                 continue
             else:
-                food2_neighbor_ILASP_temp[index_to_adjust] = int(food2_neighbor_ILASP_temp[index_to_adjust] * 10)
-                food2_neighbor_ILASP_temp_to_print[index_to_adjust] = int(food2_neighbor_ILASP_temp_to_print[index_to_adjust] * 10)
+                food2_neighbor_ILASP_temp[index_to_adjust] = float(food2_neighbor_ILASP_temp[index_to_adjust] * 10)
+                food2_neighbor_ILASP_temp_to_print[index_to_adjust] = float(food2_neighbor_ILASP_temp_to_print[index_to_adjust] * 10)
+                food2_neighbor_ILASP_temp[index_to_adjust] = int(round(food2_neighbor_ILASP_temp[index_to_adjust]))
+                food2_neighbor_ILASP_temp_to_print[index_to_adjust] = int(round(food2_neighbor_ILASP_temp_to_print[index_to_adjust]))
         list_food_2_neighbor_ILASP.append(food2_neighbor_ILASP_temp)
         list_food_2_neighbor_ILASP_to_print.append(food2_neighbor_ILASP_temp_to_print)
 
@@ -1147,9 +1152,9 @@ def sample_around_gauss(first_food, second_food, all_food, pca_food, number_of_s
     plt.scatter(pca_food[index_second_food, 0], pca_food[index_second_food, 1])
     plt.title("couple: " + str(index_first_food) + "-" + str(index_second_food))
     if no_zero:
-        plt.savefig('./Data8Component2Std/sampled-recipes-no-zero/Train' + str(TrainCouple) + '/plots/couple' + str(index_first_food) + '-' + str(index_second_food), dpi=300)
+        plt.savefig('./Data8Component2Std/sampled-recipes-no-zero/Train' + str(TrainCouple) + '_gauss/plots/couple' + str(index_first_food) + '-' + str(index_second_food), dpi=300)
     else:
-        plt.savefig('./Data8Component2Std/sampled-recipes-zero/Train' + str(TrainCouple) + '/plots/couple' + str(index_first_food) + '-' + str(index_second_food), dpi=300)
+        plt.savefig('./Data8Component2Std/sampled-recipes-zero/Train' + str(TrainCouple) + '_gauss/plots/couple' + str(index_first_food) + '-' + str(index_second_food), dpi=300)
     plt.clf()
 
     return food_1_neighbor, food_2_neighbor

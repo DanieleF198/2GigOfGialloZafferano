@@ -6,9 +6,9 @@ max_p_list = [1, 2, 3, 4, 5]
 list_of_user = [15, 3, 32, 7, 36, 4, 20, 29, 14, 11]
 no_zero = False
 if no_zero:
-    NNoutput_dir = "Data8Component2Std/sampled-recipes-no-zero/Train45/"
+    NNoutput_dir = "Data8Component2Std/sampled-recipes-no-zero/Train45_gauss/"
 else:
-    NNoutput_dir = "Data8Component2Std/sampled-recipes-zero/Train45/"
+    NNoutput_dir = "Data8Component2Std/sampled-recipes-zero/Train45_gauss/"
 
 
 f_couples = os.path.join(NNoutput_dir, 'couple.txt')
@@ -28,8 +28,8 @@ for i, line in enumerate(linesOfCouples):
             continue
         couples[i, j] = value
 
-no_zero_data_dir = "./Data8Component2Std/final/users/no_zero/train/45Couples/"
-zero_data_dir = "./Data8Component2Std/final/users/zero/train/45Couples/"
+no_zero_data_dir = "./Data8Component2Std/final/users/no_zero/train/45Couples_gauss/"
+zero_data_dir = "./Data8Component2Std/final/users/zero/train/45Couples_gauss/"
 
 if no_zero:
     for USER in list_of_user:
