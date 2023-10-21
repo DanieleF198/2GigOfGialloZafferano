@@ -7,9 +7,9 @@ max_v = 1
 max_p = 5
 no_zero = False
 if no_zero:
-    path = 'Data8Component2Std/testOutput/results_no_zero.csv'
+    path = 'Data8Component2Std/testOutput/results_no_zero_gauss.csv'
 else:
-    path = './Data8Component2Std/testOutput/results_zero.csv'
+    path = './Data8Component2Std/testOutput/results_zero_gauss.csv'
 with open(path, 'w+', encoding='UTF8') as f_output:
     if no_zero:
         f_output.write("USERID;MAXV;MAXP;MAXWC;TRAIN_SIZE;TEST_SIZE;COORECTP;UNCERTAINP;INCORRECTP;TRAIN_TIME\n")
@@ -20,9 +20,9 @@ with open(path, 'w+', encoding='UTF8') as f_output:
     for DIR_COUPLE in DIR_COUPLES:
         train_size = DIR_COUPLE
         if no_zero:
-            NNoutput_dir = "Data8Component2Std/sampled-recipes-no-zero/Train" + str(DIR_COUPLE)
+            NNoutput_dir = "Data8Component2Std/sampled-recipes-no-zero/Train" + str(DIR_COUPLE) + "_gauss"
         else:
-            NNoutput_dir = "Data8Component2Std/sampled-recipes-zero/Train" + str(DIR_COUPLE)
+            NNoutput_dir = "Data8Component2Std/sampled-recipes-zero/Train" + str(DIR_COUPLE) + "_gauss"
             for_statistics = np.zeros((10, 4), dtype="float32")
 
         for U_counter, USER in enumerate([15, 3, 32, 7, 36, 4, 20, 29, 14, 11]):
@@ -46,13 +46,13 @@ with open(path, 'w+', encoding='UTF8') as f_output:
 
             for c_counter, couple in enumerate(couples):
                 if no_zero:
-                    output_train_data_dir = "./Data8Component2Std/final/users/no_zero/train/" + str(DIR_COUPLE) + "Couples/User" + str(USER) + "/trainFiles/"
-                    output_dir_for_train_data_dir = "./Data8Component2Std/final/users/no_zero/train/" + str(DIR_COUPLE) + "Couples/User" + str(USER) + "/outputTrain/"
-                    output_test_data_dir = "./Data8Component2Std/final/users/no_zero/test/45CouplesForTrain45/User" + str(USER) + "/testFiles/"
+                    output_train_data_dir = "./Data8Component2Std/final/users/no_zero/train/" + str(DIR_COUPLE) + "Couples_gauss/User" + str(USER) + "/trainFiles/"
+                    output_dir_for_train_data_dir = "./Data8Component2Std/final/users/no_zero/train/" + str(DIR_COUPLE) + "Couples_gauss/User" + str(USER) + "/outputTrain/"
+                    output_test_data_dir = "./Data8Component2Std/final/users/no_zero/test/45CouplesForTrain45_gauss/User" + str(USER) + "/testFiles/"
                 else:
-                    output_train_data_dir = "./Data8Component2Std/final/users/zero/train/" + str(DIR_COUPLE) + "Couples/User" + str(USER) + "/trainFiles/"
-                    output_dir_for_train_data_dir = "./Data8Component2Std/final/users/zero/train/" + str(DIR_COUPLE) + "Couples/User" + str(USER) + "/outputTrain/"
-                    output_test_data_dir = "./Data8Component2Std/final/users/zero/test/45CouplesForTrain45/User" + str(USER) + "/testFiles/"
+                    output_train_data_dir = "./Data8Component2Std/final/users/zero/train/" + str(DIR_COUPLE) + "Couples_gauss/User" + str(USER) + "/trainFiles/"
+                    output_dir_for_train_data_dir = "./Data8Component2Std/final/users/zero/train/" + str(DIR_COUPLE) + "Couples_gauss/User" + str(USER) + "/outputTrain/"
+                    output_test_data_dir = "./Data8Component2Std/final/users/zero/test/45CouplesForTrain45_gauss/User" + str(USER) + "/testFiles/"
                 filename = output_dir_for_train_data_dir + 'Couple' + str(int(couple[0])) + '-' + str(int(couple[1])) + '-max_v=' + str(max_v) + '-max_p=' + str(max_p) + '.txt'
                 if int(max_v) > 0 and int(max_p) > 0:
                     items = ilasp.itemsFromFile("Data8Component2Std/recipes/recipes_max_v(" + str(max_v) + ")-max_p(" + str(max_p) + ").las")

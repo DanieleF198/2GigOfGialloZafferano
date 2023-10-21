@@ -1,0 +1,16 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Pre-processing                          : 0.057s
+%% Hypothesis Space Generation             : 0.105s
+%% Conflict analysis                       : 25.743s
+%%   - Brave Orders                        : 25.743s
+%% Counterexample search                   : 3.193s
+%%   - CDOEs                               : 2.093s
+%%   - CDPIs                               : 1.107s
+%% Hypothesis Search                       : 157.839s
+%% Propagation                             : 82.194s
+%%   - CDOEs                               : 82.194s
+%% Total                                   : 270.585s
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+:~ value(latticini,V1).[V1@3, V1]
+:~ value(erbe_spezie_e_condimenti,V1).[V1@1, V1]
+

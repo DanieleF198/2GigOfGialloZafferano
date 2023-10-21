@@ -597,6 +597,149 @@ def sample_around(first_food, second_food, all_food, pca_food, number_of_sample,
         for index_ingredient in range(39, 47):
             food_2_neighbor_scaled[index_row, index_ingredient] /= sum_of_preparations
 
+    for index_row, row_scaled in enumerate(food_1_neighbor_scaled):
+        for index_col in range(0, 5):
+            food_1_neighbor_scaled[index_row, index_col] = int(food_1_neighbor_scaled[index_row, index_col])
+    temp_for_scaling_categories = np.zeros((101, 5), dtype="float32")
+    temp_for_scaling_categories[0] = food_1_neighbor_scaled[0, 0:5]
+    passed = False
+    for index_all_food, food_in_all_food in enumerate(all_food):
+        if index_all_food == index_first_food:
+            passed = True
+            continue
+        if passed:
+            temp_for_scaling_categories[index_all_food, int(food_in_all_food[0]) - 1] = 1
+        else:
+            temp_for_scaling_categories[index_all_food + 1, int(food_in_all_food[0]) - 1] = 1
+    scaler_foods = preprocessing.StandardScaler()
+    temp_for_scaling_categories = scaler_foods.fit_transform(temp_for_scaling_categories)
+    for index_row, row_scaled in enumerate(food_1_neighbor_scaled):
+        food_1_neighbor_scaled[index_row, 0:5] = temp_for_scaling_categories[0]
+    for index_row, row_scaled in enumerate(food_1_neighbor_scaled):
+        temp_for_scaling = np.zeros((101, len(first_food) - 1), dtype="float32")
+        temp_for_scaling[0] = row_scaled[5:]
+        passed = False
+        for index_all_food, food_in_all_food in enumerate(all_food):
+            if index_all_food == index_first_food:
+                passed = True
+                continue
+            if passed:
+                temp_for_scaling[index_all_food] = food_in_all_food[1:]
+            else:
+                temp_for_scaling[index_all_food + 1] = food_in_all_food[1:]
+        scaler_foods = preprocessing.StandardScaler()
+        temp_for_scaling[:, 0:2] = scaler_foods.fit_transform(temp_for_scaling[:, 0:2])
+        temp_for_temp_prep = np.zeros((101, 1), dtype="float32")
+        for element_row_index, element_row in enumerate(temp_for_scaling):
+            temp_for_temp_prep[element_row_index] = element_row[2]
+        scaler_foods = preprocessing.StandardScaler()
+        temp_for_temp_prep = scaler_foods.fit_transform(temp_for_temp_prep)
+        for element_row_index, element_row in enumerate(temp_for_scaling):
+            temp_for_scaling[element_row_index, 2] = temp_for_temp_prep[element_row_index]
+        passed = False
+        for index_all_food, food_in_all_food in enumerate(all_food):
+            if index_all_food == index_first_food:
+                passed = True
+                continue
+            sum_of_row = 0
+            for ingredient_to_sum in range(4, 35):
+                sum_of_row += food_in_all_food[ingredient_to_sum]
+            for ingredient_to_set in range(4, 35):
+                if passed:
+                    temp_for_scaling[index_all_food, ingredient_to_set - 1] = food_in_all_food[ingredient_to_set] / sum_of_row
+                else:
+                    temp_for_scaling[index_all_food + 1, ingredient_to_set - 1] = food_in_all_food[ingredient_to_set] / sum_of_row
+        passed = False
+        for index_all_food, food_in_all_food in enumerate(all_food):
+            if index_all_food == index_first_food:
+                passed = True
+                continue
+            sum_of_row = 0
+            for preparation_to_sum in range(35, 43):
+                sum_of_row += food_in_all_food[preparation_to_sum]
+            for preparation_to_set in range(35, 43):
+                if passed:
+                    temp_for_scaling[index_all_food, preparation_to_set - 1] = food_in_all_food[preparation_to_set] / sum_of_row
+                else:
+                    temp_for_scaling[index_all_food + 1, preparation_to_set - 1] = food_in_all_food[preparation_to_set] / sum_of_row
+        scaler_foods = preprocessing.StandardScaler()
+        temp_for_scaling[:, 3:34] = scaler_foods.fit_transform(temp_for_scaling[:, 3:34])
+        scaler_foods = preprocessing.StandardScaler()
+        temp_for_scaling[:, 34:] = scaler_foods.fit_transform(temp_for_scaling[:, 34:])
+        food_1_neighbor_scaled[index_row, 5:] = temp_for_scaling[0]
+
+    for index_row, row_scaled in enumerate(food_2_neighbor_scaled):
+        for index_col in range(0, 5):
+            food_2_neighbor_scaled[index_row, index_col] = int(food_2_neighbor_scaled[index_row, index_col])
+    temp_for_scaling_categories = np.zeros((101, 5), dtype="float32")
+    temp_for_scaling_categories[0] = food_2_neighbor_scaled[0, 0:5]
+    passed = False
+    for index_all_food, food_in_all_food in enumerate(all_food):
+        if index_all_food == index_second_food:
+            passed = True
+            continue
+        if passed:
+            temp_for_scaling_categories[index_all_food, int(food_in_all_food[0])-1] = 1
+        else:
+            temp_for_scaling_categories[index_all_food+1, int(food_in_all_food[0])-1] = 1
+    scaler_foods = preprocessing.StandardScaler()
+    temp_for_scaling_categories = scaler_foods.fit_transform(temp_for_scaling_categories)
+    for index_row, row_scaled in enumerate(food_2_neighbor_scaled):
+        food_2_neighbor_scaled[index_row, 0:5] = temp_for_scaling_categories[0]
+    for index_row, row_scaled in enumerate(food_2_neighbor_scaled):
+        temp_for_scaling = np.zeros((101, len(second_food)-1), dtype="float32")
+        temp_for_scaling[0] = row_scaled[5:]
+        passed = False
+        for index_all_food, food_in_all_food in enumerate(all_food):
+            if index_all_food == index_second_food:
+                passed = True
+                continue
+            if passed:
+                temp_for_scaling[index_all_food] = food_in_all_food[1:]
+            else:
+                temp_for_scaling[index_all_food+1] = food_in_all_food[1:]
+        scaler_foods = preprocessing.StandardScaler()
+        temp_for_scaling[:, 0:2] = scaler_foods.fit_transform(temp_for_scaling[:, 0:2])
+        temp_for_temp_prep = np.zeros((101, 1), dtype="float32")
+        for element_row_index, element_row in enumerate(temp_for_scaling):
+            temp_for_temp_prep[element_row_index] = element_row[2]
+        scaler_foods = preprocessing.StandardScaler()
+        temp_for_temp_prep = scaler_foods.fit_transform(temp_for_temp_prep)
+        for element_row_index, element_row in enumerate(temp_for_scaling):
+            temp_for_scaling[element_row_index, 2] = temp_for_temp_prep[element_row_index]
+        passed = False
+        for index_all_food, food_in_all_food in enumerate(all_food):
+            if index_all_food == index_second_food:
+                passed = True
+                continue
+            sum_of_row = 0
+            for ingredient_to_sum in range(4, 35):
+                sum_of_row += food_in_all_food[ingredient_to_sum]
+            for ingredient_to_set in range(4, 35):
+                if passed:
+                    temp_for_scaling[index_all_food, ingredient_to_set-1] = food_in_all_food[ingredient_to_set]/sum_of_row
+                else:
+                    temp_for_scaling[index_all_food + 1, ingredient_to_set-1] = food_in_all_food[ingredient_to_set]/sum_of_row
+        passed = False
+        for index_all_food, food_in_all_food in enumerate(all_food):
+            if index_all_food == index_second_food:
+                passed = True
+                continue
+            sum_of_row = 0
+            for preparation_to_sum in range(35, 43):
+                sum_of_row += food_in_all_food[preparation_to_sum]
+            for preparation_to_set in range(35, 43):
+                if passed:
+                    temp_for_scaling[index_all_food, preparation_to_set-1] = food_in_all_food[preparation_to_set]/sum_of_row
+                else:
+                    temp_for_scaling[index_all_food + 1, preparation_to_set-1] = food_in_all_food[preparation_to_set]/sum_of_row
+        scaler_foods = preprocessing.StandardScaler()
+        temp_for_scaling[:, 3:34] = scaler_foods.fit_transform(temp_for_scaling[:, 3:34])
+        scaler_foods = preprocessing.StandardScaler()
+        temp_for_scaling[:, 34:] = scaler_foods.fit_transform(temp_for_scaling[:, 34:])
+        food_2_neighbor_scaled[index_row, 5:] = temp_for_scaling[0]
+
+
     food_1_neighbor = pca_to_pass.transform(food_1_neighbor_scaled)
     food_2_neighbor = pca_to_pass.transform(food_2_neighbor_scaled)
 
@@ -1114,9 +1257,7 @@ def sample_around_gauss(first_food, second_food, all_food, pca_food, number_of_s
 
     food_1_neighbor_scaled = food_1_neighbor_original.copy()
     food_2_neighbor_scaled = food_2_neighbor_original.copy()
-    scaler_foods = preprocessing.StandardScaler()
-    food_1_neighbor_scaled[:, 0:8] = scaler_foods.fit_transform(food_1_neighbor_scaled[:, 0:8])
-    food_2_neighbor_scaled[:, 0:8] = scaler_foods.fit_transform(food_2_neighbor_scaled[:, 0:8])
+
     for index_row, row_food1 in enumerate(food_1_neighbor_scaled):
         sum_of_ingredients = 0
         for index_ingredient in range(8, 39):
@@ -1142,9 +1283,150 @@ def sample_around_gauss(first_food, second_food, all_food, pca_food, number_of_s
         for index_ingredient in range(39, 47):
             food_2_neighbor_scaled[index_row, index_ingredient] /= sum_of_preparations
 
+    for index_row, row_scaled in enumerate(food_1_neighbor_scaled):
+        for index_col in range(0, 5):
+            food_1_neighbor_scaled[index_row, index_col] = int(food_1_neighbor_scaled[index_row, index_col])
+    temp_for_scaling_categories = np.zeros((101, 5), dtype="float32")
+    temp_for_scaling_categories[0] = food_1_neighbor_scaled[0, 0:5]
+    passed = False
+    for index_all_food, food_in_all_food in enumerate(all_food):
+        if index_all_food == index_first_food:
+            passed = True
+            continue
+        if passed:
+            temp_for_scaling_categories[index_all_food, int(food_in_all_food[0]) - 1] = 1
+        else:
+            temp_for_scaling_categories[index_all_food + 1, int(food_in_all_food[0]) - 1] = 1
+    scaler_foods = preprocessing.StandardScaler()
+    temp_for_scaling_categories = scaler_foods.fit_transform(temp_for_scaling_categories)
+    for index_row, row_scaled in enumerate(food_1_neighbor_scaled):
+        food_1_neighbor_scaled[index_row, 0:5] = temp_for_scaling_categories[0]
+    for index_row, row_scaled in enumerate(food_1_neighbor_scaled):
+        temp_for_scaling = np.zeros((101, len(first_food) - 1), dtype="float32")
+        temp_for_scaling[0] = row_scaled[5:]
+        passed = False
+        for index_all_food, food_in_all_food in enumerate(all_food):
+            if index_all_food == index_first_food:
+                passed = True
+                continue
+            if passed:
+                temp_for_scaling[index_all_food] = food_in_all_food[1:]
+            else:
+                temp_for_scaling[index_all_food + 1] = food_in_all_food[1:]
+        scaler_foods = preprocessing.StandardScaler()
+        temp_for_scaling[:, 0:2] = scaler_foods.fit_transform(temp_for_scaling[:, 0:2])
+        temp_for_temp_prep = np.zeros((101, 1), dtype="float32")
+        for element_row_index, element_row in enumerate(temp_for_scaling):
+            temp_for_temp_prep[element_row_index] = element_row[2]
+        scaler_foods = preprocessing.StandardScaler()
+        temp_for_temp_prep = scaler_foods.fit_transform(temp_for_temp_prep)
+        for element_row_index, element_row in enumerate(temp_for_scaling):
+            temp_for_scaling[element_row_index, 2] = temp_for_temp_prep[element_row_index]
+        passed = False
+        for index_all_food, food_in_all_food in enumerate(all_food):
+            if index_all_food == index_first_food:
+                passed = True
+                continue
+            sum_of_row = 0
+            for ingredient_to_sum in range(4, 35):
+                sum_of_row += food_in_all_food[ingredient_to_sum]
+            for ingredient_to_set in range(4, 35):
+                if passed:
+                    temp_for_scaling[index_all_food, ingredient_to_set - 1] = food_in_all_food[ingredient_to_set] / sum_of_row
+                else:
+                    temp_for_scaling[index_all_food + 1, ingredient_to_set - 1] = food_in_all_food[ingredient_to_set] / sum_of_row
+        passed = False
+        for index_all_food, food_in_all_food in enumerate(all_food):
+            if index_all_food == index_first_food:
+                passed = True
+                continue
+            sum_of_row = 0
+            for preparation_to_sum in range(35, 43):
+                sum_of_row += food_in_all_food[preparation_to_sum]
+            for preparation_to_set in range(35, 43):
+                if passed:
+                    temp_for_scaling[index_all_food, preparation_to_set - 1] = food_in_all_food[preparation_to_set] / sum_of_row
+                else:
+                    temp_for_scaling[index_all_food + 1, preparation_to_set - 1] = food_in_all_food[preparation_to_set] / sum_of_row
+        scaler_foods = preprocessing.StandardScaler()
+        temp_for_scaling[:, 3:34] = scaler_foods.fit_transform(temp_for_scaling[:, 3:34])
+        scaler_foods = preprocessing.StandardScaler()
+        temp_for_scaling[:, 34:] = scaler_foods.fit_transform(temp_for_scaling[:, 34:])
+        food_1_neighbor_scaled[index_row, 5:] = temp_for_scaling[0]
+
+    for index_row, row_scaled in enumerate(food_2_neighbor_scaled):
+        for index_col in range(0, 5):
+            food_2_neighbor_scaled[index_row, index_col] = int(food_2_neighbor_scaled[index_row, index_col])
+    temp_for_scaling_categories = np.zeros((101, 5), dtype="float32")
+    temp_for_scaling_categories[0] = food_2_neighbor_scaled[0, 0:5]
+    passed = False
+    for index_all_food, food_in_all_food in enumerate(all_food):
+        if index_all_food == index_second_food:
+            passed = True
+            continue
+        if passed:
+            temp_for_scaling_categories[index_all_food, int(food_in_all_food[0])-1] = 1
+        else:
+            temp_for_scaling_categories[index_all_food+1, int(food_in_all_food[0])-1] = 1
+    scaler_foods = preprocessing.StandardScaler()
+    temp_for_scaling_categories = scaler_foods.fit_transform(temp_for_scaling_categories)
+    for index_row, row_scaled in enumerate(food_2_neighbor_scaled):
+        food_2_neighbor_scaled[index_row, 0:5] = temp_for_scaling_categories[0]
+    for index_row, row_scaled in enumerate(food_2_neighbor_scaled):
+        temp_for_scaling = np.zeros((101, len(second_food)-1), dtype="float32")
+        temp_for_scaling[0] = row_scaled[5:]
+        passed = False
+        for index_all_food, food_in_all_food in enumerate(all_food):
+            if index_all_food == index_second_food:
+                passed = True
+                continue
+            if passed:
+                temp_for_scaling[index_all_food] = food_in_all_food[1:]
+            else:
+                temp_for_scaling[index_all_food+1] = food_in_all_food[1:]
+        scaler_foods = preprocessing.StandardScaler()
+        temp_for_scaling[:, 0:2] = scaler_foods.fit_transform(temp_for_scaling[:, 0:2])
+        temp_for_temp_prep = np.zeros((101, 1), dtype="float32")
+        for element_row_index, element_row in enumerate(temp_for_scaling):
+            temp_for_temp_prep[element_row_index] = element_row[2]
+        scaler_foods = preprocessing.StandardScaler()
+        temp_for_temp_prep = scaler_foods.fit_transform(temp_for_temp_prep)
+        for element_row_index, element_row in enumerate(temp_for_scaling):
+            temp_for_scaling[element_row_index, 2] = temp_for_temp_prep[element_row_index]
+        passed = False
+        for index_all_food, food_in_all_food in enumerate(all_food):
+            if index_all_food == index_second_food:
+                passed = True
+                continue
+            sum_of_row = 0
+            for ingredient_to_sum in range(4, 35):
+                sum_of_row += food_in_all_food[ingredient_to_sum]
+            for ingredient_to_set in range(4, 35):
+                if passed:
+                    temp_for_scaling[index_all_food, ingredient_to_set-1] = food_in_all_food[ingredient_to_set]/sum_of_row
+                else:
+                    temp_for_scaling[index_all_food + 1, ingredient_to_set-1] = food_in_all_food[ingredient_to_set]/sum_of_row
+        passed = False
+        for index_all_food, food_in_all_food in enumerate(all_food):
+            if index_all_food == index_second_food:
+                passed = True
+                continue
+            sum_of_row = 0
+            for preparation_to_sum in range(35, 43):
+                sum_of_row += food_in_all_food[preparation_to_sum]
+            for preparation_to_set in range(35, 43):
+                if passed:
+                    temp_for_scaling[index_all_food, preparation_to_set-1] = food_in_all_food[preparation_to_set]/sum_of_row
+                else:
+                    temp_for_scaling[index_all_food + 1, preparation_to_set-1] = food_in_all_food[preparation_to_set]/sum_of_row
+        scaler_foods = preprocessing.StandardScaler()
+        temp_for_scaling[:, 3:34] = scaler_foods.fit_transform(temp_for_scaling[:, 3:34])
+        scaler_foods = preprocessing.StandardScaler()
+        temp_for_scaling[:, 34:] = scaler_foods.fit_transform(temp_for_scaling[:, 34:])
+        food_2_neighbor_scaled[index_row, 5:] = temp_for_scaling[0]
+
     food_1_neighbor = pca_to_pass.transform(food_1_neighbor_scaled)
     food_2_neighbor = pca_to_pass.transform(food_2_neighbor_scaled)
-
 
     plt.scatter(food_1_neighbor[:, 0], food_1_neighbor[:, 1])
     plt.scatter(food_2_neighbor[:, 0], food_2_neighbor[:, 1])
