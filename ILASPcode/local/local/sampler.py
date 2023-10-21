@@ -873,7 +873,7 @@ def sample_around_gauss(first_food, second_food, all_food, pca_food, number_of_s
         food1_neighbor = np.zeros(len(first_food)+4, dtype="float32")
         food1_neighbor[int(first_food[0])-1] = 1
         food1_neighbor[5:-1] = np.copy(first_food[1:-1])
-        s = np.random.normal(0, 0.1, len(food1_neighbor))
+        s = np.random.normal(0, 0.01, len(food1_neighbor))
         s_min = abs(np.min(s))
         s += s_min
         for not_modifiable_feature in not_modifiable_features:
@@ -985,8 +985,8 @@ def sample_around_gauss(first_food, second_food, all_food, pca_food, number_of_s
             if index_to_adjust == 0:
                 continue
             else:
-                food1_neighbor_ILASP_temp[index_to_adjust] = float(food1_neighbor_ILASP_temp[index_to_adjust] * 10)
-                food1_neighbor_ILASP_temp_to_print[index_to_adjust] = float(food1_neighbor_ILASP_temp_to_print[index_to_adjust] * 10)
+                food1_neighbor_ILASP_temp[index_to_adjust] = float(food1_neighbor_ILASP_temp[index_to_adjust] * 100)
+                food1_neighbor_ILASP_temp_to_print[index_to_adjust] = float(food1_neighbor_ILASP_temp_to_print[index_to_adjust] * 100)
                 food1_neighbor_ILASP_temp[index_to_adjust] = int(round(food1_neighbor_ILASP_temp[index_to_adjust]))
                 food1_neighbor_ILASP_temp_to_print[index_to_adjust] = int(round(food1_neighbor_ILASP_temp_to_print[index_to_adjust]))
 
@@ -1001,7 +1001,7 @@ def sample_around_gauss(first_food, second_food, all_food, pca_food, number_of_s
         food2_neighbor = np.zeros(len(second_food)+4, dtype="float32")
         food2_neighbor[int(second_food[0])-1] = 1
         food2_neighbor[5:-1] = np.copy(second_food[1:-1])
-        s = np.random.normal(0, 0.1, len(food2_neighbor))
+        s = np.random.normal(0, 0.01, len(food2_neighbor))
         s_min = abs(np.min(s))
         s += s_min
         for not_modifiable_feature in not_modifiable_features:
@@ -1114,8 +1114,8 @@ def sample_around_gauss(first_food, second_food, all_food, pca_food, number_of_s
             if index_to_adjust == 0:
                 continue
             else:
-                food2_neighbor_ILASP_temp[index_to_adjust] = float(food2_neighbor_ILASP_temp[index_to_adjust] * 10)
-                food2_neighbor_ILASP_temp_to_print[index_to_adjust] = float(food2_neighbor_ILASP_temp_to_print[index_to_adjust] * 10)
+                food2_neighbor_ILASP_temp[index_to_adjust] = float(food2_neighbor_ILASP_temp[index_to_adjust] * 100)
+                food2_neighbor_ILASP_temp_to_print[index_to_adjust] = float(food2_neighbor_ILASP_temp_to_print[index_to_adjust] * 100)
                 food2_neighbor_ILASP_temp[index_to_adjust] = int(round(food2_neighbor_ILASP_temp[index_to_adjust]))
                 food2_neighbor_ILASP_temp_to_print[index_to_adjust] = int(round(food2_neighbor_ILASP_temp_to_print[index_to_adjust]))
         list_food_2_neighbor_ILASP.append(food2_neighbor_ILASP_temp)
