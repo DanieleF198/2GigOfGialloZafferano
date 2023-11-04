@@ -68,13 +68,13 @@ def preferencesFromFileSpacesAndSignSampledCouples(path):
 
 
 # the following function is made to correct an error in createPrefDataset&finalData (which now is fixed, but the data have been already created and processed)
-def preferencesFromFileSpacesAndSignSampledCouplesTestCorrection(path):
+def preferencesFromFileSpacesAndSignSampledCouplesTestCorrection(path, couples):
     preferences = []
     with open(path) as f:
         for line in f:
             if "#brave_ordering" in line:
                 line = line.replace("sampled", "item")
-                line = line.replace("s44", "")
+                line = line.replace("s"+ str(couples), "")
                 match = re.match('#brave_ordering\(.*,\s+([a-zA-Z]+\d+),\s+([a-zA-Z]+\d+),\s+([<>=]).*', line)
                 if match: preferences.append((match.groups()[0], match.groups()[1], match.groups()[2]))
             else:

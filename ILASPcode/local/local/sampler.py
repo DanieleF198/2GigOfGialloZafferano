@@ -19,7 +19,7 @@ physical_devices = tf.config.list_physical_devices('GPU')
 tf.config.experimental.set_memory_growth(physical_devices[0], True)
 
 
-def sample_around(first_food, second_food, all_food, pca_food, number_of_sample, index_first_food, index_second_food, pca_to_pass, no_zero, TrainCouple):
+def sample_around(first_food, second_food, all_food, pca_food, number_of_sample, index_first_food, index_second_food, pca_to_pass, scaler_to_pass, no_zero, TrainCouple, ref_test):
 
     macro_ingredients_dictionary = {0: "cereali",
                                     1: "latticini",
@@ -492,9 +492,87 @@ def sample_around(first_food, second_food, all_food, pca_food, number_of_sample,
         distances_dict[str(distance)] = number_of_distances
         number_of_distances -= 1
 
+    food_1_neighbor_scaled = food_1_neighbor_original.copy()
+    food_2_neighbor_scaled = food_2_neighbor_original.copy()
+    food_1_neighbor_PCA = np.zeros((len(food_1_neighbor_scaled), 17), dtype="float32")
+    food_2_neighbor_PCA = np.zeros((len(food_2_neighbor_scaled), 17), dtype="float32")
+    for index_row, row_food1 in enumerate(food_1_neighbor_scaled):
+        sum_of_ingredients = 0
+        for index_ingredient in range(8, 39):
+            sum_of_ingredients += food_1_neighbor_scaled[index_row, index_ingredient]
+        for index_ingredient in range(8, 39):
+            food_1_neighbor_scaled[index_row, index_ingredient] /= sum_of_ingredients
+    for index_row, row_food1 in enumerate(food_2_neighbor_scaled):
+        sum_of_ingredients = 0
+        for index_ingredient in range(8, 39):
+            sum_of_ingredients += food_2_neighbor_scaled[index_row, index_ingredient]
+        for index_ingredient in range(8, 39):
+            food_2_neighbor_scaled[index_row, index_ingredient] /= sum_of_ingredients
+    for index_row, row_food1 in enumerate(food_1_neighbor_scaled):
+        sum_of_preparations = 0
+        for index_ingredient in range(39, 47):
+            sum_of_preparations += food_1_neighbor_scaled[index_row, index_ingredient]
+        for index_ingredient in range(39, 47):
+            food_1_neighbor_scaled[index_row, index_ingredient] /= sum_of_preparations
+    for index_row, row_food1 in enumerate(food_2_neighbor_scaled):
+        sum_of_preparations = 0
+        for index_ingredient in range(39, 47):
+            sum_of_preparations += food_2_neighbor_scaled[index_row, index_ingredient]
+        for index_ingredient in range(39, 47):
+            food_2_neighbor_scaled[index_row, index_ingredient] /= sum_of_preparations
+
+    foodsLabel = ['F1']
+    categoryLabel = ['CATEGORY' + str(i) for i in range(1, 6)]
+    ingredientsLabel = ['INGREDIENTS' + str(i) for i in range(1, 32)]
+    preparationsLabel = ['PREPARATIONS' + str(i) for i in range(1, 9)]
+
+    temp_for_scaling_categories = scaler_to_pass["final_category"].transform(food_1_neighbor_scaled[0, 0:5].reshape(1, -1))
+    for index_row, row_scaled in enumerate(food_1_neighbor_scaled):
+        food_1_neighbor_scaled[index_row, 0:5] = temp_for_scaling_categories
+    for index_row, row_scaled in enumerate(food_1_neighbor_scaled):
+        temp_for_scaling = row_scaled[5:].copy()
+        temp_for_scaling[0:2] = scaler_to_pass["categories"].transform(temp_for_scaling[0:2].reshape(1, -1))
+        temp_for_scaling[2] = scaler_to_pass["scalars"].transform(temp_for_scaling[2].reshape(1, -1))
+        temp_for_scaling[3:34] = scaler_to_pass["ingredients"].transform(temp_for_scaling[3:34].reshape(1, -1))
+        temp_for_scaling[34:] = scaler_to_pass["preparations"].transform(temp_for_scaling[34:].reshape(1, -1))
+        food_1_neighbor_scaled[index_row, 5:] = temp_for_scaling
+        to_fit_to_PCA = np.concatenate((temp_for_scaling_categories.reshape(1, -1), temp_for_scaling.reshape(1, -1)), axis=1)
+        to_fit_to_PCA_final = pd.DataFrame(columns=[*categoryLabel, 'COST', 'DIFFICULTY', 'PREPARATION', *ingredientsLabel, *preparationsLabel], index=foodsLabel)
+        for i, food in enumerate(to_fit_to_PCA_final.index):
+            to_fit_to_PCA_final.loc[food] = to_fit_to_PCA[i]
+        fitted_on_PCA = pca_to_pass.transform(to_fit_to_PCA_final)
+        food_1_neighbor_PCA[index_row] = fitted_on_PCA[0]
+
+    temp_for_scaling_categories = scaler_to_pass["final_category"].transform(food_2_neighbor_scaled[0, 0:5].reshape(1, -1))
+    for index_row, row_scaled in enumerate(food_2_neighbor_scaled):
+        food_2_neighbor_scaled[index_row, 0:5] = temp_for_scaling_categories
+    for index_row, row_scaled in enumerate(food_2_neighbor_scaled):
+        temp_for_scaling = row_scaled[5:].copy()
+        temp_for_scaling[0:2] = scaler_to_pass["categories"].transform(temp_for_scaling[0:2].reshape(1, -1))
+        temp_for_scaling[2] = scaler_to_pass["scalars"].transform(temp_for_scaling[2].reshape(1, -1))
+        temp_for_scaling[3:34] = scaler_to_pass["ingredients"].transform(temp_for_scaling[3:34].reshape(1, -1))
+        temp_for_scaling[34:] = scaler_to_pass["preparations"].transform(temp_for_scaling[34:].reshape(1, -1))
+        food_2_neighbor_scaled[index_row, 5:] = temp_for_scaling
+        to_fit_to_PCA = np.concatenate((temp_for_scaling_categories.reshape(1, -1), temp_for_scaling.reshape(1, -1)), axis=1)
+        to_fit_to_PCA_final = pd.DataFrame(columns=[*categoryLabel, 'COST', 'DIFFICULTY', 'PREPARATION', *ingredientsLabel, *preparationsLabel], index=foodsLabel)
+        for i, food in enumerate(to_fit_to_PCA_final.index):
+            to_fit_to_PCA_final.loc[food] = to_fit_to_PCA[i]
+        fitted_on_PCA = pca_to_pass.transform(to_fit_to_PCA_final)
+        food_2_neighbor_PCA[index_row] = fitted_on_PCA[0]
+
+    food_1_neighbor = food_1_neighbor_PCA
+    food_2_neighbor = food_2_neighbor_PCA
+
+    for index_user_to_check, user_to_check in enumerate([15, 3, 32, 7, 36, 4, 20, 29, 14, 11]):
+        for generated_couple_to_check, (food1_to_check, food2_to_check) in enumerate(zip(food_1_neighbor, food_2_neighbor)):
+            if ref_test[index_user_to_check] != single_prediction(user_id=user_to_check, first_food=food1_to_check, second_food=food2_to_check):
+                # ASSUMPTION:
+                # note that I need at least one to make the check because of the very small noise... in most of cases the prediction will be the same for all the perturbed new sample
+                return np.zeros((3, 3), dtype="float32"), np.zeros((3, 3), dtype="float32")
+            else:
+                break
+
     # before to print i have to convert ingredients for 8PC2STD conversion
-
-
 
     max_v_list = [1, 2, 3, 4, 5]
     max_p_list = [1, 2, 3, 4, 5]
@@ -567,183 +645,6 @@ def sample_around(first_food, second_food, all_food, pca_food, number_of_sample,
     sys.stdout = sys.__stdout__
     f.close()
 
-    food_1_neighbor_scaled = food_1_neighbor_original.copy()
-    food_2_neighbor_scaled = food_2_neighbor_original.copy()
-    scaler_foods = preprocessing.StandardScaler()
-    food_1_neighbor_scaled[:, 0:8] = scaler_foods.fit_transform(food_1_neighbor_scaled[:, 0:8])
-    food_2_neighbor_scaled[:, 0:8] = scaler_foods.fit_transform(food_2_neighbor_scaled[:, 0:8])
-    for index_row, row_food1 in enumerate(food_1_neighbor_scaled):
-        sum_of_ingredients = 0
-        for index_ingredient in range(8, 39):
-            sum_of_ingredients += food_1_neighbor_scaled[index_row, index_ingredient]
-        for index_ingredient in range(8, 39):
-            food_1_neighbor_scaled[index_row, index_ingredient] /= sum_of_ingredients
-    for index_row, row_food1 in enumerate(food_2_neighbor_scaled):
-        sum_of_ingredients = 0
-        for index_ingredient in range(8, 39):
-            sum_of_ingredients += food_2_neighbor_scaled[index_row, index_ingredient]
-        for index_ingredient in range(8, 39):
-            food_2_neighbor_scaled[index_row, index_ingredient] /= sum_of_ingredients
-    for index_row, row_food1 in enumerate(food_1_neighbor_scaled):
-        sum_of_preparations = 0
-        for index_ingredient in range(39, 47):
-            sum_of_preparations += food_1_neighbor_scaled[index_row, index_ingredient]
-        for index_ingredient in range(39, 47):
-            food_1_neighbor_scaled[index_row, index_ingredient] /= sum_of_preparations
-    for index_row, row_food1 in enumerate(food_2_neighbor_scaled):
-        sum_of_preparations = 0
-        for index_ingredient in range(39, 47):
-            sum_of_preparations += food_2_neighbor_scaled[index_row, index_ingredient]
-        for index_ingredient in range(39, 47):
-            food_2_neighbor_scaled[index_row, index_ingredient] /= sum_of_preparations
-
-    for index_row, row_scaled in enumerate(food_1_neighbor_scaled):
-        for index_col in range(0, 5):
-            food_1_neighbor_scaled[index_row, index_col] = int(food_1_neighbor_scaled[index_row, index_col])
-    temp_for_scaling_categories = np.zeros((101, 5), dtype="float32")
-    temp_for_scaling_categories[0] = food_1_neighbor_scaled[0, 0:5]
-    passed = False
-    for index_all_food, food_in_all_food in enumerate(all_food):
-        if index_all_food == index_first_food:
-            passed = True
-            continue
-        if passed:
-            temp_for_scaling_categories[index_all_food, int(food_in_all_food[0]) - 1] = 1
-        else:
-            temp_for_scaling_categories[index_all_food + 1, int(food_in_all_food[0]) - 1] = 1
-    scaler_foods = preprocessing.StandardScaler()
-    temp_for_scaling_categories = scaler_foods.fit_transform(temp_for_scaling_categories)
-    for index_row, row_scaled in enumerate(food_1_neighbor_scaled):
-        food_1_neighbor_scaled[index_row, 0:5] = temp_for_scaling_categories[0]
-    for index_row, row_scaled in enumerate(food_1_neighbor_scaled):
-        temp_for_scaling = np.zeros((101, len(first_food) - 1), dtype="float32")
-        temp_for_scaling[0] = row_scaled[5:]
-        passed = False
-        for index_all_food, food_in_all_food in enumerate(all_food):
-            if index_all_food == index_first_food:
-                passed = True
-                continue
-            if passed:
-                temp_for_scaling[index_all_food] = food_in_all_food[1:]
-            else:
-                temp_for_scaling[index_all_food + 1] = food_in_all_food[1:]
-        scaler_foods = preprocessing.StandardScaler()
-        temp_for_scaling[:, 0:2] = scaler_foods.fit_transform(temp_for_scaling[:, 0:2])
-        temp_for_temp_prep = np.zeros((101, 1), dtype="float32")
-        for element_row_index, element_row in enumerate(temp_for_scaling):
-            temp_for_temp_prep[element_row_index] = element_row[2]
-        scaler_foods = preprocessing.StandardScaler()
-        temp_for_temp_prep = scaler_foods.fit_transform(temp_for_temp_prep)
-        for element_row_index, element_row in enumerate(temp_for_scaling):
-            temp_for_scaling[element_row_index, 2] = temp_for_temp_prep[element_row_index]
-        passed = False
-        for index_all_food, food_in_all_food in enumerate(all_food):
-            if index_all_food == index_first_food:
-                passed = True
-                continue
-            sum_of_row = 0
-            for ingredient_to_sum in range(4, 35):
-                sum_of_row += food_in_all_food[ingredient_to_sum]
-            for ingredient_to_set in range(4, 35):
-                if passed:
-                    temp_for_scaling[index_all_food, ingredient_to_set - 1] = food_in_all_food[ingredient_to_set] / sum_of_row
-                else:
-                    temp_for_scaling[index_all_food + 1, ingredient_to_set - 1] = food_in_all_food[ingredient_to_set] / sum_of_row
-        passed = False
-        for index_all_food, food_in_all_food in enumerate(all_food):
-            if index_all_food == index_first_food:
-                passed = True
-                continue
-            sum_of_row = 0
-            for preparation_to_sum in range(35, 43):
-                sum_of_row += food_in_all_food[preparation_to_sum]
-            for preparation_to_set in range(35, 43):
-                if passed:
-                    temp_for_scaling[index_all_food, preparation_to_set - 1] = food_in_all_food[preparation_to_set] / sum_of_row
-                else:
-                    temp_for_scaling[index_all_food + 1, preparation_to_set - 1] = food_in_all_food[preparation_to_set] / sum_of_row
-        scaler_foods = preprocessing.StandardScaler()
-        temp_for_scaling[:, 3:34] = scaler_foods.fit_transform(temp_for_scaling[:, 3:34])
-        scaler_foods = preprocessing.StandardScaler()
-        temp_for_scaling[:, 34:] = scaler_foods.fit_transform(temp_for_scaling[:, 34:])
-        food_1_neighbor_scaled[index_row, 5:] = temp_for_scaling[0]
-
-    for index_row, row_scaled in enumerate(food_2_neighbor_scaled):
-        for index_col in range(0, 5):
-            food_2_neighbor_scaled[index_row, index_col] = int(food_2_neighbor_scaled[index_row, index_col])
-    temp_for_scaling_categories = np.zeros((101, 5), dtype="float32")
-    temp_for_scaling_categories[0] = food_2_neighbor_scaled[0, 0:5]
-    passed = False
-    for index_all_food, food_in_all_food in enumerate(all_food):
-        if index_all_food == index_second_food:
-            passed = True
-            continue
-        if passed:
-            temp_for_scaling_categories[index_all_food, int(food_in_all_food[0])-1] = 1
-        else:
-            temp_for_scaling_categories[index_all_food+1, int(food_in_all_food[0])-1] = 1
-    scaler_foods = preprocessing.StandardScaler()
-    temp_for_scaling_categories = scaler_foods.fit_transform(temp_for_scaling_categories)
-    for index_row, row_scaled in enumerate(food_2_neighbor_scaled):
-        food_2_neighbor_scaled[index_row, 0:5] = temp_for_scaling_categories[0]
-    for index_row, row_scaled in enumerate(food_2_neighbor_scaled):
-        temp_for_scaling = np.zeros((101, len(second_food)-1), dtype="float32")
-        temp_for_scaling[0] = row_scaled[5:]
-        passed = False
-        for index_all_food, food_in_all_food in enumerate(all_food):
-            if index_all_food == index_second_food:
-                passed = True
-                continue
-            if passed:
-                temp_for_scaling[index_all_food] = food_in_all_food[1:]
-            else:
-                temp_for_scaling[index_all_food+1] = food_in_all_food[1:]
-        scaler_foods = preprocessing.StandardScaler()
-        temp_for_scaling[:, 0:2] = scaler_foods.fit_transform(temp_for_scaling[:, 0:2])
-        temp_for_temp_prep = np.zeros((101, 1), dtype="float32")
-        for element_row_index, element_row in enumerate(temp_for_scaling):
-            temp_for_temp_prep[element_row_index] = element_row[2]
-        scaler_foods = preprocessing.StandardScaler()
-        temp_for_temp_prep = scaler_foods.fit_transform(temp_for_temp_prep)
-        for element_row_index, element_row in enumerate(temp_for_scaling):
-            temp_for_scaling[element_row_index, 2] = temp_for_temp_prep[element_row_index]
-        passed = False
-        for index_all_food, food_in_all_food in enumerate(all_food):
-            if index_all_food == index_second_food:
-                passed = True
-                continue
-            sum_of_row = 0
-            for ingredient_to_sum in range(4, 35):
-                sum_of_row += food_in_all_food[ingredient_to_sum]
-            for ingredient_to_set in range(4, 35):
-                if passed:
-                    temp_for_scaling[index_all_food, ingredient_to_set-1] = food_in_all_food[ingredient_to_set]/sum_of_row
-                else:
-                    temp_for_scaling[index_all_food + 1, ingredient_to_set-1] = food_in_all_food[ingredient_to_set]/sum_of_row
-        passed = False
-        for index_all_food, food_in_all_food in enumerate(all_food):
-            if index_all_food == index_second_food:
-                passed = True
-                continue
-            sum_of_row = 0
-            for preparation_to_sum in range(35, 43):
-                sum_of_row += food_in_all_food[preparation_to_sum]
-            for preparation_to_set in range(35, 43):
-                if passed:
-                    temp_for_scaling[index_all_food, preparation_to_set-1] = food_in_all_food[preparation_to_set]/sum_of_row
-                else:
-                    temp_for_scaling[index_all_food + 1, preparation_to_set-1] = food_in_all_food[preparation_to_set]/sum_of_row
-        scaler_foods = preprocessing.StandardScaler()
-        temp_for_scaling[:, 3:34] = scaler_foods.fit_transform(temp_for_scaling[:, 3:34])
-        scaler_foods = preprocessing.StandardScaler()
-        temp_for_scaling[:, 34:] = scaler_foods.fit_transform(temp_for_scaling[:, 34:])
-        food_2_neighbor_scaled[index_row, 5:] = temp_for_scaling[0]
-
-
-    food_1_neighbor = pca_to_pass.transform(food_1_neighbor_scaled)
-    food_2_neighbor = pca_to_pass.transform(food_2_neighbor_scaled)
-
-
     plt.scatter(food_1_neighbor[:, 0], food_1_neighbor[:, 1])
     plt.scatter(food_2_neighbor[:, 0], food_2_neighbor[:, 1])
     plt.scatter(pca_food[index_first_food, 0], pca_food[index_first_food, 1])
@@ -757,7 +658,7 @@ def sample_around(first_food, second_food, all_food, pca_food, number_of_sample,
 
     return food_1_neighbor, food_2_neighbor
 
-def sample_around_gauss(first_food, second_food, all_food, pca_food, number_of_sample, index_first_food, index_second_food, pca_to_pass, no_zero, TrainCouple):
+def sample_around_gauss(first_food, second_food, all_food, pca_food, number_of_sample, index_first_food, index_second_food, pca_to_pass, scaler_to_pass, no_zero, TrainCouple, ref_test, passed_user):
 
     macro_ingredients_dictionary = {0: "cereali",
                                     1: "latticini",
@@ -873,7 +774,7 @@ def sample_around_gauss(first_food, second_food, all_food, pca_food, number_of_s
         food1_neighbor = np.zeros(len(first_food)+4, dtype="float32")
         food1_neighbor[int(first_food[0])-1] = 1
         food1_neighbor[5:-1] = np.copy(first_food[1:-1])
-        s = np.random.normal(0, 0.01, len(food1_neighbor))
+        s = np.random.normal(0, 1, len(food1_neighbor))
         s_min = abs(np.min(s))
         s += s_min
         for not_modifiable_feature in not_modifiable_features:
@@ -985,8 +886,8 @@ def sample_around_gauss(first_food, second_food, all_food, pca_food, number_of_s
             if index_to_adjust == 0:
                 continue
             else:
-                food1_neighbor_ILASP_temp[index_to_adjust] = float(food1_neighbor_ILASP_temp[index_to_adjust] * 100)
-                food1_neighbor_ILASP_temp_to_print[index_to_adjust] = float(food1_neighbor_ILASP_temp_to_print[index_to_adjust] * 100)
+                food1_neighbor_ILASP_temp[index_to_adjust] = float(food1_neighbor_ILASP_temp[index_to_adjust] * 1)
+                food1_neighbor_ILASP_temp_to_print[index_to_adjust] = float(food1_neighbor_ILASP_temp_to_print[index_to_adjust] * 1)
                 food1_neighbor_ILASP_temp[index_to_adjust] = int(round(food1_neighbor_ILASP_temp[index_to_adjust]))
                 food1_neighbor_ILASP_temp_to_print[index_to_adjust] = int(round(food1_neighbor_ILASP_temp_to_print[index_to_adjust]))
 
@@ -1001,7 +902,7 @@ def sample_around_gauss(first_food, second_food, all_food, pca_food, number_of_s
         food2_neighbor = np.zeros(len(second_food)+4, dtype="float32")
         food2_neighbor[int(second_food[0])-1] = 1
         food2_neighbor[5:-1] = np.copy(second_food[1:-1])
-        s = np.random.normal(0, 0.01, len(food2_neighbor))
+        s = np.random.normal(0, 1, len(food2_neighbor))
         s_min = abs(np.min(s))
         s += s_min
         for not_modifiable_feature in not_modifiable_features:
@@ -1114,8 +1015,8 @@ def sample_around_gauss(first_food, second_food, all_food, pca_food, number_of_s
             if index_to_adjust == 0:
                 continue
             else:
-                food2_neighbor_ILASP_temp[index_to_adjust] = float(food2_neighbor_ILASP_temp[index_to_adjust] * 100)
-                food2_neighbor_ILASP_temp_to_print[index_to_adjust] = float(food2_neighbor_ILASP_temp_to_print[index_to_adjust] * 100)
+                food2_neighbor_ILASP_temp[index_to_adjust] = float(food2_neighbor_ILASP_temp[index_to_adjust] * 1)
+                food2_neighbor_ILASP_temp_to_print[index_to_adjust] = float(food2_neighbor_ILASP_temp_to_print[index_to_adjust] * 1)
                 food2_neighbor_ILASP_temp[index_to_adjust] = int(round(food2_neighbor_ILASP_temp[index_to_adjust]))
                 food2_neighbor_ILASP_temp_to_print[index_to_adjust] = int(round(food2_neighbor_ILASP_temp_to_print[index_to_adjust]))
         list_food_2_neighbor_ILASP.append(food2_neighbor_ILASP_temp)
@@ -1161,7 +1062,7 @@ def sample_around_gauss(first_food, second_food, all_food, pca_food, number_of_s
     # divide samples for more than 2 or 3 groups, while we want something more capillar, possibly
     # mean_of_distances = np.mean(distances_metric[:, 1])
     # std_of_distances = np.std(distances_metric[:, 1])
-    #
+
     # distances_df = pd.DataFrame(distances_metric, columns=['index', 'distance', 'distance_p'])
     # distances_df.drop(['index', 'distance_p'], axis=1, inplace=True)
     # distances_df.hist(bins=len(distances_metric))
@@ -1180,9 +1081,119 @@ def sample_around_gauss(first_food, second_food, all_food, pca_food, number_of_s
         distances_dict[str(distance)] = number_of_distances
         number_of_distances -= 1
 
+    # convert data for NN predictions, and test if sampled data are ok
+    food_1_neighbor_scaled = food_1_neighbor_original.copy()
+    food_2_neighbor_scaled = food_2_neighbor_original.copy()
+    food_1_neighbor_PCA = np.zeros((len(food_1_neighbor_scaled), 17), dtype="float32")
+    food_2_neighbor_PCA = np.zeros((len(food_2_neighbor_scaled), 17), dtype="float32")
+    for index_row, row_food1 in enumerate(food_1_neighbor_scaled):
+        sum_of_ingredients = 0
+        for index_ingredient in range(8, 39):
+            sum_of_ingredients += food_1_neighbor_scaled[index_row, index_ingredient]
+        for index_ingredient in range(8, 39):
+            food_1_neighbor_scaled[index_row, index_ingredient] /= sum_of_ingredients
+    for index_row, row_food1 in enumerate(food_2_neighbor_scaled):
+        sum_of_ingredients = 0
+        for index_ingredient in range(8, 39):
+            sum_of_ingredients += food_2_neighbor_scaled[index_row, index_ingredient]
+        for index_ingredient in range(8, 39):
+            food_2_neighbor_scaled[index_row, index_ingredient] /= sum_of_ingredients
+    for index_row, row_food1 in enumerate(food_1_neighbor_scaled):
+        sum_of_preparations = 0
+        for index_ingredient in range(39, 47):
+            sum_of_preparations += food_1_neighbor_scaled[index_row, index_ingredient]
+        for index_ingredient in range(39, 47):
+            food_1_neighbor_scaled[index_row, index_ingredient] /= sum_of_preparations
+    for index_row, row_food1 in enumerate(food_2_neighbor_scaled):
+        sum_of_preparations = 0
+        for index_ingredient in range(39, 47):
+            sum_of_preparations += food_2_neighbor_scaled[index_row, index_ingredient]
+        for index_ingredient in range(39, 47):
+            food_2_neighbor_scaled[index_row, index_ingredient] /= sum_of_preparations
+
+    foodsLabel = ['F1']
+    categoryLabel = ['CATEGORY' + str(i) for i in range(1, 6)]
+    ingredientsLabel = ['INGREDIENTS' + str(i) for i in range(1, 32)]
+    preparationsLabel = ['PREPARATIONS' + str(i) for i in range(1, 9)]
+
+    for index_row, row_scaled in enumerate(food_1_neighbor_scaled):
+        max_value, max_index = 0, 0
+        for range_index in range(0, 5):
+            if max_value < food_1_neighbor_scaled[index_row, range_index]:
+                max_value = food_1_neighbor_scaled[index_row, range_index]
+                max_index = range_index
+        for range_index in range(0, 5):
+            if range_index == max_index:
+                food_1_neighbor_scaled[index_row, range_index] = 1
+            else:
+                food_1_neighbor_scaled[index_row, range_index] = 0
+    temp_for_scaling_categories = scaler_to_pass["final_category"].transform(food_1_neighbor_scaled[0, 0:5].reshape(1, -1))
+    for index_row, row_scaled in enumerate(food_1_neighbor_scaled):
+        food_1_neighbor_scaled[index_row, 0:5] = temp_for_scaling_categories
+    for index_row, row_scaled in enumerate(food_1_neighbor_scaled):
+        temp_for_scaling = row_scaled[5:].copy()
+        temp_for_scaling[0:2] = scaler_to_pass["categories"].transform(temp_for_scaling[0:2].reshape(1, -1))
+        temp_for_scaling[2] = scaler_to_pass["scalars"].transform(temp_for_scaling[2].reshape(1, -1))
+        temp_for_scaling[3:34] = scaler_to_pass["ingredients"].transform(temp_for_scaling[3:34].reshape(1, -1))
+        temp_for_scaling[34:] = scaler_to_pass["preparations"].transform(temp_for_scaling[34:].reshape(1, -1))
+        food_1_neighbor_scaled[index_row, 5:] = temp_for_scaling
+        to_fit_to_PCA = np.concatenate((temp_for_scaling_categories.reshape(1, -1), temp_for_scaling.reshape(1, -1)), axis=1)
+        to_fit_to_PCA_final = pd.DataFrame(columns=[*categoryLabel, 'COST', 'DIFFICULTY', 'PREPARATION', *ingredientsLabel, *preparationsLabel], index=foodsLabel)
+        for i, food in enumerate(to_fit_to_PCA_final.index):
+            to_fit_to_PCA_final.loc[food] = to_fit_to_PCA[i]
+        fitted_on_PCA = pca_to_pass.transform(to_fit_to_PCA_final)
+        food_1_neighbor_PCA[index_row] = fitted_on_PCA[0]
+
+    for index_row, row_scaled in enumerate(food_2_neighbor_scaled):
+        max_value, max_index = 0, 0
+        for range_index in range(0, 5):
+            if max_value < food_2_neighbor_scaled[index_row, range_index]:
+                max_value = food_2_neighbor_scaled[index_row, range_index]
+                max_index = range_index
+        for range_index in range(0, 5):
+            if range_index == max_index:
+                food_2_neighbor_scaled[index_row, range_index] = 1
+            else:
+                food_2_neighbor_scaled[index_row, range_index] = 0
+    temp_for_scaling_categories = scaler_to_pass["final_category"].transform(food_2_neighbor_scaled[0, 0:5].reshape(1, -1))
+    for index_row, row_scaled in enumerate(food_2_neighbor_scaled):
+        food_2_neighbor_scaled[index_row, 0:5] = temp_for_scaling_categories
+    for index_row, row_scaled in enumerate(food_2_neighbor_scaled):
+        temp_for_scaling = row_scaled[5:].copy()
+        temp_for_scaling[0:2] = scaler_to_pass["categories"].transform(temp_for_scaling[0:2].reshape(1, -1))
+        temp_for_scaling[2] = scaler_to_pass["scalars"].transform(temp_for_scaling[2].reshape(1, -1))
+        temp_for_scaling[3:34] = scaler_to_pass["ingredients"].transform(temp_for_scaling[3:34].reshape(1, -1))
+        temp_for_scaling[34:] = scaler_to_pass["preparations"].transform(temp_for_scaling[34:].reshape(1, -1))
+        food_2_neighbor_scaled[index_row, 5:] = temp_for_scaling
+        to_fit_to_PCA = np.concatenate((temp_for_scaling_categories.reshape(1, -1), temp_for_scaling.reshape(1, -1)), axis=1)
+        to_fit_to_PCA_final = pd.DataFrame(columns=[*categoryLabel, 'COST', 'DIFFICULTY', 'PREPARATION', *ingredientsLabel, *preparationsLabel], index=foodsLabel)
+        for i, food in enumerate(to_fit_to_PCA_final.index):
+            to_fit_to_PCA_final.loc[food] = to_fit_to_PCA[i]
+        fitted_on_PCA = pca_to_pass.transform(to_fit_to_PCA_final)
+        food_2_neighbor_PCA[index_row] = fitted_on_PCA[0]
+
+    food_1_neighbor = food_1_neighbor_PCA
+    food_2_neighbor = food_2_neighbor_PCA
+
+    # for index_user_to_check, user_to_check in enumerate([passed_user]): # 15, 3, 32, 7, 36, 4, 20, 29, 14, 11
+    #     couple_same_label = 0
+    #     ok_user = False
+    #     for_debugging = []
+    #     for generated_couple_to_check, (food1_to_check, food2_to_check) in enumerate(zip(food_1_neighbor, food_2_neighbor)):
+    #         debuggin_value = single_prediction(user_id=user_to_check, first_food=food1_to_check, second_food=food2_to_check)
+    #         for_debugging.append(debuggin_value)
+    #         if ref_test[index_user_to_check] == debuggin_value:
+    #         # if ref_test[index_user_to_check] == single_prediction(user_id=user_to_check, first_food=food1_to_check, second_food=food2_to_check):
+    #             couple_same_label += 1
+    #             if couple_same_label >= int(number_of_sample/2):
+    #                 ok_user = True
+    #                 break
+    #     print("couple same label: " + str(couple_same_label))
+    #     if ok_user == False:
+    #         print("wrong user " + str(user_to_check))
+    #         return np.zeros((3, 3), dtype="float32"), np.zeros((3, 3), dtype="float32")
+
     # before to print i have to convert ingredients for 8PC2STD conversion
-
-
 
     max_v_list = [1, 2, 3, 4, 5]
     max_p_list = [1, 2, 3, 4, 5]
@@ -1190,7 +1201,7 @@ def sample_around_gauss(first_food, second_food, all_food, pca_food, number_of_s
         Dir = "Data8Component2Std/sampled-recipes-no-zero/Train" + str(TrainCouple) + "_gauss/las_files"
     else:
         Dir = "Data8Component2Std/sampled-recipes-zero/Train" + str(TrainCouple) + "_gauss/las_files"
-    f_output = os.path.join(Dir, 'recipes_sampled_'+str(index_first_food)+'-'+str(index_second_food)+'.las')
+    f_output = os.path.join(Dir, 'user' + str(passed_user) + 'recipes_sampled_'+str(index_first_food)+'-'+str(index_second_food)+'.las')
     f = open(f_output, 'w+')
     sys.stdout = open(f_output, 'w')
 
@@ -1243,7 +1254,7 @@ def sample_around_gauss(first_food, second_food, all_food, pca_food, number_of_s
         Dir = "Data8Component2Std/sampled-recipes-no-zero/Train" + str(TrainCouple) + "_gauss/distances"
     else:
         Dir = "Data8Component2Std/sampled-recipes-zero/Train" + str(TrainCouple) + "_gauss/distances"
-    f_output = os.path.join(Dir, 'recipes_distances' + str(index_first_food) + '-' + str(index_second_food) + '.txt')
+    f_output = os.path.join(Dir, 'user' + str(passed_user) + 'recipes_distances' + str(index_first_food) + '-' + str(index_second_food) + '.txt')
     f = open(f_output, 'w+')
     sys.stdout = open(f_output, 'w')
 
@@ -1255,188 +1266,16 @@ def sample_around_gauss(first_food, second_food, all_food, pca_food, number_of_s
     sys.stdout = sys.__stdout__
     f.close()
 
-    food_1_neighbor_scaled = food_1_neighbor_original.copy()
-    food_2_neighbor_scaled = food_2_neighbor_original.copy()
-
-    for index_row, row_food1 in enumerate(food_1_neighbor_scaled):
-        sum_of_ingredients = 0
-        for index_ingredient in range(8, 39):
-            sum_of_ingredients += food_1_neighbor_scaled[index_row, index_ingredient]
-        for index_ingredient in range(8, 39):
-            food_1_neighbor_scaled[index_row, index_ingredient] /= sum_of_ingredients
-    for index_row, row_food1 in enumerate(food_2_neighbor_scaled):
-        sum_of_ingredients = 0
-        for index_ingredient in range(8, 39):
-            sum_of_ingredients += food_2_neighbor_scaled[index_row, index_ingredient]
-        for index_ingredient in range(8, 39):
-            food_2_neighbor_scaled[index_row, index_ingredient] /= sum_of_ingredients
-    for index_row, row_food1 in enumerate(food_1_neighbor_scaled):
-        sum_of_preparations = 0
-        for index_ingredient in range(39, 47):
-            sum_of_preparations += food_1_neighbor_scaled[index_row, index_ingredient]
-        for index_ingredient in range(39, 47):
-            food_1_neighbor_scaled[index_row, index_ingredient] /= sum_of_preparations
-    for index_row, row_food1 in enumerate(food_2_neighbor_scaled):
-        sum_of_preparations = 0
-        for index_ingredient in range(39, 47):
-            sum_of_preparations += food_2_neighbor_scaled[index_row, index_ingredient]
-        for index_ingredient in range(39, 47):
-            food_2_neighbor_scaled[index_row, index_ingredient] /= sum_of_preparations
-
-    for index_row, row_scaled in enumerate(food_1_neighbor_scaled):
-        for index_col in range(0, 5):
-            food_1_neighbor_scaled[index_row, index_col] = int(food_1_neighbor_scaled[index_row, index_col])
-    temp_for_scaling_categories = np.zeros((101, 5), dtype="float32")
-    temp_for_scaling_categories[0] = food_1_neighbor_scaled[0, 0:5]
-    passed = False
-    for index_all_food, food_in_all_food in enumerate(all_food):
-        if index_all_food == index_first_food:
-            passed = True
-            continue
-        if passed:
-            temp_for_scaling_categories[index_all_food, int(food_in_all_food[0]) - 1] = 1
-        else:
-            temp_for_scaling_categories[index_all_food + 1, int(food_in_all_food[0]) - 1] = 1
-    scaler_foods = preprocessing.StandardScaler()
-    temp_for_scaling_categories = scaler_foods.fit_transform(temp_for_scaling_categories)
-    for index_row, row_scaled in enumerate(food_1_neighbor_scaled):
-        food_1_neighbor_scaled[index_row, 0:5] = temp_for_scaling_categories[0]
-    for index_row, row_scaled in enumerate(food_1_neighbor_scaled):
-        temp_for_scaling = np.zeros((101, len(first_food) - 1), dtype="float32")
-        temp_for_scaling[0] = row_scaled[5:]
-        passed = False
-        for index_all_food, food_in_all_food in enumerate(all_food):
-            if index_all_food == index_first_food:
-                passed = True
-                continue
-            if passed:
-                temp_for_scaling[index_all_food] = food_in_all_food[1:]
-            else:
-                temp_for_scaling[index_all_food + 1] = food_in_all_food[1:]
-        scaler_foods = preprocessing.StandardScaler()
-        temp_for_scaling[:, 0:2] = scaler_foods.fit_transform(temp_for_scaling[:, 0:2])
-        temp_for_temp_prep = np.zeros((101, 1), dtype="float32")
-        for element_row_index, element_row in enumerate(temp_for_scaling):
-            temp_for_temp_prep[element_row_index] = element_row[2]
-        scaler_foods = preprocessing.StandardScaler()
-        temp_for_temp_prep = scaler_foods.fit_transform(temp_for_temp_prep)
-        for element_row_index, element_row in enumerate(temp_for_scaling):
-            temp_for_scaling[element_row_index, 2] = temp_for_temp_prep[element_row_index]
-        passed = False
-        for index_all_food, food_in_all_food in enumerate(all_food):
-            if index_all_food == index_first_food:
-                passed = True
-                continue
-            sum_of_row = 0
-            for ingredient_to_sum in range(4, 35):
-                sum_of_row += food_in_all_food[ingredient_to_sum]
-            for ingredient_to_set in range(4, 35):
-                if passed:
-                    temp_for_scaling[index_all_food, ingredient_to_set - 1] = food_in_all_food[ingredient_to_set] / sum_of_row
-                else:
-                    temp_for_scaling[index_all_food + 1, ingredient_to_set - 1] = food_in_all_food[ingredient_to_set] / sum_of_row
-        passed = False
-        for index_all_food, food_in_all_food in enumerate(all_food):
-            if index_all_food == index_first_food:
-                passed = True
-                continue
-            sum_of_row = 0
-            for preparation_to_sum in range(35, 43):
-                sum_of_row += food_in_all_food[preparation_to_sum]
-            for preparation_to_set in range(35, 43):
-                if passed:
-                    temp_for_scaling[index_all_food, preparation_to_set - 1] = food_in_all_food[preparation_to_set] / sum_of_row
-                else:
-                    temp_for_scaling[index_all_food + 1, preparation_to_set - 1] = food_in_all_food[preparation_to_set] / sum_of_row
-        scaler_foods = preprocessing.StandardScaler()
-        temp_for_scaling[:, 3:34] = scaler_foods.fit_transform(temp_for_scaling[:, 3:34])
-        scaler_foods = preprocessing.StandardScaler()
-        temp_for_scaling[:, 34:] = scaler_foods.fit_transform(temp_for_scaling[:, 34:])
-        food_1_neighbor_scaled[index_row, 5:] = temp_for_scaling[0]
-
-    for index_row, row_scaled in enumerate(food_2_neighbor_scaled):
-        for index_col in range(0, 5):
-            food_2_neighbor_scaled[index_row, index_col] = int(food_2_neighbor_scaled[index_row, index_col])
-    temp_for_scaling_categories = np.zeros((101, 5), dtype="float32")
-    temp_for_scaling_categories[0] = food_2_neighbor_scaled[0, 0:5]
-    passed = False
-    for index_all_food, food_in_all_food in enumerate(all_food):
-        if index_all_food == index_second_food:
-            passed = True
-            continue
-        if passed:
-            temp_for_scaling_categories[index_all_food, int(food_in_all_food[0])-1] = 1
-        else:
-            temp_for_scaling_categories[index_all_food+1, int(food_in_all_food[0])-1] = 1
-    scaler_foods = preprocessing.StandardScaler()
-    temp_for_scaling_categories = scaler_foods.fit_transform(temp_for_scaling_categories)
-    for index_row, row_scaled in enumerate(food_2_neighbor_scaled):
-        food_2_neighbor_scaled[index_row, 0:5] = temp_for_scaling_categories[0]
-    for index_row, row_scaled in enumerate(food_2_neighbor_scaled):
-        temp_for_scaling = np.zeros((101, len(second_food)-1), dtype="float32")
-        temp_for_scaling[0] = row_scaled[5:]
-        passed = False
-        for index_all_food, food_in_all_food in enumerate(all_food):
-            if index_all_food == index_second_food:
-                passed = True
-                continue
-            if passed:
-                temp_for_scaling[index_all_food] = food_in_all_food[1:]
-            else:
-                temp_for_scaling[index_all_food+1] = food_in_all_food[1:]
-        scaler_foods = preprocessing.StandardScaler()
-        temp_for_scaling[:, 0:2] = scaler_foods.fit_transform(temp_for_scaling[:, 0:2])
-        temp_for_temp_prep = np.zeros((101, 1), dtype="float32")
-        for element_row_index, element_row in enumerate(temp_for_scaling):
-            temp_for_temp_prep[element_row_index] = element_row[2]
-        scaler_foods = preprocessing.StandardScaler()
-        temp_for_temp_prep = scaler_foods.fit_transform(temp_for_temp_prep)
-        for element_row_index, element_row in enumerate(temp_for_scaling):
-            temp_for_scaling[element_row_index, 2] = temp_for_temp_prep[element_row_index]
-        passed = False
-        for index_all_food, food_in_all_food in enumerate(all_food):
-            if index_all_food == index_second_food:
-                passed = True
-                continue
-            sum_of_row = 0
-            for ingredient_to_sum in range(4, 35):
-                sum_of_row += food_in_all_food[ingredient_to_sum]
-            for ingredient_to_set in range(4, 35):
-                if passed:
-                    temp_for_scaling[index_all_food, ingredient_to_set-1] = food_in_all_food[ingredient_to_set]/sum_of_row
-                else:
-                    temp_for_scaling[index_all_food + 1, ingredient_to_set-1] = food_in_all_food[ingredient_to_set]/sum_of_row
-        passed = False
-        for index_all_food, food_in_all_food in enumerate(all_food):
-            if index_all_food == index_second_food:
-                passed = True
-                continue
-            sum_of_row = 0
-            for preparation_to_sum in range(35, 43):
-                sum_of_row += food_in_all_food[preparation_to_sum]
-            for preparation_to_set in range(35, 43):
-                if passed:
-                    temp_for_scaling[index_all_food, preparation_to_set-1] = food_in_all_food[preparation_to_set]/sum_of_row
-                else:
-                    temp_for_scaling[index_all_food + 1, preparation_to_set-1] = food_in_all_food[preparation_to_set]/sum_of_row
-        scaler_foods = preprocessing.StandardScaler()
-        temp_for_scaling[:, 3:34] = scaler_foods.fit_transform(temp_for_scaling[:, 3:34])
-        scaler_foods = preprocessing.StandardScaler()
-        temp_for_scaling[:, 34:] = scaler_foods.fit_transform(temp_for_scaling[:, 34:])
-        food_2_neighbor_scaled[index_row, 5:] = temp_for_scaling[0]
-
-    food_1_neighbor = pca_to_pass.transform(food_1_neighbor_scaled)
-    food_2_neighbor = pca_to_pass.transform(food_2_neighbor_scaled)
-
+    # plot data
     plt.scatter(food_1_neighbor[:, 0], food_1_neighbor[:, 1])
     plt.scatter(food_2_neighbor[:, 0], food_2_neighbor[:, 1])
     plt.scatter(pca_food[index_first_food, 0], pca_food[index_first_food, 1])
     plt.scatter(pca_food[index_second_food, 0], pca_food[index_second_food, 1])
     plt.title("couple: " + str(index_first_food) + "-" + str(index_second_food))
     if no_zero:
-        plt.savefig('./Data8Component2Std/sampled-recipes-no-zero/Train' + str(TrainCouple) + '_gauss/plots/couple' + str(index_first_food) + '-' + str(index_second_food), dpi=300)
+        plt.savefig('./Data8Component2Std/sampled-recipes-no-zero/Train' + str(TrainCouple) + '_gauss/plots/' + 'user' + str(passed_user) + 'couple' + str(index_first_food) + '-' + str(index_second_food), dpi=300)
     else:
-        plt.savefig('./Data8Component2Std/sampled-recipes-zero/Train' + str(TrainCouple) + '_gauss/plots/couple' + str(index_first_food) + '-' + str(index_second_food), dpi=300)
+        plt.savefig('./Data8Component2Std/sampled-recipes-zero/Train' + str(TrainCouple) + '_gauss/plots/' + 'user' + str(passed_user) + 'couple' + str(index_first_food) + '-' + str(index_second_food), dpi=300)
     plt.clf()
 
     return food_1_neighbor, food_2_neighbor
@@ -1447,7 +1286,7 @@ def prediction(user_id, samples_to_predict):
     predictions = model(samples_to_predict)
     to_print = ""
     for index, predict in enumerate(predictions):
-        if index >= 105:
+        if index >= 45:
             break
         if (predictions[index, 0] == predictions[index, 1]) and (predictions[index, 0] == predictions[index, 2]):
             to_print = to_print + "0 "
@@ -1472,7 +1311,7 @@ def single_prediction(user_id, first_food, second_food):
     predictions = model.predict(to_predict_reshaped, verbose=0)
     to_print = ""
     for index, predict in enumerate(predictions):
-        if index >= 105:
+        if index >= 45:
             break
         if (predictions[index, 0] == predictions[index, 1]) and (predictions[index, 0] == predictions[index, 2]):
             to_print = to_print + "0 "
@@ -1491,238 +1330,273 @@ def single_prediction(user_id, first_food, second_food):
     del predictions
     return to_print
 
-# def create_samples(no_zero, TrainCouple):
+def create_samples(user_to_execute, known_label):
 
-no_zero = False
-TrainCouple = 45
-gauss_note = "_gauss"
+    no_zero = False
+    TrainCouple = 45
+    gauss_note = "_gauss"
 
-# to recover unexpected error of program
-if no_zero:
-    Dir = "Data8Component2Std/sampled-recipes-no-zero/Train" + str(TrainCouple) + gauss_note + "/distances/"
-else:
-    Dir = "Data8Component2Std/sampled-recipes-zero/Train" + str(TrainCouple) + gauss_note + "/distances/"
-already_done_one = []
-already_done_two = []
-for filename in os.listdir(Dir):
-    f = filename
-    already_done_one.append(int(f[17:f.find("-")]))
-    already_done_two.append(int(f[f.find("-") + 1:f.find(".")]))
-if len(already_done_one) != 0:
-    already_done_np = np.zeros((len(already_done_one), 2), dtype="int32")
-    for already_done_len in range(len(already_done_one)):
-        already_done_np[already_done_len] = [already_done_one[already_done_len], already_done_two[already_done_len]]
-else:
-    already_done_np = np.zeros(999, dtype="int32")
-if len(already_done_np) == 999:
-    already_done = 0
-else:
-    already_done = len(already_done_np)
-# ----
 
-data_dir = "../../../dataset_100/separated_text_data/"
+    data_dir = "../../../dataset_100/separated_text_data/"
 
-fScalar = os.path.join(data_dir, 'scalars.txt')
-fCategories = os.path.join(data_dir, 'categories.txt')
-fIngredients = os.path.join(data_dir, 'ingredients.txt')
-fPreparation = os.path.join(data_dir, 'preparations.txt')
-fNames = os.path.join(data_dir, 'names.txt')
-fCouple = os.path.join('../../../Ordinamenti/dataset_coppie.txt')
-fLabels = os.path.join('../../../Ordinamenti/output-file.txt')
+    fScalar = os.path.join(data_dir, 'scalars.txt')
+    fCategories = os.path.join(data_dir, 'categories.txt')
+    fIngredients = os.path.join(data_dir, 'ingredients.txt')
+    fPreparation = os.path.join(data_dir, 'preparations.txt')
+    fNames = os.path.join(data_dir, 'names.txt')
+    fCouple = os.path.join('../../../Ordinamenti/dataset_coppie.txt')
+    fLabels = os.path.join('../../../Ordinamenti/output-file.txt')
 
-fS = open(fScalar)
-dataS = fS.read()
-fS.close()
-fC = open(fCategories)
-dataC = fC.read()
-fC.close()
-fI = open(fIngredients)
-dataI = fI.read()
-fI.close()
-fP = open(fPreparation)
-dataP = fP.read()
-fP.close()
-fN = open(fNames)
-food_data_names = fN.read()
-fN.close()
-fCC = open(fCouple)
-dataCC = fCC.read()
-fCC.close()
-fL = open(fLabels)
-dataL = fL.read()
-fL.close()
+    fS = open(fScalar)
+    dataS = fS.read()
+    fS.close()
+    fC = open(fCategories)
+    dataC = fC.read()
+    fC.close()
+    fI = open(fIngredients)
+    dataI = fI.read()
+    fI.close()
+    fP = open(fPreparation)
+    dataP = fP.read()
+    fP.close()
+    fN = open(fNames)
+    food_data_names = fN.read()
+    fN.close()
+    fCC = open(fCouple)
+    dataCC = fCC.read()
+    fCC.close()
+    fL = open(fLabels)
+    dataL = fL.read()
+    fL.close()
 
-linesOfS = dataS.split('\n')
-food_data_scalars = np.zeros((len(linesOfS), 1), dtype='float32')
-for i, line in enumerate(linesOfS):
-    values = [x for x in line.split(' ')[1:]]
-    food_data_scalars[i, :] = values
+    linesOfS = dataS.split('\n')
+    food_data_scalars = np.zeros((len(linesOfS), 1), dtype='float32')
+    for i, line in enumerate(linesOfS):
+        values = [x for x in line.split(' ')[1:]]
+        food_data_scalars[i, :] = values
 
-linesOfC = dataC.split('\n')
-food_data_categories = np.zeros((len(linesOfC), 3), dtype='float32')
-for i, line in enumerate(linesOfC):
-    values = [x for x in line.split(' ')[1:]]
-    food_data_categories[i, :] = values
+    linesOfC = dataC.split('\n')
+    food_data_categories = np.zeros((len(linesOfC), 3), dtype='float32')
+    for i, line in enumerate(linesOfC):
+        values = [x for x in line.split(' ')[1:]]
+        food_data_categories[i, :] = values
 
-linesOfI = dataI.split('\n')
-food_data_ingredients = np.zeros((len(linesOfI), 36), dtype='float32')
-for i, line in enumerate(linesOfI):
-    values = [x for x in line.split(' ')[1:]]
-    food_data_ingredients[i, :] = values
+    linesOfI = dataI.split('\n')
+    food_data_ingredients = np.zeros((len(linesOfI), 36), dtype='float32')
+    for i, line in enumerate(linesOfI):
+        values = [x for x in line.split(' ')[1:]]
+        food_data_ingredients[i, :] = values
 
-linesOfP = dataP.split('\n')
-food_data_preparation = np.zeros((len(linesOfP), 8), dtype='float32')
-for i, line in enumerate(linesOfP):
-    values = [x for x in line.split(' ')[1:]]
-    food_data_preparation[i, :] = values
+    linesOfP = dataP.split('\n')
+    food_data_preparation = np.zeros((len(linesOfP), 8), dtype='float32')
+    for i, line in enumerate(linesOfP):
+        values = [x for x in line.split(' ')[1:]]
+        food_data_preparation[i, :] = values
 
-original_category = food_data_categories[:, 0]
-original_category = np.reshape(original_category, (101, 1))
+    linesOfCC = dataCC.split('\n')
+    food_couple = np.zeros((len(linesOfCC), 420, 2), dtype='int32')
+    for i, line in enumerate(linesOfCC):
+        if i < 54:
+            values = [x for x in line.split(';')[:]]
+            values = values[:210]
+            for j, value in enumerate(values):
+                twoValues = value.split(',')
+                first = int(twoValues[0])
+                second = int(twoValues[1])
+                food_couple[i, j, 0] = first
+                food_couple[i, j, 1] = second
+                food_couple[i, j + 210, 0] = second
+                food_couple[i, j + 210, 1] = first
 
-# manipulate categorical data
-category1HE = food_data_categories[:, 0]
-food_data_categories = np.delete(food_data_categories, 0, 1)
-category1HE = np.reshape(category1HE, (101, 1))
-enc = OneHotEncoder(handle_unknown='ignore')
-enc.fit(category1HE)
-finalCategory = enc.transform(category1HE).toarray()
 
-# remove ingredients never used
-food_data_ingredients = np.delete(food_data_ingredients, [1, 16, 23, 26, 32], axis=1)
+    original_category = food_data_categories[:, 0]
+    original_category = np.reshape(original_category, (101, 1))
 
-# normalize scaled ingredients and scaled preparation
+    # manipulate categorical data
+    category1HE = food_data_categories[:, 0]
+    food_data_categories = np.delete(food_data_categories, 0, 1)
+    category1HE = np.reshape(category1HE, (101, 1))
+    enc = OneHotEncoder(handle_unknown='ignore')
+    enc.fit(category1HE)
+    finalCategory = enc.transform(category1HE).toarray()
 
-normalized_food_data_ingredients = np.zeros((101, 31), dtype="float32")
-normalized_food_data_preparation = np.zeros((101, 8), dtype="float32")
+    # remove ingredients never used
+    food_data_ingredients = np.delete(food_data_ingredients, [1, 16, 23, 26, 32], axis=1)
 
-for i, row in enumerate(food_data_ingredients):
-    sum_of_elements = 0
-    for element in row:
-        sum_of_elements = sum_of_elements + element
-    for j, element in enumerate(row):
-        normalized_food_data_ingredients[i, j] = food_data_ingredients[i, j] / sum_of_elements
+    # normalize scaled ingredients and scaled preparation
 
-for i, row in enumerate(food_data_preparation):
-    sum_of_elements = 0
-    for element in row:
-        sum_of_elements = sum_of_elements + element
-    for j, element in enumerate(row):
-        normalized_food_data_preparation[i, j] = food_data_preparation[i, j] / sum_of_elements
+    normalized_food_data_ingredients = np.zeros((101, 31), dtype="float32")
+    normalized_food_data_preparation = np.zeros((101, 8), dtype="float32")
 
-# scaling preparation time, cost, difficulty, ingredients and preparations
-scaler = preprocessing.StandardScaler()
-scaled_food_data_finalCategory = scaler.fit_transform(finalCategory)
-scaled_food_data_scalars = scaler.fit_transform(food_data_scalars)
-scaled_food_data_categories = scaler.fit_transform(food_data_categories)
-scaled_food_data_ingredients = scaler.fit_transform(normalized_food_data_ingredients)
-scaled_food_data_preparation = scaler.fit_transform(normalized_food_data_preparation)
+    for i, row in enumerate(food_data_ingredients):
+        sum_of_elements = 0
+        for element in row:
+            sum_of_elements = sum_of_elements + element
+        for j, element in enumerate(row):
+            normalized_food_data_ingredients[i, j] = food_data_ingredients[i, j] / sum_of_elements
 
-# concatenate all data in a numpy tensor
-all_data = np.concatenate([scaled_food_data_finalCategory, scaled_food_data_categories, scaled_food_data_scalars, scaled_food_data_ingredients, scaled_food_data_preparation], axis=1)
-all_data_original = np.concatenate([original_category, food_data_categories, food_data_scalars, food_data_ingredients, food_data_preparation], axis=1)
+    for i, row in enumerate(food_data_preparation):
+        sum_of_elements = 0
+        for element in row:
+            sum_of_elements = sum_of_elements + element
+        for j, element in enumerate(row):
+            normalized_food_data_preparation[i, j] = food_data_preparation[i, j] / sum_of_elements
 
-# preparation of labels for pandas dataframe
-foodsLabel = ['F' + str(i) for i in range(1, 101)]
-categoryLabel = ['CATEGORY' + str(i) for i in range(1, 6)]
-ingredientsLabel = ['INGREDIENTS' + str(i) for i in range(1, 32)]
-preparationsLabel = ['PREPARATIONS' + str(i) for i in range(1, 9)]
+    # scaling preparation time, cost, difficulty, ingredients and preparations
+    scaler_final_category = preprocessing.StandardScaler()
+    scaled_food_data_finalCategory = scaler_final_category.fit_transform(finalCategory)
+    scaler_scalars = preprocessing.StandardScaler()
+    scaled_food_data_scalars = scaler_scalars.fit_transform(food_data_scalars)
+    scaler_categories = preprocessing.StandardScaler()
+    scaled_food_data_categories = scaler_categories.fit_transform(food_data_categories)
+    scaler_ingredients = preprocessing.StandardScaler()
+    scaled_food_data_ingredients = scaler_ingredients.fit_transform(normalized_food_data_ingredients)
+    scaler_preparations = preprocessing.StandardScaler()
+    scaled_food_data_preparation = scaler_preparations.fit_transform(normalized_food_data_preparation)
 
-# creating pandas dataframe
-final_data = pd.DataFrame(columns=[*categoryLabel, 'COST', 'DIFFICULTY', 'PREPARATION', *ingredientsLabel, *preparationsLabel], index=foodsLabel)
+    dict_of_scaler = {
+        "final_category": scaler_final_category,
+        "scalars": scaler_scalars,
+        "categories": scaler_categories,
+        "ingredients": scaler_ingredients,
+        "preparations": scaler_preparations
+    }
 
-# fill pandas dataframe with data that we concatenated in line 83
-for i, food in enumerate(final_data.index):
-    final_data.loc[food] = all_data[i]
+    # concatenate all data in a numpy tensor
+    all_data = np.concatenate([scaled_food_data_finalCategory, scaled_food_data_categories, scaled_food_data_scalars, scaled_food_data_ingredients, scaled_food_data_preparation], axis=1)
+    all_data_original = np.concatenate([original_category, food_data_categories, food_data_scalars, food_data_ingredients, food_data_preparation], axis=1)
 
-# instantiate pca object, then fit on final data
-# pca = PCA() #(we used this before to understand the number of component to use)
-pca = decomposition.PCA(n_components=17)
-pca.fit(final_data)
-# apply pca on data in pandas_dataframe
-pca_data = pca.transform(final_data)
+    # preparation of labels for pandas dataframe
+    foodsLabel = ['F' + str(i) for i in range(1, 101)]
+    categoryLabel = ['CATEGORY' + str(i) for i in range(1, 6)]
+    ingredientsLabel = ['INGREDIENTS' + str(i) for i in range(1, 32)]
+    preparationsLabel = ['PREPARATIONS' + str(i) for i in range(1, 9)]
 
-per_var = np.round(pca.explained_variance_ratio_*101, decimals=1)
-labels = ['PC' + str(x) for x in range(1, len(per_var)+1)]
-pca_df = pd.DataFrame(pca_data, columns=labels)
-list_of_couple = []
-if already_done != 0:
-    for element in already_done_np:
-        list_of_couple.append([element[0], element[1]])
-    counter_of_couple = len(already_done_np)
-else:
+    # creating pandas dataframe
+    final_data = pd.DataFrame(columns=[*categoryLabel, 'COST', 'DIFFICULTY', 'PREPARATION', *ingredientsLabel, *preparationsLabel], index=foodsLabel)
+
+    # fill pandas dataframe with data that we concatenated in line 83
+    for i, food in enumerate(final_data.index):
+        final_data.loc[food] = all_data[i]
+
+    # instantiate pca object, then fit on final data
+    # pca = PCA() #(we used this before to understand the number of component to use)
+    pca = decomposition.PCA(n_components=17)
+    pca.fit(final_data)
+    # apply pca on data in pandas_dataframe
+    pca_data = pca.transform(final_data)
+
+    per_var = np.round(pca.explained_variance_ratio_*101, decimals=1)
+    labels = ['PC' + str(x) for x in range(1, len(per_var)+1)]
+    pca_df = pd.DataFrame(pca_data, columns=labels)
+    list_of_couple = []
     counter_of_couple = 0
-while True:
-    if counter_of_couple == 45:
-        break
-    first_food_id_to_pass = np.random.randint(0, 100, size=1)
-    second_food_id_to_pass = np.random.randint(0, 100, size=1)
-    if first_food_id_to_pass[0] == second_food_id_to_pass[0]:
-        continue
-    if [first_food_id_to_pass[0], second_food_id_to_pass[0]] in list_of_couple:
-        continue
-    if [second_food_id_to_pass[0], first_food_id_to_pass[0]] in list_of_couple:
-        continue
-    to_not_append = False
-    for i in [15, 3, 32, 7, 36, 4, 20, 29, 14, 11]:
-        test_prediction = single_prediction(user_id=i, first_food=pca_data[first_food_id_to_pass[0]], second_food=pca_data[first_food_id_to_pass[0]])
-        if no_zero and (test_prediction == "0"):
-            to_not_append = True
+    while True:
+        if counter_of_couple == 45:
             break
-    if to_not_append:
-        continue
-    list_of_couple.append([first_food_id_to_pass[0], second_food_id_to_pass[0]])
-    # print("--------------------couple queried--------------------")
-    # print(str(int(first_food_id_to_pass)) + "," + str(int(second_food_id_to_pass)))
-    # print("--------------------prediction of i-th user's model on queried couple--------------------")
-    # for i in range(0, 48):
-    #     single_prediction(user_id=i, first_food=pca_data[int(first_food_id_to_pass)], second_food=pca_data[int(second_food_id_to_pass)])
-    # print("--------------------generation samples for train--------------------")
-    X_PCA_1, X_PCA_2 = sample_around_gauss(first_food=all_data_original[int(first_food_id_to_pass)], second_food=all_data_original[int(second_food_id_to_pass)], all_food=all_data_original, pca_food=pca_data, number_of_sample=45, index_first_food=int(first_food_id_to_pass), index_second_food=int(second_food_id_to_pass), pca_to_pass=pca, no_zero=no_zero, TrainCouple=TrainCouple)
-    # print("--------------------generation label for train--------------------")
-
-
-    for i in [15, 3, 32, 7, 36, 4, 20, 29, 14, 11]:
-        if no_zero:
-            Dir = "Data8Component2Std/sampled-recipes-no-zero/Train" + str(TrainCouple) + gauss_note + "/user_prediction/train"
+        if known_label:
+            first_food_id_to_pass = np.asarray(food_couple[user_to_execute, counter_of_couple, 0]).reshape(1)
+            second_food_id_to_pass = np.asarray(food_couple[user_to_execute, counter_of_couple, 1]).reshape(1)
         else:
-            Dir = "Data8Component2Std/sampled-recipes-zero/Train" + str(TrainCouple) + gauss_note + "/user_prediction/train"
-        f_output = os.path.join(Dir, 'user' + str(i) + '_Couple' + str(first_food_id_to_pass[0]) + "-" + str(second_food_id_to_pass[0]) + '.txt')
-        f = open(f_output, 'w+')
-        sys.stdout = open(f_output, 'w')
-        for j, (food1, food2) in enumerate(zip(X_PCA_1, X_PCA_2)):
-            train_prediction = single_prediction(user_id=i, first_food=food1, second_food=food2)
-            print(train_prediction)
-        sys.stdout = sys.__stdout__
-        f.close()
-        if no_zero:
-            Dir = "Data8Component2Std/sampled-recipes-no-zero/Train" + str(TrainCouple) + gauss_note + "/user_prediction/test"
-        else:
-            Dir = "Data8Component2Std/sampled-recipes-zero/Train" + str(TrainCouple) + gauss_note + "/user_prediction/test"
-        f_output = os.path.join(Dir, 'user' + str(i) + '_Couple' + str(first_food_id_to_pass[0]) + "-" + str(second_food_id_to_pass[0]) + '.txt')
-        f = open(f_output, 'w+')
-        sys.stdout = open(f_output, 'w')
-        test_prediction = single_prediction(user_id=i, first_food=pca_data[first_food_id_to_pass[0]], second_food=pca_data[first_food_id_to_pass[0]])
-        print(test_prediction)
-        sys.stdout = sys.__stdout__
-        f.close()
-    counter_of_couple += 1
-if no_zero:
-    f_output = "Data8Component2Std/sampled-recipes-no-zero/Train" + str(TrainCouple) + gauss_note + "/couple.txt"
-else:
-    f_output = "Data8Component2Std/sampled-recipes-zero/Train" + str(TrainCouple) + gauss_note + "/couple.txt"
-f = open(f_output, 'w+')
-sys.stdout = open(f_output, 'w')
-for couple in list_of_couple:
-    print(str(couple[0]) + ";" + str(couple[1]))
-sys.stdout = sys.__stdout__
-f.close()
+            first_food_id_to_pass = np.random.randint(0, 100, size=1)
+            second_food_id_to_pass = np.random.randint(0, 100, size=1)
+        if first_food_id_to_pass[0] == second_food_id_to_pass[0]:
+            continue
+        if [first_food_id_to_pass[0], second_food_id_to_pass[0]] in list_of_couple:
+            continue
+        if [second_food_id_to_pass[0], first_food_id_to_pass[0]] in list_of_couple:
+            continue
+        to_not_append = False
+        list_of_references = []
+        for i in [user_to_execute]: # 15, 3, 32, 7, 36, 4, 20, 29, 14, 11
+            test_prediction = single_prediction(user_id=i, first_food=pca_data[first_food_id_to_pass[0]], second_food=pca_data[second_food_id_to_pass[0]])
+            if no_zero and (test_prediction == "0"):
+                to_not_append = True
+                break
+            list_of_references.append(test_prediction)
+        if to_not_append:
+            continue
+        list_of_couple.append([first_food_id_to_pass[0], second_food_id_to_pass[0]])
+        # print("--------------------couple queried--------------------")
+        # print(str(int(first_food_id_to_pass)) + "," + str(int(second_food_id_to_pass)))
+        # print("--------------------prediction of i-th user's model on queried couple--------------------")
+        # for i in range(0, 48):
+        #     single_prediction(user_id=i, first_food=pca_data[int(first_food_id_to_pass)], second_food=pca_data[int(second_food_id_to_pass)])
+        # print("--------------------generation samples for train--------------------")
+        X_PCA_1, X_PCA_2 = sample_around_gauss(first_food=all_data_original[int(first_food_id_to_pass)], second_food=all_data_original[int(second_food_id_to_pass)], all_food=all_data_original, pca_food=pca_data, number_of_sample=45, index_first_food=int(first_food_id_to_pass), index_second_food=int(second_food_id_to_pass), pca_to_pass=pca, scaler_to_pass=dict_of_scaler, no_zero=no_zero, TrainCouple=TrainCouple, ref_test=list_of_references, passed_user=user_to_execute)
+        if X_PCA_1.shape == (3, 3) and X_PCA_2.shape == (3, 3):
+            continue
+        # print("--------------------generation label for train--------------------")
 
-# if __name__ == '__main__':
-#     p_zero = Process(target=create_samples, args=(False, 210))
-#     p_no_zero = Process(target=create_samples, args=(True, 210))
-#
-#     p_zero.start()
-#     p_no_zero.start()
-#
-#     p_zero.join()
-#     p_no_zero.join()
+
+        for i in [user_to_execute]: # 15, 3, 32, 7, 36, 4, 20, 29, 14, 11
+            if no_zero:
+                Dir = "Data8Component2Std/sampled-recipes-no-zero/Train" + str(TrainCouple) + gauss_note + "/user_prediction/train"
+            else:
+                Dir = "Data8Component2Std/sampled-recipes-zero/Train" + str(TrainCouple) + gauss_note + "/user_prediction/train"
+            f_output = os.path.join(Dir, 'user' + str(i) + '_Couple' + str(first_food_id_to_pass[0]) + "-" + str(second_food_id_to_pass[0]) + '.txt')
+            f = open(f_output, 'w+')
+            sys.stdout = open(f_output, 'w')
+            for j, (food1, food2) in enumerate(zip(X_PCA_1, X_PCA_2)):
+                train_prediction = single_prediction(user_id=i, first_food=food1, second_food=food2)
+                print(train_prediction)
+            sys.stdout = sys.__stdout__
+            f.close()
+            if no_zero:
+                Dir = "Data8Component2Std/sampled-recipes-no-zero/Train" + str(TrainCouple) + gauss_note + "/user_prediction/test"
+            else:
+                Dir = "Data8Component2Std/sampled-recipes-zero/Train" + str(TrainCouple) + gauss_note + "/user_prediction/test"
+            f_output = os.path.join(Dir, 'user' + str(i) + '_Couple' + str(first_food_id_to_pass[0]) + "-" + str(second_food_id_to_pass[0]) + '.txt')
+            f = open(f_output, 'w+')
+            sys.stdout = open(f_output, 'w')
+            test_prediction = single_prediction(user_id=i, first_food=pca_data[first_food_id_to_pass[0]], second_food=pca_data[second_food_id_to_pass[0]])
+            print(test_prediction)
+            sys.stdout = sys.__stdout__
+            f.close()
+        counter_of_couple += 1
+    if no_zero:
+        f_output = "Data8Component2Std/sampled-recipes-no-zero/Train" + str(TrainCouple) + gauss_note + "/couple" + str(user_to_execute) + ".txt"
+    else:
+        f_output = "Data8Component2Std/sampled-recipes-zero/Train" + str(TrainCouple) + gauss_note + "/couple" + str(user_to_execute) + ".txt"
+    f = open(f_output, 'w+')
+    sys.stdout = open(f_output, 'w')
+    for couple in list_of_couple:
+        print(str(couple[0]) + ";" + str(couple[1]))
+    sys.stdout = sys.__stdout__
+    f.close()
+
+if __name__ == '__main__':
+    for batch in range(0, 3):
+        if batch == 0:
+            p1 = Process(target=create_samples, args=(15, False))
+            p2 = Process(target=create_samples, args=(3, False))
+            p3 = Process(target=create_samples, args=(32,  False))
+            p1.start()
+            p2.start()
+            p3.start()
+            p1.join()
+            p2.join()
+            p3.join()
+        elif batch == 1:
+            p1 = Process(target=create_samples, args=(7, False))
+            p2 = Process(target=create_samples, args=(36, False))
+            p3 = Process(target=create_samples, args=(4,  False))
+            p1.start()
+            p2.start()
+            p3.start()
+            p1.join()
+            p2.join()
+            p3.join()
+        else:
+            p1 = Process(target=create_samples, args=(20, False))
+            p2 = Process(target=create_samples, args=(29, False))
+            p3 = Process(target=create_samples, args=(14,  False))
+            p1.start()
+            p2.start()
+            p3.start()
+            p1.join()
+            p2.join()
+            p3.join()
+    p4 = Process(target=create_samples, args=(11, False))
+    p4.start()
+    p4.join()

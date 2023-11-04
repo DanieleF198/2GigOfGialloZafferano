@@ -2,79 +2,80 @@ import os
 import sys
 import numpy as np
 import re
-no_zero = True
+no_zero = False
 if no_zero:
-    NNoutput_dir = "Data8Component2Std/sampled-recipes-no-zero/Train45"
+    NNoutput_dir = "Data8Component2Std/sampled-recipes-no-zero/Train45_gauss"
 else:
-    NNoutput_dir = "Data8Component2Std/sampled-recipes-zero/Train45"
+    NNoutput_dir = "Data8Component2Std/sampled-recipes-zero/Train45_gauss"
 
-zero_dir_train = "Data8Component2Std/final/users/zero/train/45Couples/"
-no_zero_dir_train = "./Data8Component2Std/final/users/no_zero/train/45Couples/"
-zero_dir_test = "Data8Component2Std/final/users/zero/test/45CouplesForTrain45/"
-no_zero_dir_test = "Data8Component2Std/final/users/no_zero/test/45CouplesForTrain45/"
+zero_dir_train = "Data8Component2Std/final/users/zero/train/45Couples_gauss/"
+no_zero_dir_train = "./Data8Component2Std/final/users/no_zero/train/45Couples_gauss/"
+zero_dir_test = "Data8Component2Std/final/users/zero/test/45CouplesForTrain45_gauss/"
+no_zero_dir_test = "Data8Component2Std/final/users/no_zero/test/45CouplesForTrain45_gauss/"
 
-output_dir_for_zero_train_data_dir = "./Data8Component2Std/final/users/zero/train/45Couples/"
-output_dir_for_no_zero_train_data_dir = "./Data8Component2Std/final/users/no_zero/train/45Couples/"
-output_dir_for_zero_test_data_dir = "Data8Component2Std/final/users/zero/test/45CouplesForTrain45/"
-output_dir_for_no_zero_test_data_dir = "Data8Component2Std/final/users/no_zero/test/45CouplesForTrain45/"
+output_dir_for_zero_train_data_dir = "./Data8Component2Std/final/users/zero/train/45Couples_gauss/"
+output_dir_for_no_zero_train_data_dir = "./Data8Component2Std/final/users/no_zero/train/45Couples_gauss/"
+output_dir_for_zero_test_data_dir = "Data8Component2Std/final/users/zero/test/45CouplesForTrain45_gauss/"
+output_dir_for_no_zero_test_data_dir = "Data8Component2Std/final/users/no_zero/test/45CouplesForTrain45_gauss/"
 
 dir_labels_train = os.path.join(NNoutput_dir, 'user_prediction/train/')
 dir_labels_test = os.path.join(NNoutput_dir, 'user_prediction/test/')
 dir_distances_train = os.path.join(NNoutput_dir, 'distances/')
 dir_las_files = os.path.join(NNoutput_dir, 'las_files/')
-f_couples = os.path.join(NNoutput_dir, 'couple.txt')
 
-fCouples = open(f_couples)
-dataCouples = fCouples.read()
-fCouples.close()
+for u_counter, u in enumerate([15, 3, 32, 7, 36, 4, 20, 29, 14, 11]):
+    f_couples = os.path.join(NNoutput_dir, 'couple' + str(u) + '.txt')
 
-linesOfCouples = dataCouples.split('\n')
-couples = np.zeros((len(linesOfCouples), 2), dtype='float32')
-for i, line in enumerate(linesOfCouples):
-    if line == '':
-        continue
-    values = [x for x in line.split(';')[:]]
-    for j, value in enumerate(values):
-        if value == '':
-            continue
-        couples[i, j] = value
+    fCouples = open(f_couples)
+    dataCouples = fCouples.read()
+    fCouples.close()
 
-distances = np.zeros((len(couples), 45), dtype='float32')
-
-for k, couple in enumerate(couples):
-    f_distance = os.path.join(dir_distances_train, 'recipes_distances' + str(int(couple[0])) + '-' + str(int(couple[1])) + ".txt")
-    fDistances = open(f_distance)
-    dataDistances = fDistances.read()
-    fDistances.close()
-
-    linesOfDistances = dataDistances.split('\n')
-    for i, line in enumerate(linesOfDistances):
+    linesOfCouples = dataCouples.split('\n')
+    couples = np.zeros((len(linesOfCouples), 2), dtype='float32')
+    for i, line in enumerate(linesOfCouples):
         if line == '':
             continue
-        values = [x for x in line.split('\n')[:]]
+        values = [x for x in line.split(';')[:]]
         for j, value in enumerate(values):
             if value == '':
                 continue
-            distances[k, i] = value
+            couples[i, j] = value
 
-dict_of_las_files = {}
+    distances = np.zeros((len(couples), 45), dtype='float32')
 
-for k, couple in enumerate(couples):
-    f_las_files = os.path.join(dir_las_files, 'recipes_sampled_' + str(int(couple[0])) + '-' + str(int(couple[1])) + ".las")
-    fLasFiles = open(f_las_files)
-    dataLasFiles = fLasFiles.read()
-    fLasFiles.close()
-    regex_string1 = "sampled" + str(int(couple[0])) + "-"
-    regex_string2 = "sampled" + str(int(couple[1])) + "-"
-    replace_string1 = "sampled" + str(int(couple[0])) + "s"
-    replace_string2 = "sampled" + str(int(couple[1])) + "s"
-    dataLasFiles = re.sub(regex_string1, replace_string1, dataLasFiles)
-    dataLasFiles = re.sub(regex_string2, replace_string2, dataLasFiles)
-    dict_of_las_files[str(int(couple[0])) + '-' + str(int(couple[1]))] = dataLasFiles
+    for k, couple in enumerate(couples):
+        f_distance = os.path.join(dir_distances_train, 'user' + str(u) + 'recipes_distances' + str(int(couple[0])) + '-' + str(int(couple[1])) + ".txt")
+        fDistances = open(f_distance)
+        dataDistances = fDistances.read()
+        fDistances.close()
 
-couple_label_train = np.zeros((10, 45, 45), dtype="int32")
-couple_label_test = np.zeros((10, 45, 1), dtype="int32")
-for u_counter, u in enumerate([15, 3, 32, 7, 36, 4, 20, 29, 14, 11]):
+        linesOfDistances = dataDistances.split('\n')
+        for i, line in enumerate(linesOfDistances):
+            if line == '':
+                continue
+            values = [x for x in line.split('\n')[:]]
+            for j, value in enumerate(values):
+                if value == '':
+                    continue
+                distances[k, i] = value
+
+    dict_of_las_files = {}
+
+    for k, couple in enumerate(couples):
+        f_las_files = os.path.join(dir_las_files, 'user' + str(u) + 'recipes_sampled_' + str(int(couple[0])) + '-' + str(int(couple[1])) + ".las")
+        fLasFiles = open(f_las_files)
+        dataLasFiles = fLasFiles.read()
+        fLasFiles.close()
+        regex_string1 = "sampled" + str(int(couple[0])) + "-"
+        regex_string2 = "sampled" + str(int(couple[1])) + "-"
+        replace_string1 = "sampled" + str(int(couple[0])) + "s"
+        replace_string2 = "sampled" + str(int(couple[1])) + "s"
+        dataLasFiles = re.sub(regex_string1, replace_string1, dataLasFiles)
+        dataLasFiles = re.sub(regex_string2, replace_string2, dataLasFiles)
+        dict_of_las_files[str(int(couple[0])) + '-' + str(int(couple[1]))] = dataLasFiles
+
+    couple_label_train = np.zeros((10, 45, 45), dtype="int32")
+    couple_label_test = np.zeros((10, 45, 1), dtype="int32")
     for k, couple in enumerate(couples):
         f_label_train_file = os.path.join(dir_labels_train, 'user' + str(u) + "_Couple" + str(int(couple[0])) + '-' + str(int(couple[1])) + '.txt')
         fLabelTrainFile = open(f_label_train_file)
@@ -90,7 +91,6 @@ for u_counter, u in enumerate([15, 3, 32, 7, 36, 4, 20, 29, 14, 11]):
                     continue
                 couple_label_train[u_counter, k, i] = value
 
-for u_counter, u in enumerate([15, 3, 32, 7, 36, 4, 20, 29, 14, 11]):
     for k, couple in enumerate(couples):
         f_label_test_file = os.path.join(dir_labels_test, 'user' + str(u) + "_Couple" + str(int(couple[0])) + '-' + str(int(couple[1])) + '.txt')
         fLabelTestFile = open(f_label_test_file)
@@ -108,31 +108,30 @@ for u_counter, u in enumerate([15, 3, 32, 7, 36, 4, 20, 29, 14, 11]):
                     continue
                 couple_label_test[u_counter, k, i] = value
 
-macro_ingredients_dictionary = {0: "cereali",
-                                1: "latticini",
-                                2: "uova",
-                                3: "farinacei",
-                                4: "frutta",
-                                5: "erbe_spezie_e_condimenti",
-                                6: "carne",
-                                7: "funghi_e_tartufi",
-                                8: "pasta",
-                                9: "pesce",
-                                10: "dolcificanti",
-                                11: "verdure_e_ortaggi"}
+    macro_ingredients_dictionary = {0: "cereali",
+                                    1: "latticini",
+                                    2: "uova",
+                                    3: "farinacei",
+                                    4: "frutta",
+                                    5: "erbe_spezie_e_condimenti",
+                                    6: "carne",
+                                    7: "funghi_e_tartufi",
+                                    8: "pasta",
+                                    9: "pesce",
+                                    10: "dolcificanti",
+                                    11: "verdure_e_ortaggi"}
 
 
-preparation_dictionary = {0: "bollitura",
-                          1: "rosolatura",
-                          2: "frittura",
-                          3: "marinatura",
-                          4: "mantecatura",
-                          5: "forno",
-                          6: "cottura_a_fiamma",
-                          7: "stufato"}
+    preparation_dictionary = {0: "bollitura",
+                              1: "rosolatura",
+                              2: "frittura",
+                              3: "marinatura",
+                              4: "mantecatura",
+                              5: "forno",
+                              6: "cottura_a_fiamma",
+                              7: "stufato"}
 
-choices = [0]
-for u_counter, u in enumerate([15, 3, 32, 7, 36, 4, 20, 29, 14, 11]):
+    choices = [0]
     for k, couple in enumerate(couples):
         dir_user_output_zero_train = zero_dir_train + "User" + str(u) + "/trainFiles/"
         dir_output_zero_train = output_dir_for_zero_train_data_dir + "User" + str(u) + "/outputTrain/"

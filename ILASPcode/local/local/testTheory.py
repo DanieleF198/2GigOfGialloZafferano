@@ -7,9 +7,9 @@ max_v = 1
 max_p = 5
 no_zero = False
 if no_zero:
-    path = 'Data8Component2Std/testOutput/results_no_zero_gauss.csv'
+    path = 'Data8Component2Std/testOutput/results_no_zero_45_gauss.csv'
 else:
-    path = './Data8Component2Std/testOutput/results_zero_gauss.csv'
+    path = './Data8Component2Std/testOutput/results_zero_45_gauss.csv'
 with open(path, 'w+', encoding='UTF8') as f_output:
     if no_zero:
         f_output.write("USERID;MAXV;MAXP;MAXWC;TRAIN_SIZE;TEST_SIZE;COORECTP;UNCERTAINP;INCORRECTP;TRAIN_TIME\n")
@@ -23,11 +23,12 @@ with open(path, 'w+', encoding='UTF8') as f_output:
             NNoutput_dir = "Data8Component2Std/sampled-recipes-no-zero/Train" + str(DIR_COUPLE) + "_gauss"
         else:
             NNoutput_dir = "Data8Component2Std/sampled-recipes-zero/Train" + str(DIR_COUPLE) + "_gauss"
-            for_statistics = np.zeros((10, 4), dtype="float32")
+            for_statistics = np.zeros((10, 5), dtype="float32")
 
         for U_counter, USER in enumerate([15, 3, 32, 7, 36, 4, 20, 29, 14, 11]):
             confusion_matrix = np.zeros((3, 3), dtype='float32')
-            f_couples = os.path.join(NNoutput_dir, 'couple.txt')
+            list_of_number_of_wc = []
+            f_couples = os.path.join(NNoutput_dir, 'couple' + str(USER) + '.txt')
 
             fCouples = open(f_couples)
             dataCouples = fCouples.read()
@@ -67,6 +68,47 @@ with open(path, 'w+', encoding='UTF8') as f_output:
                 else:
                     items = ilasp.itemsFromFile("Data8Component2Std/recipes/recipes_max_v(default)-max_p(default).las")
                     language_bias = ilasp.languageBiasFromFile("Data8Component2Std/recipes/recipes_max_v(default)-max_p(default).las")
+                # --- start part for gaussian noise ---
+                #
+                # for key in items:
+                #     category_guard = True
+                #     list_string = list(items[key])
+                #     new_str = ''.join(list_string)
+                #     number_of_change = 0
+                #     for index_char, char in enumerate(items[key]):
+                #         if char.isnumeric():
+                #             if category_guard:
+                #                 category_guard = False
+                #                 continue
+                #             if int(char) == 0:
+                #                 continue
+                #             until = 0
+                #             for second_index_char in range(index_char+1, len(items[key])):
+                #                 if second_index_char == len(items[key])-1:
+                #                     until = second_index_char
+                #                     break
+                #                 if items[key][second_index_char].isnumeric():
+                #                     continue
+                #                 else:
+                #                     until = second_index_char - 1
+                #                     break
+                #             if until == index_char:
+                #                 list_string = list(new_str)
+                #                 list_string[index_char+number_of_change] = str(int(list_string[index_char+number_of_change])*10)
+                #                 new_str = ''.join(list_string)
+                #                 number_of_change += 1
+                #             else:
+                #                 list_string = list(new_str)
+                #                 number_str = ''
+                #                 for indexes in range(index_char+number_of_change, until+number_of_change+1):
+                #                     number_str += list_string[indexes]
+                #                 list_string[until+number_of_change] = ''
+                #                 list_string[index_char+number_of_change] = str(int(number_str) * 10)
+                #                 new_str = ''.join(list_string)
+                #                 number_of_change += 1
+                #     items[key] = new_str
+
+                # --- end part for gaussian noise ---
                 f_train = filename
                 f_train_data = os.path.join(output_train_data_dir, 'Couple' + str(int(couple[0])) + '-' + str(int(couple[1])) + '-max_v=' + str(max_v) + '-max_p=' + str(max_p) + '.las')
                 temp_filename = filename.replace("outputTrain", "testFiles")
@@ -78,7 +120,8 @@ with open(path, 'w+', encoding='UTF8') as f_output:
                 F_TRAIN.close()
                 # train_set = ilasp.preferencesFromFileSpaces(f_train_data)
                 train_set = ilasp.preferencesFromFileSpacesAndSignSampledCouples(f_train_data)
-                test_set = ilasp.preferencesFromFileSpacesAndSignSampledCouplesTestCorrection(f_test)
+                test_set = ilasp.preferencesFromFileSpacesAndSignSampledCouplesTestCorrection(f_test, 44)
+
                 # train_size = len(train_set)
                 test_size = len(test_set)
                 if ':~' not in data_train:
@@ -87,13 +130,16 @@ with open(path, 'w+', encoding='UTF8') as f_output:
                     lines = data_train.split('\n')
                     theory = ""
                     training_time = ""
+                    number_of_wc = 0
                     for line in lines:
                         if ':~' in line:
                             theory += line + "\n"
+                            number_of_wc += 1
                         if '%% Total' in line:
                             start_index = line.find(':')
                             end_index = line.find('s')
                             training_time += line[start_index + 2:end_index]
+                    list_of_number_of_wc.append(number_of_wc)
                     c = ilasp.test_cm_number(theory, items, test_set)
                     if c == 5:
                         confusion_matrix[0, 0] = confusion_matrix[0, 0] + 1
@@ -113,6 +159,7 @@ with open(path, 'w+', encoding='UTF8') as f_output:
                         confusion_matrix[2, 1] = confusion_matrix[2, 1] + 1
                     if c == 1:
                         confusion_matrix[2, 2] = confusion_matrix[2, 2] + 1
+            mean_of_wc = np.mean(list_of_number_of_wc)
             accuracy_class1 = (confusion_matrix[0, 0] + confusion_matrix[1, 1] + confusion_matrix[1, 2] + confusion_matrix[2, 1] + confusion_matrix[2, 2]) / np.sum(confusion_matrix)
             accuracy_class0 = (confusion_matrix[1, 1] + confusion_matrix[0, 0] + confusion_matrix[0, 2] + confusion_matrix[2, 0] + confusion_matrix[2, 2]) / np.sum(confusion_matrix)
             accuracy_class_minus1 = (confusion_matrix[2, 2] + confusion_matrix[0, 0] + confusion_matrix[0, 1] + confusion_matrix[1, 0] + confusion_matrix[1, 1]) / np.sum(confusion_matrix)
@@ -151,10 +198,10 @@ with open(path, 'w+', encoding='UTF8') as f_output:
             average_recall = (recall_class1 + recall_class0 + recall_class_minus1) / 3
             
             f_output.write(str(USER) + ";" + str(max_v) + ";" + str(max_p) + ";3;" + str(train_size) + ";" + str(test_size) + ";" + str(average_accuracy) + ";" + str(average_precision) + ";" + str(average_recall) + ";" + str(training_time) + "\n")
-            for_statistics[U_counter, :] = (average_accuracy, average_precision, average_recall, training_time)
+            for_statistics[U_counter, :] = (average_accuracy, average_precision, average_recall, training_time, mean_of_wc)
 
 
 for user, user_statistic in zip([15, 3, 32, 7, 36, 4, 20, 29, 14, 11], for_statistics):
-    print("user " + str(user) + ": avg accuracy = " + str(user_statistic[0]) + "; avg precision = " + str(user_statistic[1]) + "; avg recall = " + str(user_statistic[2]) + "; avg time execution = " + str(user_statistic[3]))
-print("mean of all user: avg accuracy = " + str(np.mean(for_statistics[:, 0])) + "; avg precision = " + str(np.mean(for_statistics[:, 1])) + "; avg recall = " + str(np.mean(for_statistics[:, 2])) + "; avg time execution = " + str(np.mean(for_statistics[:, 3])))
+    print("user " + str(user) + ": avg accuracy = " + str(user_statistic[0]) + "; avg precision = " + str(user_statistic[1]) + "; avg recall = " + str(user_statistic[2]) + "; avg time execution = " + str(user_statistic[3]) + "; avg number of wc = " + str(user_statistic[4]))
+print("mean of all user: avg accuracy = " + str(np.mean(for_statistics[:, 0])) + "; avg precision = " + str(np.mean(for_statistics[:, 1])) + "; avg recall = " + str(np.mean(for_statistics[:, 2])) + "; avg time execution = " + str(np.mean(for_statistics[:, 3])) + "; avg number of wc = " + str(np.mean(for_statistics[:, 4])))
 

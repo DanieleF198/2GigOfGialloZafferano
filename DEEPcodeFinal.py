@@ -109,7 +109,7 @@ def testing():
     linesOfCC = dataCC.split('\n')
     food_couple = np.zeros((len(linesOfCC), 420, 2), dtype='int32')
     for i, line in enumerate(linesOfCC):
-        if i < 48:
+        if i < 54:
             values = [x for x in line.split(';')[:]]
             values = values[:210]
             for j, value in enumerate(values):
@@ -124,7 +124,7 @@ def testing():
     linesOfL = dataL.split('\n')
     couple_label = np.zeros((len(linesOfL), 420), dtype='int32')
     for i, line in enumerate(linesOfL):
-        if i < 48:
+        if i < 54:
             values = [x for x in line.split(' ')[:]]
             for j, value in enumerate(values):
                 veryValue = int(value)
@@ -170,14 +170,29 @@ def testing():
 
     # scaling preparation time, cost, difficulty, ingredients and preparations
     scaler = preprocessing.StandardScaler()
-    scaled_food_data_finalCategory = scaler.fit_transform(finalCategory)
-    scaled_food_data_scalars = scaler.fit_transform(food_data_scalars)
-    scaled_food_data_categories = scaler.fit_transform(food_data_categories)
-    scaled_food_data_ingredients = scaler.fit_transform(normalized_food_data_ingredients)
-    scaled_food_data_preparation = scaler.fit_transform(normalized_food_data_preparation)
+    scaler_final_category = preprocessing.StandardScaler()
+    scaled_food_data_finalCategory = scaler_final_category.fit_transform(finalCategory)
+    scaler_scalars = preprocessing.StandardScaler()
+    scaled_food_data_scalars = scaler_scalars.fit_transform(food_data_scalars)
+    scaler_categories = preprocessing.StandardScaler()
+    scaled_food_data_categories = scaler_categories.fit_transform(food_data_categories)
+    scaler_ingredients = preprocessing.StandardScaler()
+    scaled_food_data_ingredients = scaler_ingredients.fit_transform(normalized_food_data_ingredients)
+    scaler_preparations = preprocessing.StandardScaler()
+    scaled_food_data_preparation = scaler_preparations.fit_transform(normalized_food_data_preparation)
+
+    dict_of_scaler = {
+        "final_category": scaler_final_category,
+        "scalars": scaler_scalars,
+        "categories": scaler_categories,
+        "ingredients": scaler_ingredients,
+        "preparations": scaler_preparations
+    }
 
     # concatenate all data in a numpy tensor
     all_data = np.concatenate([scaled_food_data_finalCategory, scaled_food_data_categories, scaled_food_data_scalars, scaled_food_data_ingredients, scaled_food_data_preparation], axis=1)
+    all_data_original = np.concatenate([finalCategory, food_data_categories, food_data_scalars, food_data_ingredients, food_data_preparation], axis=1)
+    all_data_original = all_data_original[:-1, :]
 
     # preparation of labels for pandas dataframe
     foodsLabel = ['F' + str(i) for i in range(1, 101)]
@@ -199,14 +214,76 @@ def testing():
     # apply pca on data in pandas_dataframe
     pca_data = pca.transform(final_data)
 
+    couple_label = couple_label[:-1, :]
+
+    # for each couple I augmentate the dataset by adding noise (10 times)
+    dataset_augmented = np.zeros((100, 10, 47), dtype="float32")
+    for f_index, food_original in enumerate(all_data_original):
+        temp_to_append = np.zeros((10, 47), dtype="float32")
+        for pert_index in range(0, 10):
+            s = np.random.normal(0, 0.01, 47)
+            s_min = abs(np.min(s))
+            s += s_min
+            temp_to_append[pert_index] = food_original + s
+        dataset_augmented[f_index] = temp_to_append
+
+    for f_index, perturbed_food in enumerate(dataset_augmented):
+        for effective_perturbed_food in perturbed_food:
+            sum_of_ingredients = 0
+            for index_ingredient in range(8, 39):
+                sum_of_ingredients += effective_perturbed_food[index_ingredient]
+            for index_ingredient in range(8, 39):
+                effective_perturbed_food[index_ingredient] /= sum_of_ingredients
+
+    for f_index, perturbed_food in enumerate(dataset_augmented):
+        for effective_perturbed_food in perturbed_food:
+            sum_of_preparations = 0
+            for index_ingredient in range(39, 47):
+                sum_of_preparations += effective_perturbed_food[index_ingredient]
+            for index_ingredient in range(39, 47):
+                effective_perturbed_food[index_ingredient] /= sum_of_preparations
+
+    foodsLabel = ['F1']
+    dataset_augmented_final = np.zeros((100, 10, 17), dtype="float32")
+
+    for f_index, perturbed_food in enumerate(dataset_augmented):
+        for ff_index, effective_perturbed_food in enumerate(perturbed_food):
+            temp_for_scaling_categories = dict_of_scaler["final_category"].transform(dataset_augmented[f_index, ff_index, 0:5].reshape(1, -1))
+            dataset_augmented[f_index, ff_index, 0:5] = temp_for_scaling_categories
+            temp_for_scaling = dataset_augmented[f_index, ff_index, 5:].copy()
+            temp_for_scaling[0:2] = dict_of_scaler["categories"].transform(temp_for_scaling[0:2].reshape(1, -1))
+            temp_for_scaling[2] = dict_of_scaler["scalars"].transform(temp_for_scaling[2].reshape(1, -1))
+            temp_for_scaling[3:34] = dict_of_scaler["ingredients"].transform(temp_for_scaling[3:34].reshape(1, -1))
+            temp_for_scaling[34:] = dict_of_scaler["preparations"].transform(temp_for_scaling[34:].reshape(1, -1))
+            dataset_augmented[f_index, ff_index, 5:] = temp_for_scaling
+            to_fit_to_PCA = np.concatenate((temp_for_scaling_categories.reshape(1, -1), temp_for_scaling.reshape(1, -1)), axis=1)
+            to_fit_to_PCA_final = pd.DataFrame(columns=[*categoryLabel, 'COST', 'DIFFICULTY', 'PREPARATION', *ingredientsLabel, *preparationsLabel], index=foodsLabel)
+            for i, food in enumerate(to_fit_to_PCA_final.index):
+                to_fit_to_PCA_final.loc[food] = to_fit_to_PCA[i]
+            fitted_on_PCA = pca.transform(to_fit_to_PCA_final)
+            dataset_augmented_final[f_index, ff_index] = fitted_on_PCA[0]
+
 
     # VERSION F1X | F2X | ... | FnX | F1Y | F2Y | ... | FnY |
     food_effective_couple = np.zeros((len(food_couple)-1, 420, 2, 17))  # len(food_couple) answer, each one with 210 couple made of 2 elements that each is rapresented by 19 feature (PCA)
+    food_effective_couple_augmented = np.zeros((len(food_couple)-1, 4200, 2, 17))
+    couple_label_augmented = np.zeros((len(food_couple)-1, 4200), dtype="int32")
     for i, answer in enumerate(food_couple):
-        if i < 48:
+        if i < 54:
             for j, couple in enumerate(answer):
                 for k, food in enumerate(couple):
                     food_effective_couple[i, j, k, :] = pca_data[int(food)]
+            for j, couple in enumerate(answer):
+                for k, food in enumerate(couple):
+                    for pert_index in range(0, 10):
+                        food_effective_couple_augmented[i, (j*10)+pert_index, k, :] = dataset_augmented_final[int(food), pert_index]
+                        couple_label_augmented[i, (j*10)+pert_index] = couple_label[i, j]
+
+    food_effective_couple_temp = np.copy(food_effective_couple)
+    couple_label_temp = np.copy(couple_label)
+
+    food_effective_couple = np.concatenate((food_effective_couple_temp, food_effective_couple_augmented), axis=1)
+    couple_label = np.concatenate((couple_label_temp, couple_label_augmented), axis=1)
 
     # # VERSION F1X | F1Y | F2X | F2Y | ... | FnX | FnY |
     # food_effective_couple = np.zeros((len(food_couple), 210, 34))
@@ -249,7 +326,7 @@ def testing():
     #                             couple_label[i, j] = 1
     #                         # couple_label[i, j] *= -1
 
-    food_effective_couple = np.reshape(food_effective_couple, (len(food_couple)-1, 420, 34))
+    food_effective_couple = np.reshape(food_effective_couple, (len(food_couple)-1, 4620, 34))
 
     # food_effective_couple_zeros = np.zeros((len(food_effective_couple),420,34))
     # food_effective_couple_no_zeros = np.zeros((len(food_effective_couple),420,34))
@@ -302,6 +379,8 @@ def testing():
     epoch = 10000
 
     for k, row in enumerate(food_effective_couple):
+        if k != 3 and k != 4 and k != 7 and k != 11 and k != 14 and k != 15 and k != 20 and k != 29 and k != 32 and k != 36:
+            continue
         print("User" + str(k))
         X = scaler.fit_transform(food_effective_couple[k])
         Y = couple_label[k]
@@ -335,27 +414,27 @@ def testing():
                                 for dropout_use in dropout_uses:
                                     for batch_normalization_use in batch_normalization_uses:
                                         for dropout_parameter in dropout_parameters:
-                                            if (activationOfFirstLayer == "linear" and (activationOfSecondLayer == "linear" or activationOfThirdLayer == "linear")) or (activationOfSecondLayer == "linear" and (activationOfFirstLayer == "linear" or activationOfThirdLayer == "linear")) or (activationOfThirdLayer == "linear" and (activationOfFirstLayer == "linear" or activationOfSecondLayer == "linear")):
-                                                continue
-                                            if not dropout_use:     # go directly to last iteration of dropout_parameter because we don't consider it (and so don't waste time)
-                                                if dropout_parameter == 0.1 or dropout_parameter == 0.2:
-                                                    continue
-                                            if k == 2:
-                                                continue
-                                            if k == 5:
-                                                continue
-                                            if k == 23:
-                                                if lrValue == 0.01 or lrValue == 0.001:
-                                                    continue
-                                                elif lrValue == 0.0001:
-                                                    if numberOfNodes == 32:
-                                                        continue
-                                                    elif numberOfNodes == 64:
-                                                        if dropout_use:
-                                                            continue
-                                                        else:
-                                                            if batch_normalization_use:
-                                                                continue
+                                            # if (activationOfFirstLayer == "linear" and (activationOfSecondLayer == "linear" or activationOfThirdLayer == "linear")) or (activationOfSecondLayer == "linear" and (activationOfFirstLayer == "linear" or activationOfThirdLayer == "linear")) or (activationOfThirdLayer == "linear" and (activationOfFirstLayer == "linear" or activationOfSecondLayer == "linear")):
+                                            #     continue
+                                            # if not dropout_use:     # go directly to last iteration of dropout_parameter because we don't consider it (and so don't waste time)
+                                            #     if dropout_parameter == 0.1 or dropout_parameter == 0.2:
+                                            #         continue
+                                            # if k == 2:
+                                            #     continue
+                                            # if k == 5:
+                                            #     continue
+                                            # if k == 23:
+                                            #     if lrValue == 0.01 or lrValue == 0.001:
+                                            #         continue
+                                            #     elif lrValue == 0.0001:
+                                            #         if numberOfNodes == 32:
+                                            #             continue
+                                            #         elif numberOfNodes == 64:
+                                            #             if dropout_use:
+                                            #                 continue
+                                            #             else:
+                                            #                 if batch_normalization_use:
+                                            #                     continue
 
                                             # kfold = StratifiedKFold(n_splits=5, shuffle=True, random_state=42) # mod.: 31/01/2022 near 17:00
                                             X_train_temp, X_validation, Y_train_temp, Y_validation = train_test_split(X, Y_enc, shuffle=True, stratify=Y_enc, test_size=0.20, random_state=42)
@@ -409,6 +488,8 @@ def testing():
                                             metricRecall = tf.keras.metrics.Recall()
                                             model.compile(optimizer=optimizer, loss='categorical_crossentropy', metrics=['accuracy', metricPrecision, metricRecall])
                                             # X_train, X_validation, Y_train, Y_validation = train_test_split(X_train_fold, Y_train_fold, test_size=0.20, random_state=42)
+                                            # callback = EarlyStopping(monitor='loss', patience=10, min_delta=0.0001)
+                                            # history = model.fit(X, Y_enc, epochs=epoch, batch_size=32, verbose=1, shuffle=True)
                                             history = model.fit(X_train, Y_train, epochs=epoch, batch_size=32, validation_data=(X_validation, Y_validation), verbose=0, shuffle=True)
                                             evaluation = model.evaluate(X_test, Y_test, verbose=0)
                                             loss.append(evaluation[0])
@@ -416,7 +497,7 @@ def testing():
                                             precision.append(evaluation[2])
                                             recall.append(evaluation[3])
                                             f1score.append(2*(precision[len(precision)-1]*recall[len(precision)-1])/(precision[len(precision)-1]+recall[len(precision)-1]))
-                                            tf.keras.models.save_model(model= model, filepath="./NN_data/models/User" + str(k) + "/folder_version", save_format='h5py')
+                                            tf.keras.models.save_model(model=model, filepath="./NN_data/models/User" + str(k) + "/folder_version", save_format='h5py')
                                             model.save("./NN_data/models/User" + str(k) + "/modelUser" + str(k) + ".h5")
 
                                             if ("precision" in history.history) and ("recall" in history.history):
@@ -482,8 +563,8 @@ def testing():
                                             # average_val_f1score_history = [np.mean([x[i] for x in all_val_f1score_history]) for i in range(epoch)]
 
                                             plt.clf()
-                                            plt.plots(range(1, len(accuracy_history) + 1), accuracy_history, label='accuracy')
-                                            plt.plots(range(1, len(val_accuracy_history) + 1), val_accuracy_history, label='val_accuracy')
+                                            plt.plot(range(1, len(accuracy_history) + 1), accuracy_history, label='accuracy')
+                                            plt.plot(range(1, len(val_accuracy_history) + 1), val_accuracy_history, label='val_accuracy')
                                             plt.xlabel('Epochs')
                                             plt.ylabel('training and validation accuracy')
                                             if dropout_use:
@@ -498,81 +579,81 @@ def testing():
                                             plt.legend()
                                             if dropout_use:
                                                 if batch_normalization_use:
-                                                    plt.savefig("./NN_data/plots/User" + str(k) + "/accuracy/" + activationOfFirstLayer + "-" + activationOfSecondLayer + "-" + activationOfThirdLayer + "-Yes_Drop" + str(dropout_parameter) + "_Yes_batch-softmax_LR-" + str(lrValue) + "_OPT-" + optimizerValue + "_Nodes-" + str(numberOfNodes) + ".jpg", dpi=300)
+                                                    plt.savefig("./NN_data/allPlots/accuracy/User" + str(k) + "-" + activationOfFirstLayer + "-" + activationOfSecondLayer + "-" + activationOfThirdLayer + "-Yes_Drop" + str(dropout_parameter) + "_Yes_batch-softmax_LR-" + str(lrValue) + "_OPT-" + optimizerValue + "_Nodes-" + str(numberOfNodes) + ".jpg", dpi=300)
                                                 else:
-                                                    plt.savefig("./NN_data/plots/User" + str(k) + "/accuracy/" + activationOfFirstLayer + "-" + activationOfSecondLayer + "-" + activationOfThirdLayer + "-Yes_Drop" + str(dropout_parameter) + "_No_batch-softmax_LR-" + str(lrValue) + "_OPT-" + optimizerValue + "_Nodes-" + str(numberOfNodes) + ".jpg", dpi=300)
+                                                    plt.savefig("./NN_data/allPlots/accuracy/User" + str(k) + "-" + activationOfFirstLayer + "-" + activationOfSecondLayer + "-" + activationOfThirdLayer + "-Yes_Drop" + str(dropout_parameter) + "_No_batch-softmax_LR-" + str(lrValue) + "_OPT-" + optimizerValue + "_Nodes-" + str(numberOfNodes) + ".jpg", dpi=300)
                                             elif batch_normalization_use:
-                                                plt.savefig("./NN_data/plots/User" + str(k) + "/accuracy/" + activationOfFirstLayer + "-" + activationOfSecondLayer + "-" + activationOfThirdLayer + "-No_Drop_Yes_batch-softmax_LR-" + str(lrValue) + "_OPT-" + optimizerValue + "_Nodes-" + str(numberOfNodes) + ".jpg", dpi=300)
+                                                plt.savefig("./NN_data/allPlots/accuracy/User" + str(k) + "-" + activationOfFirstLayer + "-" + activationOfSecondLayer + "-" + activationOfThirdLayer + "-No_Drop_Yes_batch-softmax_LR-" + str(lrValue) + "_OPT-" + optimizerValue + "_Nodes-" + str(numberOfNodes) + ".jpg", dpi=300)
                                             else:
-                                                plt.savefig("./NN_data/plots/User" + str(k) + "/accuracy/" + activationOfFirstLayer + "-" + activationOfSecondLayer + "-" + activationOfThirdLayer + "-No_Drop_No_batch-softmax_LR-" + str(lrValue) + "_OPT-" + optimizerValue + "_Nodes-" + str(numberOfNodes) + ".jpg", dpi=300)
+                                                plt.savefig("./NN_data/allPlots/accuracy/User" + str(k) + "-" + activationOfFirstLayer + "-" + activationOfSecondLayer + "-" + activationOfThirdLayer + "-No_Drop_No_batch-softmax_LR-" + str(lrValue) + "_OPT-" + optimizerValue + "_Nodes-" + str(numberOfNodes) + ".jpg", dpi=300)
 
                                             plt.clf()
-                                            plt.plots(range(1, len(loss_history) + 1), loss_history, label='loss')
-                                            plt.plots(range(1, len(val_loss_history) + 1), val_loss_history, label='val_loss')
+                                            plt.plot(range(1, len(loss_history) + 1), loss_history, label='loss')
+                                            plt.plot(range(1, len(val_loss_history) + 1), val_loss_history, label='val_loss')
                                             plt.xlabel('Epochs')
                                             plt.ylabel('training and validation loss')
                                             plt.title("user" + str(k) + " " + activationOfFirstLayer + "-" + activationOfSecondLayer + "-" + activationOfThirdLayer + "-softmax LR=" + str(lrValue) + " OPT=" + optimizerValue + "_Nodes-" + str(numberOfNodes))
                                             plt.legend()
                                             if dropout_use:
                                                 if batch_normalization_use:
-                                                    plt.savefig("./NN_data/plots/User" + str(k) + "/loss/" + activationOfFirstLayer + "-" + activationOfSecondLayer + "-" + activationOfThirdLayer + "-Yes_Drop" + str(dropout_parameter) + "_Yes_batch-softmax_LR-" + str(lrValue) + "_OPT-" + optimizerValue + "_Nodes-" + str(numberOfNodes) + ".jpg", dpi=300)
+                                                    plt.savefig("./NN_data/allPlots/loss/User" + str(k) + "-" + activationOfFirstLayer + "-" + activationOfSecondLayer + "-" + activationOfThirdLayer + "-Yes_Drop" + str(dropout_parameter) + "_Yes_batch-softmax_LR-" + str(lrValue) + "_OPT-" + optimizerValue + "_Nodes-" + str(numberOfNodes) + ".jpg", dpi=300)
                                                 else:
-                                                    plt.savefig("./NN_data/plots/User" + str(k) + "/loss/" + activationOfFirstLayer + "-" + activationOfSecondLayer + "-" + activationOfThirdLayer + "-Yes_Drop" + str(dropout_parameter) + "_No_batch-softmax_LR-" + str(lrValue) + "_OPT-" + optimizerValue + "_Nodes-" + str(numberOfNodes) + ".jpg", dpi=300)
+                                                    plt.savefig("./NN_data/allPlots/loss/User" + str(k) + "-" + activationOfFirstLayer + "-" + activationOfSecondLayer + "-" + activationOfThirdLayer + "-Yes_Drop" + str(dropout_parameter) + "_No_batch-softmax_LR-" + str(lrValue) + "_OPT-" + optimizerValue + "_Nodes-" + str(numberOfNodes) + ".jpg", dpi=300)
                                             elif batch_normalization_use:
-                                                plt.savefig("./NN_data/plots/User" + str(k) + "/loss/" + activationOfFirstLayer + "-" + activationOfSecondLayer + "-" + activationOfThirdLayer + "-No_Drop_Yes_batch-softmax_LR-" + str(lrValue) + "_OPT-" + optimizerValue + "_Nodes-" + str(numberOfNodes) + ".jpg", dpi=300)
+                                                plt.savefig("./NN_data/allPlots/loss/User" + str(k) + "-" + activationOfFirstLayer + "-" + activationOfSecondLayer + "-" + activationOfThirdLayer + "-No_Drop_Yes_batch-softmax_LR-" + str(lrValue) + "_OPT-" + optimizerValue + "_Nodes-" + str(numberOfNodes) + ".jpg", dpi=300)
                                             else:
-                                                plt.savefig("./NN_data/plots/User" + str(k) + "/loss/" + activationOfFirstLayer + "-" + activationOfSecondLayer + "-" + activationOfThirdLayer + "-No_Drop_No_batch-softmax_LR-" + str(lrValue) + "_OPT-" + optimizerValue + "_Nodes-" + str(numberOfNodes) + ".jpg", dpi=300)
+                                                plt.savefig("./NN_data/allPlots/loss/User" + str(k) + "-" + activationOfFirstLayer + "-" + activationOfSecondLayer + "-" + activationOfThirdLayer + "-No_Drop_No_batch-softmax_LR-" + str(lrValue) + "_OPT-" + optimizerValue + "_Nodes-" + str(numberOfNodes) + ".jpg", dpi=300)
 
                                             plt.clf()
-                                            plt.plots(range(1, len(precision_history) + 1), precision_history, label='precision')
-                                            plt.plots(range(1, len(val_precision_history) + 1), val_precision_history, label='val_precision')
+                                            plt.plot(range(1, len(precision_history) + 1), precision_history, label='precision')
+                                            plt.plot(range(1, len(val_precision_history) + 1), val_precision_history, label='val_precision')
                                             plt.xlabel('Epochs')
                                             plt.ylabel('training and validation precision')
                                             plt.title("user" + str(k) + " " + activationOfFirstLayer + "-" + activationOfSecondLayer + "-" + activationOfThirdLayer + "-softmax LR=" + str(lrValue) + " OPT=" + optimizerValue + "_Nodes-" + str(numberOfNodes))
                                             plt.legend()
                                             if dropout_use:
                                                 if batch_normalization_use:
-                                                    plt.savefig("./NN_data/plots/User" + str(k) + "/precision/" + activationOfFirstLayer + "-" + activationOfSecondLayer + "-" + activationOfThirdLayer + "-Yes_Drop" + str(dropout_parameter) + "_Yes_batch-softmax_LR-" + str(lrValue) + "_OPT-" + optimizerValue + "_Nodes-" + str(numberOfNodes) + ".jpg", dpi=300)
+                                                    plt.savefig("./NN_data/allPlots/precision/User" + str(k) + "-" + activationOfFirstLayer + "-" + activationOfSecondLayer + "-" + activationOfThirdLayer + "-Yes_Drop" + str(dropout_parameter) + "_Yes_batch-softmax_LR-" + str(lrValue) + "_OPT-" + optimizerValue + "_Nodes-" + str(numberOfNodes) + ".jpg", dpi=300)
                                                 else:
-                                                    plt.savefig("./NN_data/plots/User" + str(k) + "/precision/" + activationOfFirstLayer + "-" + activationOfSecondLayer + "-" + activationOfThirdLayer + "-Yes_Drop" + str(dropout_parameter) + "_No_batch-softmax_LR-" + str(lrValue) + "_OPT-" + optimizerValue + "_Nodes-" + str(numberOfNodes) + ".jpg", dpi=300)
+                                                    plt.savefig("./NN_data/allPlots/precision/User" + str(k) + "-" + activationOfFirstLayer + "-" + activationOfSecondLayer + "-" + activationOfThirdLayer + "-Yes_Drop" + str(dropout_parameter) + "_No_batch-softmax_LR-" + str(lrValue) + "_OPT-" + optimizerValue + "_Nodes-" + str(numberOfNodes) + ".jpg", dpi=300)
                                             elif batch_normalization_use:
-                                                plt.savefig("./NN_data/plots/User" + str(k) + "/precision/" + activationOfFirstLayer + "-" + activationOfSecondLayer + "-" + activationOfThirdLayer + "-No_Drop_Yes_batch-softmax_LR-" + str(lrValue) + "_OPT-" + optimizerValue + "_Nodes-" + str(numberOfNodes) + ".jpg", dpi=300)
+                                                plt.savefig("./NN_data/allPlots/precision/User" + str(k) + "-" + activationOfFirstLayer + "-" + activationOfSecondLayer + "-" + activationOfThirdLayer + "-No_Drop_Yes_batch-softmax_LR-" + str(lrValue) + "_OPT-" + optimizerValue + "_Nodes-" + str(numberOfNodes) + ".jpg", dpi=300)
                                             else:
-                                                plt.savefig("./NN_data/plots/User" + str(k) + "/precision/" + activationOfFirstLayer + "-" + activationOfSecondLayer + "-" + activationOfThirdLayer + "-No_Drop_No_batch-softmax_LR-" + str(lrValue) + "_OPT-" + optimizerValue + "_Nodes-" + str(numberOfNodes) + ".jpg", dpi=300)
+                                                plt.savefig("./NN_data/allPlots/precision/User" + str(k) + "-" + activationOfFirstLayer + "-" + activationOfSecondLayer + "-" + activationOfThirdLayer + "-No_Drop_No_batch-softmax_LR-" + str(lrValue) + "_OPT-" + optimizerValue + "_Nodes-" + str(numberOfNodes) + ".jpg", dpi=300)
 
                                             plt.clf()
-                                            plt.plots(range(1, len(recall_history) + 1), recall_history, label='recall')
-                                            plt.plots(range(1, len(val_recall_history) + 1), val_recall_history, label='val_recall')
+                                            plt.plot(range(1, len(recall_history) + 1), recall_history, label='recall')
+                                            plt.plot(range(1, len(val_recall_history) + 1), val_recall_history, label='val_recall')
                                             plt.xlabel('Epochs')
                                             plt.ylabel('training and validation recall')
                                             plt.title("user" + str(k) + " " + activationOfFirstLayer + "-" + activationOfSecondLayer + "-" + activationOfThirdLayer + "-softmax LR=" + str(lrValue) + " OPT=" + optimizerValue + "_Nodes-" + str(numberOfNodes))
                                             plt.legend()
                                             if dropout_use:
                                                 if batch_normalization_use:
-                                                    plt.savefig("./NN_data/plots/User" + str(k) + "/recall/" + activationOfFirstLayer + "-" + activationOfSecondLayer + "-" + activationOfThirdLayer + "-Yes_Drop" + str(dropout_parameter) + "_Yes_batch-softmax_LR-" + str(lrValue) + "_OPT-" + optimizerValue + "_Nodes-" + str(numberOfNodes) + ".jpg", dpi=300)
+                                                    plt.savefig("./NN_data/allPlots/recall/User" + str(k) + "-" + activationOfFirstLayer + "-" + activationOfSecondLayer + "-" + activationOfThirdLayer + "-Yes_Drop" + str(dropout_parameter) + "_Yes_batch-softmax_LR-" + str(lrValue) + "_OPT-" + optimizerValue + "_Nodes-" + str(numberOfNodes) + ".jpg", dpi=300)
                                                 else:
-                                                    plt.savefig("./NN_data/plots/User" + str(k) + "/recall/" + activationOfFirstLayer + "-" + activationOfSecondLayer + "-" + activationOfThirdLayer + "-Yes_Drop" + str(dropout_parameter) + "_No_batch-softmax_LR-" + str(lrValue) + "_OPT-" + optimizerValue + "_Nodes-" + str(numberOfNodes) + ".jpg", dpi=300)
+                                                    plt.savefig("./NN_data/allPlots/recall/User" + str(k) + "-" + activationOfFirstLayer + "-" + activationOfSecondLayer + "-" + activationOfThirdLayer + "-Yes_Drop" + str(dropout_parameter) + "_No_batch-softmax_LR-" + str(lrValue) + "_OPT-" + optimizerValue + "_Nodes-" + str(numberOfNodes) + ".jpg", dpi=300)
                                             elif batch_normalization_use:
-                                                plt.savefig("./NN_data/plots/User" + str(k) + "/recall/" + activationOfFirstLayer + "-" + activationOfSecondLayer + "-" + activationOfThirdLayer + "-No_Drop_Yes_batch-softmax_LR-" + str(lrValue) + "_OPT-" + optimizerValue + "_Nodes-" + str(numberOfNodes) + ".jpg", dpi=300)
+                                                plt.savefig("./NN_data/allPlots/recall/User" + str(k) + "-" + activationOfFirstLayer + "-" + activationOfSecondLayer + "-" + activationOfThirdLayer + "-No_Drop_Yes_batch-softmax_LR-" + str(lrValue) + "_OPT-" + optimizerValue + "_Nodes-" + str(numberOfNodes) + ".jpg", dpi=300)
                                             else:
-                                                plt.savefig("./NN_data/plots/User" + str(k) + "/recall/" + activationOfFirstLayer + "-" + activationOfSecondLayer + "-" + activationOfThirdLayer + "-No_Drop_No_batch-softmax_LR-" + str(lrValue) + "_OPT-" + optimizerValue + "_Nodes-" + str(numberOfNodes) + ".jpg", dpi=300)
+                                                plt.savefig("./NN_data/allPlots/recall/User" + str(k) + "-" + activationOfFirstLayer + "-" + activationOfSecondLayer + "-" + activationOfThirdLayer + "-No_Drop_No_batch-softmax_LR-" + str(lrValue) + "_OPT-" + optimizerValue + "_Nodes-" + str(numberOfNodes) + ".jpg", dpi=300)
 
                                             plt.clf()
-                                            plt.plots(range(1, len(f1score_history) + 1), f1score_history, label='f1score')
-                                            plt.plots(range(1, len(val_f1score_history) + 1), val_f1score_history, label='val_f1score')
+                                            plt.plot(range(1, len(f1score_history) + 1), f1score_history, label='f1score')
+                                            plt.plot(range(1, len(val_f1score_history) + 1), val_f1score_history, label='val_f1score')
                                             plt.xlabel('Epochs')
                                             plt.ylabel('training and validation f1score')
                                             plt.title("user" + str(k) + " " + activationOfFirstLayer + "-" + activationOfSecondLayer + "-" + activationOfThirdLayer + "-softmax LR=" + str(lrValue) + " OPT=" + optimizerValue + "_Nodes-" + str(numberOfNodes))
                                             plt.legend()
                                             if dropout_use:
                                                 if batch_normalization_use:
-                                                    plt.savefig("./NN_data/plots/User" + str(k) + "/f1score/" + activationOfFirstLayer + "-" + activationOfSecondLayer + "-" + activationOfThirdLayer + "-Yes_Drop" + str(dropout_parameter) + "_Yes_batch-softmax_LR-" + str(lrValue) + "_OPT-" + optimizerValue + "_Nodes-" + str(numberOfNodes) + ".jpg", dpi=300)
+                                                    plt.savefig("./NN_data/allPlots/f1score/User" + str(k) + "-" + activationOfFirstLayer + "-" + activationOfSecondLayer + "-" + activationOfThirdLayer + "-Yes_Drop" + str(dropout_parameter) + "_Yes_batch-softmax_LR-" + str(lrValue) + "_OPT-" + optimizerValue + "_Nodes-" + str(numberOfNodes) + ".jpg", dpi=300)
                                                 else:
-                                                    plt.savefig("./NN_data/plots/User" + str(k) + "/f1score/" + activationOfFirstLayer + "-" + activationOfSecondLayer + "-" + activationOfThirdLayer + "-Yes_Drop" + str(dropout_parameter) + "_No_batch-softmax_LR-" + str(lrValue) + "_OPT-" + optimizerValue + "_Nodes-" + str(numberOfNodes) + ".jpg", dpi=300)
+                                                    plt.savefig("./NN_data/allPlots/f1score/User" + str(k) + "-" + activationOfFirstLayer + "-" + activationOfSecondLayer + "-" + activationOfThirdLayer + "-Yes_Drop" + str(dropout_parameter) + "_No_batch-softmax_LR-" + str(lrValue) + "_OPT-" + optimizerValue + "_Nodes-" + str(numberOfNodes) + ".jpg", dpi=300)
                                             elif batch_normalization_use:
-                                                plt.savefig("./NN_data/plots/User" + str(k) + "/f1score/" + activationOfFirstLayer + "-" + activationOfSecondLayer + "-" + activationOfThirdLayer + "-No_Drop_Yes_batch-softmax_LR-" + str(lrValue) + "_OPT-" + optimizerValue + "_Nodes-" + str(numberOfNodes) + ".jpg", dpi=300)
+                                                plt.savefig("./NN_data/allPlots/f1score/User" + str(k) + "-" + activationOfFirstLayer + "-" + activationOfSecondLayer + "-" + activationOfThirdLayer + "-No_Drop_Yes_batch-softmax_LR-" + str(lrValue) + "_OPT-" + optimizerValue + "_Nodes-" + str(numberOfNodes) + ".jpg", dpi=300)
                                             else:
-                                                plt.savefig("./NN_data/plots/User" + str(k) + "/f1score/" + activationOfFirstLayer + "-" + activationOfSecondLayer + "-" + activationOfThirdLayer + "-No_Drop_No_batch-softmax_LR-" + str(lrValue) + "_OPT-" + optimizerValue + "_Nodes-" + str(numberOfNodes) + ".jpg", dpi=300)
+                                                plt.savefig("./NN_data/allPlots/f1score/User" + str(k) + "-" + activationOfFirstLayer + "-" + activationOfSecondLayer + "-" + activationOfThirdLayer + "-No_Drop_No_batch-softmax_LR-" + str(lrValue) + "_OPT-" + optimizerValue + "_Nodes-" + str(numberOfNodes) + ".jpg", dpi=300)
 
 
                                             mn_acc = np.mean(accuracy)

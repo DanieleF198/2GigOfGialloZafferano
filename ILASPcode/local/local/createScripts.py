@@ -10,29 +10,28 @@ if no_zero:
 else:
     NNoutput_dir = "Data8Component2Std/sampled-recipes-zero/Train45_gauss/"
 
+for USER in list_of_user:
+    f_couples = os.path.join(NNoutput_dir, 'couple' + str(USER) + '.txt')
 
-f_couples = os.path.join(NNoutput_dir, 'couple.txt')
+    fCouples = open(f_couples)
+    dataCouples = fCouples.read()
+    fCouples.close()
 
-fCouples = open(f_couples)
-dataCouples = fCouples.read()
-fCouples.close()
-
-linesOfCouples = dataCouples.split('\n')
-couples = np.zeros((len(linesOfCouples), 2), dtype='float32')
-for i, line in enumerate(linesOfCouples):
-    if line == '':
-        continue
-    values = [x for x in line.split(';')[:]]
-    for j, value in enumerate(values):
-        if value == '':
+    linesOfCouples = dataCouples.split('\n')
+    couples = np.zeros((len(linesOfCouples), 2), dtype='float32')
+    for i, line in enumerate(linesOfCouples):
+        if line == '':
             continue
-        couples[i, j] = value
+        values = [x for x in line.split(';')[:]]
+        for j, value in enumerate(values):
+            if value == '':
+                continue
+            couples[i, j] = value
 
-no_zero_data_dir = "./Data8Component2Std/final/users/no_zero/train/45Couples_gauss/"
-zero_data_dir = "./Data8Component2Std/final/users/zero/train/45Couples_gauss/"
+    no_zero_data_dir = "./Data8Component2Std/final/users/no_zero/train/45Couples_gauss/"
+    zero_data_dir = "./Data8Component2Std/final/users/zero/train/45Couples_gauss/"
 
-if no_zero:
-    for USER in list_of_user:
+    if no_zero:
         fileToCreate = open(no_zero_data_dir + "script_ilasp_for_test_user" + str(USER) + ".sh", "w+")
         for k, couple in enumerate(couples):
             for max_v in max_v_list:
@@ -44,8 +43,7 @@ if no_zero:
         fileToCreate.flush()
         fileToCreate.close()
 
-else:
-    for USER in list_of_user:
+    else:
         fileToCreate = open(zero_data_dir + "script_ilasp_for_test_user" + str(USER) + ".sh", "w+")
         for k, couple in enumerate(couples):
             for max_v in max_v_list:
