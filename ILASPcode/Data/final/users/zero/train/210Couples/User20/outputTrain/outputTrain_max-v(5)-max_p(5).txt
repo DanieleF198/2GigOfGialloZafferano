@@ -1,0 +1,19 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Pre-processing                          : 0.084s
+%% Hypothesis Space Generation             : 1.238s
+%% Conflict analysis                       : 51.368s
+%%   - Brave Orders                        : 51.368s
+%% Counterexample search                   : 11.469s
+%%   - CDOEs                               : 9.871s
+%%   - CDPIs                               : 1.607s
+%% Hypothesis Search                       : 4124.43s
+%% Propagation                             : 128.303s
+%%   - CDOEs                               : 128.303s
+%% Total                                   : 4318.77s
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+:~ value(difficulty,V1).[V1@1, V1]
+:~ category(1).[1@5]
+:~ value(cottura_a_fiamma,V1), category(3).[V1@2, V1]
+:~ value(cost,V1), category(4).[V1@4, V1]
+:~ value(farinacei,V1), category(3).[V1@3, V1]
+

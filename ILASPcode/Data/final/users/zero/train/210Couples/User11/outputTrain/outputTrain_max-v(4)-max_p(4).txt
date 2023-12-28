@@ -1,0 +1,18 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Pre-processing                          : 0.097s
+%% Hypothesis Space Generation             : 0.582s
+%% Conflict analysis                       : 47.955s
+%%   - Brave Orders                        : 47.955s
+%% Counterexample search                   : 12.37s
+%%   - CDOEs                               : 10.493s
+%%   - CDPIs                               : 1.894s
+%% Hypothesis Search                       : 7044.08s
+%% Propagation                             : 116.813s
+%%   - CDOEs                               : 116.814s
+%% Total                                   : 7223.3s
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+:~ value(difficulty,V1).[-V1@2, V1]
+:~ value(cereali,V1).[V1@4, V1]
+:~ value(carne,V1).[-V1@1, V1]
+:~ value(stufato,V1).[V1@3, V1]
+

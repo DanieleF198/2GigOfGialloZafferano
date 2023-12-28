@@ -1,0 +1,17 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Pre-processing                          : 0.091s
+%% Hypothesis Space Generation             : 0.689s
+%% Conflict analysis                       : 6.695s
+%%   - Brave Orders                        : 6.695s
+%% Counterexample search                   : 0.872s
+%%   - CDOEs                               : 0.583s
+%%   - CDPIs                               : 0.29s
+%% Hypothesis Search                       : 12.428s
+%% Propagation                             : 16.937s
+%%   - CDOEs                               : 16.937s
+%% Total                                   : 38.298s
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+:~ value(forno,V1).[V1@3, V1]
+:~ value(carne,V1).[-V1@2, V1]
+:~ value(verdure_e_ortaggi,V1).[-V1@1, V1]
+

@@ -1,0 +1,18 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Pre-processing                          : 0.107s
+%% Hypothesis Space Generation             : 0.699s
+%% Conflict analysis                       : 35.579s
+%%   - Brave Orders                        : 35.579s
+%% Counterexample search                   : 9.475s
+%%   - CDOEs                               : 8.073s
+%%   - CDPIs                               : 1.405s
+%% Hypothesis Search                       : 15708.4s
+%% Propagation                             : 93.511s
+%%   - CDOEs                               : 93.512s
+%% Total                                   : 15849.1s
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+:~ value(difficulty,V1).[V1@3, V1]
+:~ value(frutta,V1).[V1@4, V1]
+:~ value(latticini,V1).[V1@2, V1]
+:~ value(rosolatura,V1).[-V1@1, V1]
+

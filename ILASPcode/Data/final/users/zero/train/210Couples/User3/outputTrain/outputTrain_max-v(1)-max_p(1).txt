@@ -1,0 +1,15 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Pre-processing                          : 0.079s
+%% Hypothesis Space Generation             : 0.018s
+%% Conflict analysis                       : 14.559s
+%%   - Brave Orders                        : 14.559s
+%% Counterexample search                   : 14.172s
+%%   - CDOEs                               : 12.16s
+%%   - CDPIs                               : 2.02s
+%% Hypothesis Search                       : 39.358s
+%% Propagation                             : 43.522s
+%%   - CDOEs                               : 43.523s
+%% Total                                   : 112.179s
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+:~ value(bollitura,V1).[-V1@1, V1]
+

@@ -1,64 +1,68 @@
 import os
+TrainCouples = [45, 105, 190]
+stds = [0.1]
 
-pathFinalDirZeroTrain = './Data8Component2Std/final/users/zero/train/'
-pathFinalDirZeroTest = './Data8Component2Std/final/users/zero/test/'
-pathFinalDirNoZeroTrain = './Data8Component2Std/final/users/no_zero/train/'
-pathFinalDirNoZeroTest = './Data8Component2Std/final/users/no_zero/test/'
+for TrainCouple in TrainCouples:
+    for std in stds:
+        pathFinalDirZeroTrain = './Data17Component2Std/final/users/zero/train/'
+        pathFinalDirZeroTest = './Data17Component2Std/final/users/zero/test/'
+        # pathFinalDirNoZeroTrain = './Data17Component2Std/final/users/no_zero/train/'
+        # pathFinalDirNoZeroTest = './Data17Component2Std/final/users/no_zero/test/'
 
-pathUsersZeroCoupleTrainString = pathFinalDirZeroTrain + '45Couples_gauss'
-pathUsersZeroCoupleTestString = pathFinalDirZeroTest + '45CouplesForTrain45_gauss'
-pathUsersNoZeroCoupleTrainString = pathFinalDirNoZeroTrain + '45Couples_gauss'
-pathUsersNoZeroCoupleTestString = pathFinalDirNoZeroTest + '45CouplesForTrain45_gauss'
+        pathUsersZeroCoupleTrainString = pathFinalDirZeroTrain + str(TrainCouple) + 'Couples_gauss_std' + str(std)
+        pathUsersZeroCoupleTestString = pathFinalDirZeroTest + str(TrainCouple) + 'Couples_gauss_std' + str(std)
+        # pathUsersNoZeroCoupleTrainString = pathFinalDirNoZeroTrain + '105Couples_gauss'
+        # pathUsersNoZeroCoupleTestString = pathFinalDirNoZeroTest + '100CouplesForTrain105_gauss'
 
-effectivePathUsersZeroCoupleTrainString = os.path.join(pathUsersZeroCoupleTrainString)
-effectivePathUsersZeroCoupleTestString = os.path.join(pathUsersZeroCoupleTestString)
-effectivePathUsersNoZeroCoupleTrainString = os.path.join(pathUsersNoZeroCoupleTrainString)
-effectivePathUsersNoZeroCoupleTestString = os.path.join(pathUsersNoZeroCoupleTestString)
+        effectivePathUsersZeroCoupleTrainString = os.path.join(pathUsersZeroCoupleTrainString)
+        effectivePathUsersZeroCoupleTestString = os.path.join(pathUsersZeroCoupleTestString)
+        # effectivePathUsersNoZeroCoupleTrainString = os.path.join(pathUsersNoZeroCoupleTrainString)
+        # effectivePathUsersNoZeroCoupleTestString = os.path.join(pathUsersNoZeroCoupleTestString)
 
-os.makedirs(effectivePathUsersZeroCoupleTrainString)
-os.makedirs(effectivePathUsersZeroCoupleTestString)
-os.makedirs(effectivePathUsersNoZeroCoupleTrainString)
-os.makedirs(effectivePathUsersNoZeroCoupleTestString)
+        os.makedirs(effectivePathUsersZeroCoupleTrainString)
+        os.makedirs(effectivePathUsersZeroCoupleTestString)
+        # os.makedirs(effectivePathUsersNoZeroCoupleTrainString)
+        # os.makedirs(effectivePathUsersNoZeroCoupleTestString)
 
-for i in range(0, 54):
-    pathUsersZeroFinalTrainString = pathUsersZeroCoupleTrainString + '/User' + str(i)
-    pathUsersZeroFinalTestString = pathUsersZeroCoupleTestString + '/User' + str(i)
-    pathUsersNoZeroFinalTrainString = pathUsersNoZeroCoupleTrainString + '/User' + str(i)
-    pathUsersNoZeroFinalTestString = pathUsersNoZeroCoupleTestString + '/User' + str(i)
+        for i in range(0, 54):
+            pathUsersZeroFinalTrainString = pathUsersZeroCoupleTrainString + '/User' + str(i)
+            pathUsersZeroFinalTestString = pathUsersZeroCoupleTestString + '/User' + str(i)
+            # pathUsersNoZeroFinalTrainString = pathUsersNoZeroCoupleTrainString + '/User' + str(i)
+            # pathUsersNoZeroFinalTestString = pathUsersNoZeroCoupleTestString + '/User' + str(i)
 
-    effectivePathUsersZeroFinalTrainString = os.path.join(pathUsersZeroFinalTrainString)
-    effectivePathUsersZeroFinalTestString = os.path.join(pathUsersZeroFinalTestString)
-    effectivePathUsersNoZeroFinalTrainString = os.path.join(pathUsersNoZeroFinalTrainString)
-    effectivePathUsersNoZeroFinalTestString = os.path.join(pathUsersNoZeroFinalTestString)
+            effectivePathUsersZeroFinalTrainString = os.path.join(pathUsersZeroFinalTrainString)
+            effectivePathUsersZeroFinalTestString = os.path.join(pathUsersZeroFinalTestString)
+            # effectivePathUsersNoZeroFinalTrainString = os.path.join(pathUsersNoZeroFinalTrainString)
+            # effectivePathUsersNoZeroFinalTestString = os.path.join(pathUsersNoZeroFinalTestString)
 
-    os.makedirs(effectivePathUsersZeroFinalTrainString)
-    os.makedirs(effectivePathUsersZeroFinalTestString)
-    os.makedirs(effectivePathUsersNoZeroFinalTrainString)
-    os.makedirs(effectivePathUsersNoZeroFinalTestString)
+            os.makedirs(effectivePathUsersZeroFinalTrainString)
+            os.makedirs(effectivePathUsersZeroFinalTestString)
+            # os.makedirs(effectivePathUsersNoZeroFinalTrainString)
+            # os.makedirs(effectivePathUsersNoZeroFinalTestString)
 
-    pathUsersZeroFilesTrainFinalString = effectivePathUsersZeroFinalTrainString + '/trainFiles'
-    pathUsersZeroFilesTestFinalString = effectivePathUsersZeroFinalTestString + '/testFiles'
-    pathUsersNoZeroFilesTrainFinalString = effectivePathUsersNoZeroFinalTrainString + '/trainFiles'
-    pathUsersNoZeroFilesTestFinalString = effectivePathUsersNoZeroFinalTestString + '/testFiles'
-    pathUsersZeroOutputTrainFinalString = effectivePathUsersZeroFinalTrainString + '/outputTrain'
-    pathUsersZeroOutputTestFinalString = effectivePathUsersZeroFinalTestString + '/outputTest'
-    pathUsersNoZeroOutputTrainFinalString = effectivePathUsersNoZeroFinalTrainString + '/outputTrain'
-    pathUsersNoZeroOutputTestFinalString = effectivePathUsersNoZeroFinalTestString + '/outputTest'
+            pathUsersZeroFilesTrainFinalString = effectivePathUsersZeroFinalTrainString + '/trainFiles'
+            pathUsersZeroFilesTestFinalString = effectivePathUsersZeroFinalTestString + '/testFiles'
+            # pathUsersNoZeroFilesTrainFinalString = effectivePathUsersNoZeroFinalTrainString + '/trainFiles'
+            # pathUsersNoZeroFilesTestFinalString = effectivePathUsersNoZeroFinalTestString + '/testFiles'
+            pathUsersZeroOutputTrainFinalString = effectivePathUsersZeroFinalTrainString + '/outputTrain'
+            pathUsersZeroOutputTestFinalString = effectivePathUsersZeroFinalTestString + '/outputTest'
+            # pathUsersNoZeroOutputTrainFinalString = effectivePathUsersNoZeroFinalTrainString + '/outputTrain'
+            # pathUsersNoZeroOutputTestFinalString = effectivePathUsersNoZeroFinalTestString + '/outputTest'
 
-    effectivePathUsersZeroFilesTrainFinalString = os.path.join(pathUsersZeroFilesTrainFinalString)
-    effectivePathUsersZeroFilesTestFinalString = os.path.join(pathUsersZeroFilesTestFinalString)
-    effectivePathUsersNoZeroFilesTrainFinalString = os.path.join(pathUsersNoZeroFilesTrainFinalString)
-    effectivePathUsersNoZeroFilesTestFinalString = os.path.join(pathUsersNoZeroFilesTestFinalString)
-    effectivePathUsersZeroOutputTrainFinalString = os.path.join(pathUsersZeroOutputTrainFinalString)
-    effectivePathUsersZeroOutputTestFinalString = os.path.join(pathUsersZeroOutputTestFinalString)
-    effectivePathUsersNoZeroOutputTrainFinalString = os.path.join(pathUsersNoZeroOutputTrainFinalString)
-    effectivePathUsersNoZeroOutputTestFinalString = os.path.join(pathUsersNoZeroOutputTestFinalString)
+            effectivePathUsersZeroFilesTrainFinalString = os.path.join(pathUsersZeroFilesTrainFinalString)
+            effectivePathUsersZeroFilesTestFinalString = os.path.join(pathUsersZeroFilesTestFinalString)
+            # effectivePathUsersNoZeroFilesTrainFinalString = os.path.join(pathUsersNoZeroFilesTrainFinalString)
+            # effectivePathUsersNoZeroFilesTestFinalString = os.path.join(pathUsersNoZeroFilesTestFinalString)
+            effectivePathUsersZeroOutputTrainFinalString = os.path.join(pathUsersZeroOutputTrainFinalString)
+            effectivePathUsersZeroOutputTestFinalString = os.path.join(pathUsersZeroOutputTestFinalString)
+            # effectivePathUsersNoZeroOutputTrainFinalString = os.path.join(pathUsersNoZeroOutputTrainFinalString)
+            # effectivePathUsersNoZeroOutputTestFinalString = os.path.join(pathUsersNoZeroOutputTestFinalString)
 
-    os.makedirs(effectivePathUsersZeroFilesTrainFinalString)
-    os.makedirs(effectivePathUsersZeroFilesTestFinalString)
-    os.makedirs(effectivePathUsersNoZeroFilesTrainFinalString)
-    os.makedirs(effectivePathUsersNoZeroFilesTestFinalString)
-    os.makedirs(effectivePathUsersZeroOutputTrainFinalString)
-    os.makedirs(effectivePathUsersZeroOutputTestFinalString)
-    os.makedirs(effectivePathUsersNoZeroOutputTrainFinalString)
-    os.makedirs(effectivePathUsersNoZeroOutputTestFinalString)
+            os.makedirs(effectivePathUsersZeroFilesTrainFinalString)
+            os.makedirs(effectivePathUsersZeroFilesTestFinalString)
+            # os.makedirs(effectivePathUsersNoZeroFilesTrainFinalString)
+            # os.makedirs(effectivePathUsersNoZeroFilesTestFinalString)
+            os.makedirs(effectivePathUsersZeroOutputTrainFinalString)
+            os.makedirs(effectivePathUsersZeroOutputTestFinalString)
+            # os.makedirs(effectivePathUsersNoZeroOutputTrainFinalString)
+            # os.makedirs(effectivePathUsersNoZeroOutputTestFinalString)

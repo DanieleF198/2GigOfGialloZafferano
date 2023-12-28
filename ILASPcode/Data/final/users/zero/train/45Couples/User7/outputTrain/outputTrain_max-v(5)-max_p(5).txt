@@ -1,0 +1,16 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Pre-processing                          : 0.072s
+%% Hypothesis Space Generation             : 0.968s
+%% Conflict analysis                       : 8.825s
+%%   - Brave Orders                        : 8.825s
+%% Counterexample search                   : 0.869s
+%%   - CDOEs                               : 0.571s
+%%   - CDPIs                               : 0.299s
+%% Hypothesis Search                       : 12.095s
+%% Propagation                             : 19.949s
+%%   - CDOEs                               : 19.949s
+%% Total                                   : 43.843s
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+:~ value(pesce,V1).[V1@4, V1]
+:~ value(rosolatura,V1).[-V1@5, V1]
+

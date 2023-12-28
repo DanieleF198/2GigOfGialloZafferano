@@ -40,38 +40,38 @@ def relation_satisfied(m1_cost,m2_cost, sign):
     return 2
 
 def relation_satisfied_cm(m1_cost,m2_cost, sign):
-    print(m1_cost)
-    print(m2_cost)
+    # print(m1_cost)
+    # print(m2_cost)
     if sign == '<':     # m1 it's preferred over m2
         for i in range(len(m1_cost)):
             if m1_cost[i] < m2_cost[i]:
-                print("1.0")
+                # print("1.0")
                 return 1
             if m2_cost[i] < m1_cost[i]:
-                print("-1.0")
+                # print("-1.0")
                 return 4
-        print("0.0")
+        # print("0.0")
         return 7
     elif sign == '>':   # m2 it's preferred over m1
         for i in range(len(m1_cost)):
             if m1_cost[i] < m2_cost[i]:
-                print("1.0")
+                # print("1.0")
                 return 2
             if m2_cost[i] < m1_cost[i]:
-                print("-1.0")
+                # print("-1.0")
                 return 5
-        print("0.0")
+        # print("0.0")
         return 8
     else:   # m1 and m2 are indifferent
         for i in range(len(m1_cost)):
             if not (m1_cost[i] == m2_cost[i]):
                 if m1_cost[i] < m2_cost[i]:
-                    print("1.0")
+                    # print("1.0")
                     return 3
                 else:
-                    print("-1.0")
+                    # print("-1.0")
                     return 6
-        print("0.0")
+        # print("0.0")
         return 9
 
 def relation_satisfied_cm_grid(m1_cost,m2_cost, sign,  treshold_value):

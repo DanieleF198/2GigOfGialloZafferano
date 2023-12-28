@@ -1,0 +1,18 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Pre-processing                          : 0.083s
+%% Hypothesis Space Generation             : 0.769s
+%% Conflict analysis                       : 29.858s
+%%   - Brave Orders                        : 29.858s
+%% Counterexample search                   : 5.508s
+%%   - CDOEs                               : 4.349s
+%%   - CDPIs                               : 1.158s
+%% Hypothesis Search                       : 2222.44s
+%% Propagation                             : 75.899s
+%%   - CDOEs                               : 75.899s
+%% Total                                   : 2335.72s
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+:~ value(marinatura,V1).[V1@4, V1]
+:~ value(prepTime,V1).[V1@1, V1]
+:~ value(carne,V1).[-V1@2, V1]
+:~ value(cottura_a_fiamma,V1), category(4).[-V1@3, V1]
+

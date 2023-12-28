@@ -1,0 +1,15 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Pre-processing                          : 0.076s
+%% Hypothesis Space Generation             : 0.215s
+%% Conflict analysis                       : 4.602s
+%%   - Brave Orders                        : 4.602s
+%% Counterexample search                   : 3.059s
+%%   - CDOEs                               : 2.328s
+%%   - CDPIs                               : 0.739s
+%% Hypothesis Search                       : 13.471s
+%% Propagation                             : 16.182s
+%%   - CDOEs                               : 16.182s
+%% Total                                   : 37.783s
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+:~ value(pasta,V1).[V1@1, V1]
+

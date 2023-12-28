@@ -1,0 +1,16 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Pre-processing                          : 0.085s
+%% Hypothesis Space Generation             : 0.143s
+%% Conflict analysis                       : 19.252s
+%%   - Brave Orders                        : 19.252s
+%% Counterexample search                   : 9.711s
+%%   - CDOEs                               : 8.176s
+%%   - CDPIs                               : 1.534s
+%% Hypothesis Search                       : 136.758s
+%% Propagation                             : 54.922s
+%%   - CDOEs                               : 54.923s
+%% Total                                   : 221.489s
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+:~ value(pasta,V1).[V1@1, V1]
+:~ value(frutta,V1), category(4).[V1@2, V1]
+

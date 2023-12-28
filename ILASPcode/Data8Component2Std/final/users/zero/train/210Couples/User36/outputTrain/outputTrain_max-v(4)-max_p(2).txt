@@ -1,0 +1,16 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Pre-processing                          : 0.111s
+%% Hypothesis Space Generation             : 0.356s
+%% Conflict analysis                       : 17.913s
+%%   - Brave Orders                        : 17.913s
+%% Counterexample search                   : 8.431s
+%%   - CDOEs                               : 7.154s
+%%   - CDPIs                               : 1.279s
+%% Hypothesis Search                       : 79.641s
+%% Propagation                             : 47.598s
+%%   - CDOEs                               : 47.598s
+%% Total                                   : 154.592s
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+:~ value(verdure_e_ortaggi,V1).[-V1@1, V1]
+:~ category(2).[-1@2]
+

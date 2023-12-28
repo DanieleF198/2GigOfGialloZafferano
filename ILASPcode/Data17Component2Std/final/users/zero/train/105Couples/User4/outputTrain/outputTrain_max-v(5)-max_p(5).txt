@@ -1,0 +1,19 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Pre-processing                          : 0.075s
+%% Hypothesis Space Generation             : 0.928s
+%% Conflict analysis                       : 23.914s
+%%   - Brave Orders                        : 23.914s
+%% Counterexample search                   : 3.269s
+%%   - CDOEs                               : 2.535s
+%%   - CDPIs                               : 0.744s
+%% Hypothesis Search                       : 2255.53s
+%% Propagation                             : 60.888s
+%%   - CDOEs                               : 60.888s
+%% Total                                   : 2345.76s
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+:~ value(pasta,V1).[-V1@2, V1]
+:~ value(erbe_spezie_e_condimenti,V1).[-V1@1, V1]
+:~ value(rosolatura,V1).[-V1@3, V1]
+:~ value(forno,V1), category(4).[-V1@5, V1]
+:~ value(carne,V1), category(4).[-V1@4, V1]
+

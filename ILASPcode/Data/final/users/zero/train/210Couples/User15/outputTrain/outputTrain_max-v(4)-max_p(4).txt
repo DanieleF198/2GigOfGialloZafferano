@@ -1,0 +1,18 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Pre-processing                          : 0.09s
+%% Hypothesis Space Generation             : 0.784s
+%% Conflict analysis                       : 34.811s
+%%   - Brave Orders                        : 34.811s
+%% Counterexample search                   : 9.925s
+%%   - CDOEs                               : 8.481s
+%%   - CDPIs                               : 1.439s
+%% Hypothesis Search                       : 515.018s
+%% Propagation                             : 86.209s
+%%   - CDOEs                               : 86.209s
+%% Total                                   : 648.279s
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+:~ value(mantecatura,V1).[V1@4, V1]
+:~ value(farinacei,V1).[-V1@2, V1]
+:~ value(rosolatura,V1), category(3).[V1@1, V1]
+:~ value(bollitura,V1), category(3).[V1@3, V1]
+

@@ -105,9 +105,9 @@ def test_cm_grid(theory, items, test_set, treshold_value, factors_combination):
     confusion_matrix = np.zeros((3, 3), dtype='float32')
     #                     labels
     #            ___>___|___=___|___<___
-    #   o p  >  |   5   |   6   |   4      class 1
-    #   u u  =  |   8   |   9   |   7      class 0
-    #   t t  <  |   2   |   3   |   1      class -1
+    #   o p  >  |   5   |   6   |   4      
+    #   u u  =  |   8   |   9   |   7      
+    #   t t  <  |   2   |   3   |   1      
 
     for preference in test_set:
         c = compare_cm_grid(items[preference[0]], items[preference[1]], preference[2], theory, treshold_value, factors_combination)
@@ -170,7 +170,6 @@ def test_cm_grid(theory, items, test_set, treshold_value, factors_combination):
     if np.isnan(recall_class_minus1):
         recall_class_minus1 = 0
 
-
     average_accuracy = (accuracy_class1 + accuracy_class0 + accuracy_class_minus1)/3
     average_precision = (precision_class1 + precision_class0 + precision_class_minus1)/3
     average_recall = (recall_class1 + recall_class0 + recall_class_minus1)/3
@@ -183,9 +182,9 @@ def test_cm_grid_2(theory, items, test_set, treshold_value, factors_combination)
     confusion_matrix = np.zeros((3, 3), dtype='float32')
     #                     labels
     #            ___>___|___=___|___<___
-    #   o p  >  |   5   |   6   |   4      class 1
-    #   u u  =  |   8   |   9   |   7      class 0
-    #   t t  <  |   2   |   3   |   1      class -1
+    #   o p  >  |   5   |   6   |   4      
+    #   u u  =  |   8   |   9   |   7      
+    #   t t  <  |   2   |   3   |   1      
 
     for preference in test_set:
         c = compare_cm_grid_2(items[preference[0]], items[preference[1]], preference[2], theory, treshold_value, factors_combination)
@@ -262,9 +261,9 @@ def test_cm(theory, items, test_set):
     confusion_matrix = np.zeros((3, 3), dtype='float32')
     #                     labels
     #            ___>___|___=___|___<___
-    #   o p  >  |   5   |   6   |   4      class 1
-    #   u u  =  |   8   |   9   |   7      class 0
-    #   t t  <  |   2   |   3   |   1      class -1
+    #   o p  >  |   5   |   6   |   4      
+    #   u u  =  |   8   |   9   |   7      
+    #   t t  <  |   2   |   3   |   1      
     # NOTE: label > here is intended as ILASP syntax in brave ordering, and so a > b means that b is preferred over a (cause it activates a greater amount of weights from wc)
     #       similarly a < b means that a is preferred over b.
     for preference in test_set:

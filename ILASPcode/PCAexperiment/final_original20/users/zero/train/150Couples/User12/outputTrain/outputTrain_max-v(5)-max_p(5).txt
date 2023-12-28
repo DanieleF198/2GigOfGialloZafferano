@@ -1,0 +1,15 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Pre-processing                          : 0.074s
+%% Hypothesis Space Generation             : 0.174s
+%% Conflict analysis                       : 5.884s
+%%   - Brave Orders                        : 5.884s
+%% Counterexample search                   : 11.014s
+%%   - CDOEs                               : 8.611s
+%%   - CDPIs                               : 2.415s
+%% Hypothesis Search                       : 15.773s
+%% Propagation                             : 21.739s
+%%   - CDOEs                               : 21.739s
+%% Total                                   : 54.842s
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+:~ value(pc13,V1).[-V1@1, V1]
+

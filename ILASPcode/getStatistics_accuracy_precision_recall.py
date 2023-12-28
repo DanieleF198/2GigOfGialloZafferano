@@ -12,11 +12,11 @@ list_theory_105_couple = []
 list_theory_210_couple = []
 for choice in choices:
     if choice == 1:
-        path = './Data8Component2Std/testOutput_original/results_zero.csv'
+        path = './Data17Component2Std/testOutput/results_zero.csv'
     else:
         continue
         # temporally
-        # path = './Data8Component2Std/testOutput/results_no_zero(variant).csv'
+        # path = './Data17Component2Std/testOutput/results_no_zero.csv'
     for user in users:
         test_not_inserted = True
         with open(path, newline='\n') as csvFile:
@@ -25,6 +25,8 @@ for choice in choices:
                 if i == 0:
                     continue
                 else:
+                    if int(row[1]) != int(row[2]):
+                        continue
                     if int(row[4]) <= 45:    # 45CouplesCase
                         if int(row[0]) == user:
                             data_45_couples_no_zeros[user][int(row[1])-1][0] = float(row[6])       # accuracy_percentage
@@ -53,6 +55,9 @@ for choice in choices:
     final_precision_percentages = np.zeros((10, 15))
     final_recall_percentages = np.zeros((10, 15))
     final_training_times = np.zeros((10, 15))
+    final_number_wc_45 = np.zeros((10, 5))
+    final_number_wc_105 = np.zeros((10, 5))
+    final_number_wc_210 = np.zeros((10, 5))
     for user_matrix_45, user_matrix_105, user_matrix_210 in zip(data_45_couples_no_zeros, data_105_couples_no_zeros, data_210_couples_no_zeros):
         if user_counter not in [15, 3, 32, 7, 36, 4, 20, 29, 14, 11]:
             user_counter += 1
@@ -60,12 +65,33 @@ for choice in choices:
         accuracy_percentages_45 = user_matrix_45[:, 0]
         precision_percentages_45 = user_matrix_45[:, 1]
         recall_percentages_45 = user_matrix_45[:, 2]
+        for par in range(0, 5):
+            # case in which you have only 5-5 results
+            if par != 4:
+                continue
+            final_number_wc_45[insert_counter, par] = (len(list_theory_45_couple[insert_counter].split(":~")))-1
+            # case in which you have all results
+            # final_number_wc_45[insert_counter, par] = (len(list_theory_45_couple[(insert_counter*5)+par].split(":~")))-1
         accuracy_percentages_105 = user_matrix_105[:, 0]
         precision_percentages_105 = user_matrix_105[:, 1]
         recall_percentages_105 = user_matrix_105[:, 2]
+        for par in range(0, 5):
+            # case in which you have only 5-5 results
+            if par != 4:
+                continue
+            final_number_wc_105[insert_counter, par] = (len(list_theory_105_couple[insert_counter].split(":~")))-1
+            # case in which you have all results
+            # final_number_wc_105[insert_counter, par] = (len(list_theory_105_couple[(insert_counter*5)+par].split(":~")))-1
         accuracy_percentages_210 = user_matrix_210[:, 0]
         precision_percentages_210 = user_matrix_210[:, 1]
         recall_percentages_210 = user_matrix_210[:, 2]
+        for par in range(0, 5):
+            # case in which you have only 5-5 results
+            if par != 4:
+                continue
+            final_number_wc_210[insert_counter, par] = (len(list_theory_210_couple[insert_counter].split(":~"))) - 1
+            # case in which you have all results
+            # final_number_wc_210[insert_counter, par] = (len(list_theory_210_couple[(insert_counter*5)+par].split(":~")))-1
         accuracy_percentages_temp = np.concatenate((accuracy_percentages_45, accuracy_percentages_105))
         precision_percentages_temp = np.concatenate((precision_percentages_45, precision_percentages_105))
         recall_percentages_temp = np.concatenate((recall_percentages_45, recall_percentages_105))
@@ -114,11 +140,12 @@ for choice in choices:
                 mean_of_precision = np.mean(final_precision_percentages_T[parameter_counter])
                 mean_of_recall = np.mean(final_recall_percentages_T[parameter_counter])
                 mean_of_training_time = np.mean(final_training_times_T[parameter_counter])
+                mean_of_wc = np.mean(final_number_wc_45[:, parameter_counter])
                 mean_of_accuracy_of_all_45.append(np.mean(final_accuracy_percentages_T[parameter_counter]))
                 mean_of_precision_of_all_45.append(np.mean(final_precision_percentages_T[parameter_counter]))
                 mean_of_recall_of_all_45.append(np.mean(final_recall_percentages_T[parameter_counter]))
                 mean_of_training_time_of_all_45.append(np.mean(final_training_times_T[parameter_counter]))
-                print("On Dataset_45_couples with " + parameters[parameter_counter] + " mean of accuracy " + str(mean_of_accuracy) + "; mean of precision " + str(mean_of_precision) + "; mean of recall " + str(mean_of_recall) + "; mean of training time " + str(mean_of_training_time))
+                print("On Dataset_45_couples with " + parameters[parameter_counter] + " mean of accuracy " + str(mean_of_accuracy) + "; mean of precision " + str(mean_of_precision) + "; mean of recall " + str(mean_of_recall) + "; mean of training time " + str(mean_of_training_time) + "; mean of #wc " + str(mean_of_wc))
         elif dataset_counter == 1:
             # continue
             for parameter_counter in range(0, 5):
@@ -126,11 +153,12 @@ for choice in choices:
                 mean_of_precision = np.mean(final_precision_percentages_T[5+parameter_counter])
                 mean_of_recall = np.mean(final_recall_percentages_T[5+parameter_counter])
                 mean_of_training_time = np.mean(final_training_times_T[5+parameter_counter])
+                mean_of_wc = np.mean(final_number_wc_105[:, parameter_counter])
                 mean_of_accuracy_of_all_105.append(np.mean(final_accuracy_percentages_T[5 + parameter_counter]))
                 mean_of_precision_of_all_105.append(np.mean(final_precision_percentages_T[5 + parameter_counter]))
                 mean_of_recall_of_all_105.append(np.mean(final_recall_percentages_T[5 + parameter_counter]))
                 mean_of_training_time_of_all_105.append(np.mean(final_training_times_T[5 + parameter_counter]))
-                print("On Dataset_105_couples with " + parameters[parameter_counter] + " mean of accuracy " + str(mean_of_accuracy) + "; mean of precision " + str(mean_of_precision) + "; mean of recall " + str(mean_of_recall) + "; mean of training time " + str(mean_of_training_time))
+                print("On Dataset_105_couples with " + parameters[parameter_counter] + " mean of accuracy " + str(mean_of_accuracy) + "; mean of precision " + str(mean_of_precision) + "; mean of recall " + str(mean_of_recall) + "; mean of training time " + str(mean_of_training_time) + "; mean of #wc " + str(mean_of_wc))
 
         else:
             for parameter_counter in range(0, 5):
@@ -138,24 +166,25 @@ for choice in choices:
                 mean_of_precision = np.mean(final_precision_percentages_T[10 + parameter_counter])
                 mean_of_recall = np.mean(final_recall_percentages_T[10 + parameter_counter])
                 mean_of_training_time = np.mean(final_training_times_T[10 + parameter_counter])
+                mean_of_wc = np.mean(final_number_wc_210[:, parameter_counter])
                 mean_of_accuracy_of_all_210.append(np.mean(final_accuracy_percentages_T[10 + parameter_counter]))
                 mean_of_precision_of_all_210.append(np.mean(final_precision_percentages_T[10 + parameter_counter]))
                 mean_of_recall_of_all_210.append(np.mean(final_recall_percentages_T[10 + parameter_counter]))
                 mean_of_training_time_of_all_210.append(np.mean(final_training_times_T[10 + parameter_counter]))
-                print("On Dataset_190_couples with " + parameters[parameter_counter] + " mean of accuracy " + str(mean_of_accuracy) + "; mean of precision " + str(mean_of_precision) + "; mean of recall " + str(mean_of_recall) + ";  mean of training time " + str(mean_of_training_time))
+                print("On Dataset_190_couples with " + parameters[parameter_counter] + " mean of accuracy " + str(mean_of_accuracy) + "; mean of precision " + str(mean_of_precision) + "; mean of recall " + str(mean_of_recall) + ";  mean of training time " + str(mean_of_training_time) + "; mean of #wc " + str(mean_of_wc))
         print("")
     wc_number_case45 = []
     wc_number_case105 = []
     wc_number_case210 = []
 
     for theory in list_theory_45_couple:
-        wc_number_case45.append(len(theory.split(":~")))
+        wc_number_case45.append(len(theory.split(":~")) - 1)
 
     for theory in list_theory_105_couple:
-        wc_number_case105.append(len(theory.split(":~")))
+        wc_number_case105.append(len(theory.split(":~")) - 1)
 
     for theory in list_theory_210_couple:
-        wc_number_case210.append(len(theory.split(":~")))
+        wc_number_case210.append(len(theory.split(":~")) - 1)
 
     mean_wc_numer_case45 = np.mean(wc_number_case45)
     mean_wc_numer_case105 = np.mean(wc_number_case105)

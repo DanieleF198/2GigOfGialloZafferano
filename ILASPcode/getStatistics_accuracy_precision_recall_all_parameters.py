@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 import seaborn as sb
 import pandas as pd
 
-type_dataset = "_original"
+type_dataset = ""
 choices = [0, 1]
 users = [i for i in range(0, 48)]
 data_45_couples_no_zeros = np.zeros((48, 5*5, 4), dtype='float32')  # we have more answer, but at this point we are only interested in the ten users for testing, which are in the first 48
@@ -17,7 +17,7 @@ list_theory_210_couple = []
 list_theory_150_couple = []
 for choice in choices:
     if choice == 1:
-        path = './Data8Component2Std/testOutput' + type_dataset + '/results_zero.csv'
+        path = './Data8Component2Std/testOutput' + type_dataset + '/results_zero_all_combination.csv'
     else:
         continue
         # temporally
@@ -219,17 +219,17 @@ for choice in choices:
                     average_execution_time_45[parameter_counter] = mean_of_training_time
                     print("On Dataset_45_couples with " + parameters[parameter_counter] + " mean of accuracy " + str(mean_of_accuracy) + "; mean of precision " + str(mean_of_precision) + "; mean of recall " + str(mean_of_recall) + "; mean of training time " + str(mean_of_training_time))
                 print("")
-                # fig, axs = plt.subplots(2, 2, figsize=(25, 15))
-                # fig.suptitle('dataset 45, average performances and training times (max_v;max_p)')
-                # axs[0, 0].set_title('average accuracy')
-                # axs[0, 1].set_title('average precision')
-                # axs[1, 0].set_title('average recall')
-                # axs[1, 1].set_title('average execution time')
-                # sb.barplot(ax=axs[0, 0], y=average_accuracy_percentages_45, x=parameters_for_graph, facecolor=(31/255, 119/255, 180/255, 1.000))
-                # sb.barplot(ax=axs[0, 1], y=average_precision_percentages_45, x=parameters_for_graph, facecolor=(31/255, 119/255, 180/255, 1.000))
-                # sb.barplot(ax=axs[1 ,0], y=average_recall_percentages_45, x=parameters_for_graph, facecolor=(31/255, 119/255, 180/255, 1.000))
-                # sb.barplot(ax=axs[1, 1], y=average_execution_time_45, x=parameters_for_graph, facecolor=(31/255, 119/255, 180/255, 1.000))
-                # plt.savefig("./Data8Component2Std/all_parameters_variation_graphs/sampled/dataset45.jpg", dpi=300)
+                fig, axs = plt.subplots(2, 2, figsize=(25, 15))
+                fig.suptitle('dataset 45, average performances and training times (max_v;max_p)')
+                axs[0, 0].set_title('average accuracy')
+                axs[0, 1].set_title('average precision')
+                axs[1, 0].set_title('average recall')
+                axs[1, 1].set_title('average execution time')
+                sb.barplot(ax=axs[0, 0], y=average_accuracy_percentages_45, x=parameters_for_graph, facecolor=(31/255, 119/255, 180/255, 1.000))
+                sb.barplot(ax=axs[0, 1], y=average_precision_percentages_45, x=parameters_for_graph, facecolor=(31/255, 119/255, 180/255, 1.000))
+                sb.barplot(ax=axs[1 ,0], y=average_recall_percentages_45, x=parameters_for_graph, facecolor=(31/255, 119/255, 180/255, 1.000))
+                sb.barplot(ax=axs[1, 1], y=average_execution_time_45, x=parameters_for_graph, facecolor=(31/255, 119/255, 180/255, 1.000))
+                plt.savefig("./Data8Component2Std/all_parameters_variation_graphs/sampled/dataset45.jpg", dpi=300)
             elif dataset_counter == 1:
                 average_accuracy_percentages_105 = np.zeros((25,), dtype="float32")
                 average_precision_percentages_105 = np.zeros((25,), dtype="float32")
@@ -250,17 +250,17 @@ for choice in choices:
                     average_execution_time_105[parameter_counter] = mean_of_training_time
                     print("On Dataset_105_couples with " + parameters[parameter_counter] + " mean of accuracy " + str(mean_of_accuracy) + "; mean of precision " + str(mean_of_precision) + "; mean of recall " + str(mean_of_recall) + "; mean of training time " + str(mean_of_training_time))
                 print("")
-                # fig, axs = plt.subplots(2, 2, figsize=(25, 15))
-                # fig.suptitle('dataset 105, average performances and training times (max_v;max_p)')
-                # axs[0, 0].set_title('average accuracy')
-                # axs[0, 1].set_title('average precision')
-                # axs[1, 0].set_title('average recall')
-                # axs[1, 1].set_title('average execution time')
-                # sb.barplot(ax=axs[0, 0], y=average_accuracy_percentages_105, x=parameters_for_graph, facecolor=(31/255, 119/255, 180/255, 1.000))
-                # sb.barplot(ax=axs[0, 1], y=average_precision_percentages_105, x=parameters_for_graph, facecolor=(31/255, 119/255, 180/255, 1.000))
-                # sb.barplot(ax=axs[1 ,0], y=average_recall_percentages_105, x=parameters_for_graph, facecolor=(31/255, 119/255, 180/255, 1.000))
-                # sb.barplot(ax=axs[1, 1], y=average_execution_time_105, x=parameters_for_graph, facecolor=(31/255, 119/255, 180/255, 1.000))
-                # plt.savefig("./Data8Component2Std/all_parameters_variation_graphs/sampled/dataset105.jpg", dpi=300)
+                fig, axs = plt.subplots(2, 2, figsize=(25, 15))
+                fig.suptitle('dataset 105, average performances and training times (max_v;max_p)')
+                axs[0, 0].set_title('average accuracy')
+                axs[0, 1].set_title('average precision')
+                axs[1, 0].set_title('average recall')
+                axs[1, 1].set_title('average execution time')
+                sb.barplot(ax=axs[0, 0], y=average_accuracy_percentages_105, x=parameters_for_graph, facecolor=(31/255, 119/255, 180/255, 1.000))
+                sb.barplot(ax=axs[0, 1], y=average_precision_percentages_105, x=parameters_for_graph, facecolor=(31/255, 119/255, 180/255, 1.000))
+                sb.barplot(ax=axs[1 ,0], y=average_recall_percentages_105, x=parameters_for_graph, facecolor=(31/255, 119/255, 180/255, 1.000))
+                sb.barplot(ax=axs[1, 1], y=average_execution_time_105, x=parameters_for_graph, facecolor=(31/255, 119/255, 180/255, 1.000))
+                plt.savefig("./Data8Component2Std/all_parameters_variation_graphs/sampled/dataset105.jpg", dpi=300)
             else:
                 average_accuracy_percentages_210 = np.zeros((25,), dtype="float32")
                 average_precision_percentages_210 = np.zeros((25,), dtype="float32")

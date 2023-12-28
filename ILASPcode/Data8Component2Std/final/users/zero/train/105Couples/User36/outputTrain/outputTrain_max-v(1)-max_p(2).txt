@@ -1,0 +1,16 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Pre-processing                          : 0.073s
+%% Hypothesis Space Generation             : 0.023s
+%% Conflict analysis                       : 8.846s
+%%   - Brave Orders                        : 8.845s
+%% Counterexample search                   : 3.025s
+%%   - CDOEs                               : 2.373s
+%%   - CDPIs                               : 0.658s
+%% Hypothesis Search                       : 33.012s
+%% Propagation                             : 26.5s
+%%   - CDOEs                               : 26.5s
+%% Total                                   : 71.807s
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+:~ value(stufato,V1).[-V1@2, V1]
+:~ value(verdure_e_ortaggi,V1).[V1@1, V1]
+

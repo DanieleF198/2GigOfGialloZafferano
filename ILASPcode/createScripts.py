@@ -94,8 +94,8 @@ choices = [0, 1]
 
 second_list_of_user = [15, 3, 32, 7, 36, 4, 20, 29, 14, 11]
 # second_list_of_user = [str(i) for i in range(0, 54)]
-no_zero_data_dir = "./Data8Component2Std/final/users/no_zero/train/105Couples/"
-zero_data_dir = "./Data8Component2Std/final/users/zero/train/105Couples/"
+no_zero_data_dir = "./Data17Component2Std/final/users/no_zero/train/105Couples/"
+zero_data_dir = "./Data17Component2Std/final/users/zero/train/105Couples/"
 # fileToCreate = open(no_zero_data_dir + "script_ilasp_for_test_users_commands_equals_until_three.sh", "w+")
 # for USER in second_list_of_user:
 #     for max_v in max_v_list:
@@ -218,37 +218,37 @@ zero_data_dir = "./Data8Component2Std/final/users/zero/train/105Couples/"
 # fileToCreate.flush()
 # fileToCreate.close()
 #
-# fileToCreate = open(zero_data_dir + "script_ilasp_for_test_users_commands_equals_only_five.sh", "w+")
+fileToCreate = open(zero_data_dir + "script_ilasp_for_test_users_commands_equals_only_five.sh", "w+")
+for USER in second_list_of_user:
+    for max_v in max_v_list:
+        for max_p in max_p_list:
+            if max_v == max_p:
+                if max_v == 5:
+                    fileToCreate.write("ILASP --version=4 ./User" + str(USER) + "/trainFiles/train_max-v\(" + str(max_v) + "\)-max_p\(" + str(max_p) + "\).las > ./User" + str(USER) + "/outputTrain/outputTrain_max-v\(" + str(max_v) + "\)-max_p\(" + str(max_p) + "\).txt;\n")
+fileToCreate.flush()
+fileToCreate.close()
+#
+# # version maxp = 2, maxv from 1 to 10
+#
+# fileToCreate = open(no_zero_data_dir + "script_ilasp_for_test_users_all_combination.sh", "w+")
 # for USER in second_list_of_user:
 #     for max_v in max_v_list:
 #         for max_p in max_p_list:
 #             if max_v == max_p:
-#                 if max_v == 5:
-#                     fileToCreate.write("ILASP --version=4 ./User" + str(USER) + "/trainFiles/train_max-v\(" + str(max_v) + "\)-max_p\(" + str(max_p) + "\).las > ./User" + str(USER) + "/outputTrain/outputTrain_max-v\(" + str(max_v) + "\)-max_p\(" + str(max_p) + "\).txt;\n")
+#                 continue
+#             fileToCreate.write("ILASP --version=4 ./User" + str(USER) + "/trainFiles/train_max-v\(" + str(max_v) + "\)-max_p\(" + str(max_p) + "\).las > ./User" + str(USER) + "/outputTrain/outputTrain_max-v\(" + str(max_v) + "\)-max_p\(" + str(max_p) + "\).txt;\n")
 # fileToCreate.flush()
 # fileToCreate.close()
-#
-# # version maxp = 2, maxv from 1 to 10
-#
-fileToCreate = open(no_zero_data_dir + "script_ilasp_for_test_users_all_combination.sh", "w+")
-for USER in second_list_of_user:
-    for max_v in max_v_list:
-        for max_p in max_p_list:
-            if max_v == max_p:
-                continue
-            fileToCreate.write("ILASP --version=4 ./User" + str(USER) + "/trainFiles/train_max-v\(" + str(max_v) + "\)-max_p\(" + str(max_p) + "\).las > ./User" + str(USER) + "/outputTrain/outputTrain_max-v\(" + str(max_v) + "\)-max_p\(" + str(max_p) + "\).txt;\n")
-fileToCreate.flush()
-fileToCreate.close()
-#
-fileToCreate = open(zero_data_dir + "script_ilasp_for_test_users_all_combination.sh", "w+")
-for USER in second_list_of_user:
-    for max_v in max_v_list:
-        for max_p in max_p_list:
-            if max_v == max_p:
-                continue
-            fileToCreate.write("ILASP --version=4 ./User" + str(USER) + "/trainFiles/train_max-v\(" + str(max_v) + "\)-max_p\(" + str(max_p) + "\).las > ./User" + str(USER) + "/outputTrain/outputTrain_max-v\(" + str(max_v) + "\)-max_p\(" + str(max_p) + "\).txt;\n")
-fileToCreate.flush()
-fileToCreate.close()
+# #
+# fileToCreate = open(zero_data_dir + "script_ilasp_for_test_users_all_combination.sh", "w+")
+# for USER in second_list_of_user:
+#     for max_v in max_v_list:
+#         for max_p in max_p_list:
+#             if max_v == max_p:
+#                 continue
+#             fileToCreate.write("ILASP --version=4 ./User" + str(USER) + "/trainFiles/train_max-v\(" + str(max_v) + "\)-max_p\(" + str(max_p) + "\).las > ./User" + str(USER) + "/outputTrain/outputTrain_max-v\(" + str(max_v) + "\)-max_p\(" + str(max_p) + "\).txt;\n")
+# fileToCreate.flush()
+# fileToCreate.close()
 
 # HERE
 # fileToCreate = open(zero_data_dir + "script_ilasp_for_test_users_on_founded_max_v_max_p.sh", "w+")

@@ -1,0 +1,15 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Pre-processing                          : 0.076s
+%% Hypothesis Space Generation             : 0.017s
+%% Conflict analysis                       : 11.084s
+%%   - Brave Orders                        : 11.083s
+%% Counterexample search                   : 11.375s
+%%   - CDOEs                               : 9.46s
+%%   - CDPIs                               : 1.921s
+%% Hypothesis Search                       : 32.948s
+%% Propagation                             : 36.059s
+%%   - CDOEs                               : 36.059s
+%% Total                                   : 91.904s
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+:~ value(latticini,V1).[-V1@1, V1]
+

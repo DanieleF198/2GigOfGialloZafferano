@@ -1,0 +1,17 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Pre-processing                          : 0.113s
+%% Hypothesis Space Generation             : 1.249s
+%% Conflict analysis                       : 15.738s
+%%   - Brave Orders                        : 15.738s
+%% Counterexample search                   : 2.204s
+%%   - CDOEs                               : 1.411s
+%%   - CDPIs                               : 0.793s
+%% Hypothesis Search                       : 26.358s
+%% Propagation                             : 41.172s
+%%   - CDOEs                               : 41.173s
+%% Total                                   : 88.143s
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+:~ value(farinacei,V1).[-V1@5, V1]
+:~ category(2).[-1@1]
+:~ value(pesce,V1), category(3).[V1@4, V1]
+
