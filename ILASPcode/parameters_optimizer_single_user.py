@@ -405,20 +405,20 @@ def obtain_hpyerparameters(COUPLE, max_v, max_p, USER):
     # gb_model.addConstr(z.sum('*') == 1)     # (1)
     # gb_model.update()
     # gb_model.write('./Lp_files/model.lp')
-    for j in reversed(range(max_p)):
-        if j >= 0:
-            if list_checked[j]:
-                if j == 0:
-                    continue
-                for k in range(0, j):
-                    gb_model.addConstr(z[j] >= z[k])  # (2)
-            else:
-                gb_model.addConstr(z[j] == 0)  # (2)
-    for j in range(max_p):
-        if list_checked[j]:
-            gb_model.addConstr(z[j] >= 0.01)
-    gb_model.update()
-    gb_model.write('./Lp_files/model.lp')
+    # for j in reversed(range(max_p)):
+    #     if j >= 0:
+    #         if list_checked[j]:
+    #             if j == 0:
+    #                 continue
+    #             for k in range(0, j):
+    #                 gb_model.addConstr(z[j] >= z[k])  # (2)
+    #         else:
+    #             gb_model.addConstr(z[j] == 0)  # (2)
+    # for j in range(max_p):
+    #     if list_checked[j]:
+    #         gb_model.addConstr(z[j] >= 0.01)
+    # gb_model.update()
+    # gb_model.write('./Lp_files/model.lp')
     # temp for test
     # for j in reversed(range(max_p)):
     #     if j > 1:
@@ -493,17 +493,25 @@ def obtain_hpyerparameters(COUPLE, max_v, max_p, USER):
     gb_model.update()
     gb_model.write('./Lp_files/model.lp')
 
+    sz1 = gb_model.addVars(l, vtype=gb.GRB.BINARY, name='zz1')  # support variables
+
     couple_counter = 0
     for l1, recipe1 in enumerate(recipes_indexes):
         for l2, recipe2 in enumerate(recipes_indexes):
             if COUPLE == 150:
                 if couple_counter >= l:
-                    gb_model.addGenConstrIndicator(s[couple_counter], True, v[couple_counter] == y[couple_counter])
+                    # gb_model.addGenConstrIndicator(s[couple_counter], True, v[couple_counter] == y[couple_counter])
+                    gb_model.addConstr(v[couple_counter] - y[couple_counter] >= eps - M * (1 - sz1[couple_counter]))
+                    gb_model.addConstr(v[couple_counter] - y[couple_counter] <= M * sz1[couple_counter])
+                    gb_model.addConstr(s[couple_counter] == sz1[couple_counter])
                     couple_counter += 1
             else:
                 if l2 <= l1:
                     continue
-                gb_model.addGenConstrIndicator(s[couple_counter], True, v[couple_counter] == y[couple_counter])
+                # gb_model.addGenConstrIndicator(s[couple_counter], True, v[couple_counter] == y[couple_counter])
+                gb_model.addConstr(v[couple_counter] - y[couple_counter] >= eps - M * (1 - sz1[couple_counter]))
+                gb_model.addConstr(v[couple_counter] - y[couple_counter] <= M * sz1[couple_counter])
+                gb_model.addConstr(s[couple_counter] == sz1[couple_counter])
                 couple_counter += 1
     gb_model.update()
     gb_model.write('./Lp_files/model.lp')

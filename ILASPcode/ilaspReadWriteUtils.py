@@ -334,6 +334,8 @@ def test_cm(theory, items, test_set):
 
     return {'avg_accuracy': average_accuracy, 'avg_precision': average_precision, 'avg_recall': average_recall}
 
+def test_cm_number(theory, element1, element2, sign):
+    return compare_cm(element1, element2, sign, theory)
 
 def test(theory,items,test_set):
     correct_instances = 0

@@ -6,6 +6,8 @@ import sys
 import os
 import pandas as pd
 import numpy as np
+import re
+from deep_translator import GoogleTranslator
 
 class WeakConstraintClass:
     def __init__(self, wc_literals, wc_weight, wc_priority, wc_terms):
@@ -85,7 +87,32 @@ def retro_projection(WCSObjectList):
             WeakConstraint.set_literals(['value(carne,V1)', 'value(funghi,V1)', 'value(marinatura,V1)'])
     return WCSObjectList
 
-def printTheory(path, data_collector, data_counter_collector, user = 99, max_v = 99, max_p = 99, couple = 99, ):
+
+def weak_constraint_in_theory(t):
+    WeakConstraintObjectList = []
+    listWeakConstraint = t.split(':~')
+    del listWeakConstraint[0]  # del empty occurrence
+    for weakConstraint in listWeakConstraint:
+        partsOfWeakConstraint = weakConstraint.split('.')
+        literals = list(partsOfWeakConstraint[0].split(', '))  # note: there works if space after commas in literals are only from a literal to the next.
+        weight = partsOfWeakConstraint[1].split('@')[0][1:]
+        priorityAndTerms = partsOfWeakConstraint[1].split('@')[1]
+        priorityAndTerms = priorityAndTerms[0:priorityAndTerms.find(']')]
+        if priorityAndTerms.find(',') != -1:
+            priority = priorityAndTerms[0:priorityAndTerms.find(',')]
+            terms = list(priorityAndTerms[priorityAndTerms.find(',') + 2:])  # note: also there space after commas between a terms and his next is required.
+        else:
+            priority = priorityAndTerms
+            terms = []
+        wc = WeakConstraintClass(literals, str(weight), int(priority), terms)
+        WeakConstraintObjectList.append(wc)
+    WeakConstraintObjectList.sort()
+    if "pc" in str(WeakConstraintObjectList[0].get_literals()):
+        WeakConstraintObjectList = retro_projection(WeakConstraintObjectList)
+    return WeakConstraintObjectList
+
+
+def printTheory(path, data_collector, data_counter_collector, user = 99, max_v = 99, max_p = 99, couple = 99):
     print('Preferences are written from the one with less priority to the one with high priority')
     print('The conflicts are grouped by the right part of the statement (so wcs x(1), x(2), ..., x(n) which are contradicted by the same wc y) and are written with the same order considered for preferences referred to wc y')
     print('---------------------------------------------------------------------------------------')
@@ -128,27 +155,7 @@ def printTheory(path, data_collector, data_counter_collector, user = 99, max_v =
                         continue
                     else:
                         print("User " + user_to_print + "; (max_v, max_p) = (" + str(max_v_to_print) + ", " + str(max_p_to_print + "); Dataset of size " + str(couple_to_print)))
-                        WeakConstraintObjectList = []
-                        weakConstraints = str(element)
-                        listWeakConstraint = element.split(':~')
-                        del listWeakConstraint[0]   # del empty occurrence
-                        for weakConstraint in listWeakConstraint:
-                            partsOfWeakConstraint = weakConstraint.split('.')
-                            literals = list(partsOfWeakConstraint[0].split(', '))     # note: there works if space after commas in literals are only from a literal to the next.
-                            weight = partsOfWeakConstraint[1].split('@')[0][1:]
-                            priorityAndTerms = partsOfWeakConstraint[1].split('@')[1]
-                            priorityAndTerms = priorityAndTerms[0:priorityAndTerms.find(']')]
-                            if priorityAndTerms.find(',') != -1:
-                                priority = priorityAndTerms[0:priorityAndTerms.find(',')]
-                                terms = list(priorityAndTerms[priorityAndTerms.find(',') + 2:])  # note: also there space after commas between a terms and his next is required.
-                            else:
-                                priority = priorityAndTerms
-                                terms = []
-                            wc = WeakConstraintClass(literals, str(weight), int(priority), terms)
-                            WeakConstraintObjectList.append(wc)
-                        WeakConstraintObjectList.sort()
-                        if "pc" in str(WeakConstraintObjectList[0].get_literals()):
-                            WeakConstraintObjectList = retro_projection(WeakConstraintObjectList)
+                        WeakConstraintObjectList = weak_constraint_in_theory(element)
                         # ---- start data collection for plots ----
 
                         for l, WeakConstraint in enumerate(WeakConstraintObjectList):
@@ -226,7 +233,7 @@ def printTheory(path, data_collector, data_counter_collector, user = 99, max_v =
                                         stringToPrint = stringToPrint + " and with "
                                     if "value" in literal:
                                         wordOfInterest = literal[literal.find('(') + 1:literal.find(',')]
-                                        stringToPrint = stringToPrint + wordOfInterest + " (proportionally to its quantity/importance in the recipe)"
+                                        stringToPrint = stringToPrint + " more " + wordOfInterest
                                     else:
                                         stringToPrint = stringToPrint + literal
                                     if k == numberOfLiterals - 1:
@@ -237,9 +244,9 @@ def printTheory(path, data_collector, data_counter_collector, user = 99, max_v =
                                 if "value" in literal:
                                     wordOfInterest = WeakConstraintObjectList[0].get_literals()[0][WeakConstraintObjectList[0].get_literals()[0].find('(') + 1:WeakConstraintObjectList[0].get_literals()[0].find(',')]
                                     if '-' in WeakConstraintObjectList[0].get_weight():
-                                        print("priority 1 - you appreciate more the one with " + wordOfInterest + " (proportionally to its quantity/importance in the recipe)")
+                                        print("priority 1 - you appreciate more the one with more " + wordOfInterest)
                                     else:
-                                        print("priority 1 - you appreciate less the one with " + wordOfInterest + " (proportionally to its quantity/importance in the recipe)")
+                                        print("priority 1 - you appreciate less the one with more " + wordOfInterest)
                                 else:
                                     if '-' in WeakConstraintObjectList[0].get_weight():
                                         print("priority 1 - you appreciate more the one with " + WeakConstraintObjectList[0].get_literals()[0])
@@ -323,7 +330,7 @@ def printTheory(path, data_collector, data_counter_collector, user = 99, max_v =
                                                 stringToPrint = stringToPrint + " and with "
                                             if "value" in literal:
                                                 wordOfInterest = literal[literal.find('(') + 1:literal.find(',')]
-                                                stringToPrint = stringToPrint + wordOfInterest + " (proportionally to its quantity/importance in the recipe)"
+                                                stringToPrint = stringToPrint + " more " + wordOfInterest
                                             else:
                                                 stringToPrint = stringToPrint + literal
                                             if k == numberOfLiterals - 1:
@@ -334,9 +341,9 @@ def printTheory(path, data_collector, data_counter_collector, user = 99, max_v =
                                         if "value" in literal:
                                             wordOfInterest = WeakConstraint.get_literals()[0][WeakConstraint.get_literals()[0].find('(')+1:WeakConstraint.get_literals()[0].find(',')]
                                             if '-' in WeakConstraint.get_weight():
-                                                print("priority " + str(z+1) + " - you appreciate more the one with " + wordOfInterest + " (proportionally to its quantity/importance in the recipe)")
+                                                print("priority " + str(z+1) + " - you appreciate more the one with more  " + wordOfInterest)
                                             else:
-                                                print("priority " + str(z+1) + " - you appreciate less the one with " + wordOfInterest + " (proportionally to its quantity/importance in the recipe)")
+                                                print("priority " + str(z+1) + " - you appreciate less the one with more " + wordOfInterest)
                                         else:
                                             if '-' in WeakConstraint.get_weight():
                                                 print("priority " + str(z+1) + " - you appreciate more the one with " + WeakConstraint.get_literals()[0])
@@ -353,7 +360,7 @@ def printTheory(path, data_collector, data_counter_collector, user = 99, max_v =
                                                 stringToPrint = stringToPrint + " and with "
                                             if "value" in literal:
                                                 wordOfInterest = literal[literal.find('(') + 1:literal.find(',')]
-                                                stringToPrint = stringToPrint + wordOfInterest + " (proportionally to its quantity/importance in the recipe)"
+                                                stringToPrint = stringToPrint + " more " + wordOfInterest
                                             else:
                                                 stringToPrint = stringToPrint + literal
                                             if k == numberOfLiterals - 1:
@@ -364,9 +371,9 @@ def printTheory(path, data_collector, data_counter_collector, user = 99, max_v =
                                         if "value" in literal:
                                             wordOfInterest = WeakConstraint.get_literals()[0][WeakConstraint.get_literals()[0].find('(')+1:WeakConstraint.get_literals()[0].find(',')]
                                             if '-' in WeakConstraint.get_weight():
-                                                print("priority " + str(z+1) + " - you appreciate more the one with " + wordOfInterest + " (proportionally to its quantity/importance in the recipe)")
+                                                print("priority " + str(z+1) + " - you appreciate more the one with more " + wordOfInterest)
                                             else:
-                                                print("priority " + str(z+1) + " - you appreciate less the one with " + wordOfInterest + " (proportionally to its quantity/importance in the recipe)")
+                                                print("priority " + str(z+1) + " - you appreciate less the one with more " + wordOfInterest)
                                         else:
                                             if '-' in WeakConstraint.get_weight():
                                                 print("priority " + str(z+1) + " - you appreciate more the one with " + WeakConstraint.get_literals()[0])
@@ -394,7 +401,7 @@ def printTheory(path, data_collector, data_counter_collector, user = 99, max_v =
                                                                     stringToPrintConflicts = stringToPrintConflicts + " and with "
                                                                 if "value" in literal:
                                                                     wordOfInterest = literal[literal.find('(') + 1:literal.find(',')]
-                                                                    stringToPrintConflicts = stringToPrintConflicts + wordOfInterest + " (proportionally to its quantity/importance in the recipe)"
+                                                                    stringToPrintConflicts = stringToPrintConflicts + " more " + wordOfInterest
                                                                 else:
                                                                     stringToPrintConflicts = stringToPrintConflicts + literal
                                                                 if k == numberOfLiterals2 - 1:
@@ -403,7 +410,7 @@ def printTheory(path, data_collector, data_counter_collector, user = 99, max_v =
                                                             literal = WeakConstraint2.get_literals()[0]
                                                             if "value" in literal:
                                                                 wordOfInterest = WeakConstraint2.get_literals()[0][WeakConstraint2.get_literals()[0].find('(') + 1:WeakConstraint2.get_literals()[0].find(',')]
-                                                                stringToPrintConflicts = stringToPrintConflicts + wordOfInterest + " (proportionally to its quantity/importance in the recipe)"
+                                                                stringToPrintConflicts = stringToPrintConflicts + " more " + wordOfInterest
                                                             else:
                                                                 stringToPrintConflicts = stringToPrintConflicts + WeakConstraint2.get_literals()[0]
                                                     else:
@@ -417,7 +424,7 @@ def printTheory(path, data_collector, data_counter_collector, user = 99, max_v =
                                                                     stringToPrintConflicts = stringToPrintConflicts + " and with "
                                                                 if "value" in literal:
                                                                     wordOfInterest = literal[literal.find('(') + 1:literal.find(',')]
-                                                                    stringToPrintConflicts = stringToPrintConflicts + wordOfInterest + " (proportionally to its quantity/importance in the recipe)"
+                                                                    stringToPrintConflicts = stringToPrintConflicts + " more " + wordOfInterest
                                                                 else:
                                                                     stringToPrintConflicts = stringToPrintConflicts + literal
                                                                 if k == numberOfLiterals2 - 1:
@@ -426,7 +433,7 @@ def printTheory(path, data_collector, data_counter_collector, user = 99, max_v =
                                                             literal = WeakConstraint2.get_literals()[0]
                                                             if "value" in literal:
                                                                 wordOfInterest = WeakConstraint2.get_literals()[0][WeakConstraint2.get_literals()[0].find('(') + 1:WeakConstraint2.get_literals()[0].find(',')]
-                                                                stringToPrintConflicts = stringToPrintConflicts + " " + wordOfInterest + " (proportionally to its quantity/importance in the recipe)"
+                                                                stringToPrintConflicts = stringToPrintConflicts + " more " + wordOfInterest
                                                             else:
                                                                 stringToPrintConflicts = stringToPrintConflicts + WeakConstraint2.get_literals()[0]
                                             if checker != 0:
@@ -443,7 +450,7 @@ def printTheory(path, data_collector, data_counter_collector, user = 99, max_v =
                                                 stringToPrintConflicts = stringToPrintConflicts + " and with "
                                             if "value" in literal:
                                                 wordOfInterest = literal[literal.find('(') + 1:literal.find(',')]
-                                                stringToPrintConflicts = stringToPrintConflicts + wordOfInterest + " (proportionally to its quantity/importance in the recipe)"
+                                                stringToPrintConflicts = stringToPrintConflicts + " more " + wordOfInterest
                                             else:
                                                 stringToPrintConflicts = stringToPrintConflicts + literal
                                             if k == numberOfLiterals - 1:
@@ -453,9 +460,9 @@ def printTheory(path, data_collector, data_counter_collector, user = 99, max_v =
                                         if "value" in literal:
                                             wordOfInterest = WeakConstraint.get_literals()[0][WeakConstraint.get_literals()[0].find('(')+1:WeakConstraint.get_literals()[0].find(',')]
                                             if '-' in WeakConstraint.get_weight():
-                                                stringToPrintConflicts = stringToPrintConflicts + "this it's not true when there is also " + wordOfInterest + " (proportionally to its quantity/importance in the recipe)"
+                                                stringToPrintConflicts = stringToPrintConflicts + "this it's not true when there is also more " + wordOfInterest
                                             else:
-                                                stringToPrintConflicts = stringToPrintConflicts + "this it's not true when there is also " + wordOfInterest + " (proportionally to its quantity/importance in the recipe)"
+                                                stringToPrintConflicts = stringToPrintConflicts + "this it's not true when there is also more " + wordOfInterest
                                         else:
                                             if '-' in WeakConstraint.get_weight():
                                                 stringToPrintConflicts = stringToPrintConflicts + "this it's not true when there is also " + WeakConstraint.get_literals()[0]
@@ -472,15 +479,15 @@ def printTheory(path, data_collector, data_counter_collector, user = 99, max_v =
                                 for line_counter, lineConflict in enumerate(stringToPrintConflicts.split("\n")):
                                     for macro_ingredient in macro_ingredients_list:
                                         if lineConflict.count(macro_ingredient) >= 2:
-                                            temp_line = stringToPrintConflicts.replace(" and with " + macro_ingredient + " (proportionally to its quantity/importance in the recipe)", "")
+                                            temp_line = stringToPrintConflicts.replace(" and with more " + macro_ingredient, "")
                                             list_conflict[line_counter] = temp_line.replace(" and with " + macro_ingredient, "")
                                     for preparation in preparations:
                                         if lineConflict.count(preparation) >= 2:
-                                            temp_line = stringToPrintConflicts.replace(" and with " + preparation + " (proportionally to its quantity/importance in the recipe)", "")
+                                            temp_line = stringToPrintConflicts.replace(" and with more " + preparation, "")
                                             list_conflict[line_counter] = temp_line.replace(" and with " + preparation, "")
                                     for category in categories:
                                         if lineConflict.count(category) >= 2:
-                                            temp_line = stringToPrintConflicts.replace(" and with " + category + " (proportionally to its quantity/importance in the recipe)", "")
+                                            temp_line = stringToPrintConflicts.replace(" and with more " + category, "")
                                             list_conflict[line_counter] = temp_line.replace(" and with " + category, "")
                                 stringToPrintConflicts = ""
                                 for conflict_in_list in list_conflict:
@@ -490,7 +497,7 @@ def printTheory(path, data_collector, data_counter_collector, user = 99, max_v =
                                 print(stringToPrintConflicts)
                         print('---------------------------------------------------------------------------------------')
 
-def translate_theory(theory1):
+def translate_theory_old(theory1):
     macro_ingredients_art_i = ["cereali", "latticini", "farinacei", "dolcificanti"]
     macro_ingredients_art_le = ["uova"]
     macro_ingredients_art_la = ["frutta", "carne", "pasta"]
@@ -600,10 +607,65 @@ def translate_theory(theory1):
 
     return theory
 
+def translate_theory(theory):
+    theory1 = theory.replace("  ", " ")
+    theory2 = theory1.replace("category(1)", "starter")
+    theory3 = theory2.replace("category(2)", "complete meal")
+    theory4 = theory3.replace("category(3)", "first course")
+    theory5 = theory4.replace("category(4)", "second course")
+    theory6 = theory5.replace("category(5)", "savory cake")
+    theory7 = theory6.replace("with starter", "which is a starter")
+    theory8 = theory7.replace("with complete meal", "which is a complete meal")
+    theory9 = theory8.replace("with first course", "which is a first course")
+    theory10 = theory9.replace("with second course", "which is a second course")
+    theory11 = theory10.replace("with savory cake", "which is savory cake")
+    theory12 = theory11.replace("with more cost", "which costs more")
+    theory13 = theory12.replace("with more prepTime", "which requires more preparation time")
+    theory14 = theory13.replace("with more difficulty", "which is more difficult to prepare")
+    theory15 = theory14.replace("_", " ")
+    translated = GoogleTranslator(source='english', target='italian').translate(theory15)
+    translated1 = translated.replace("quello con", "quella con")
+    translated2 = translated1.replace("quello che", "quella che")
+    translated3 = translated2.replace("Anche se è vero che in genere", "Seppur sia vero che in generale")
+    translated4 = translated3.replace("si apprezza", "apprezzi")
+    translated5 = translated4.replace("non si apprezza", "non apprezzi")
+    translated6 = translated5.replace("c'è anche più bollitura", "la ricetta è preparata tramite bollitura")
+    translated7 = translated6.replace("c'è anche più rosolatura", "la ricetta è preparata tramite rosolatura")
+    translated8 = translated7.replace("c'è anche più frittura", "la ricetta è preparata tramite frittura")
+    translated9 = translated8.replace("c'è anche più marinatura", "la ricetta è preparata tramite marinatura")
+    translated10 = translated9.replace("c'è anche più mantecatura", "la ricetta è preparata tramite mantecatura")
+    translated11 = translated10.replace("c'è anche più forno", "la ricetta è preparata tramite cottura al forno")
+    translated12 = translated11.replace("c'è anche più cottura a fiamma", "la ricetta è preparata tramite cottura a fiamma")
+    translated13 = translated12.replace("c'è anche più stufato", "la ricetta è preparata tramite stufato")
+    translated14 = translated13.replace("con più bollitura", "in cui la ricetta è preparata tramite bollitura")
+    translated15 = translated14.replace("con più rosolatura", "in cui la ricetta è preparata tramite rosolatura")
+    translated16 = translated15.replace("con più frittura", "in cui la ricetta è preparata tramite frittura")
+    translated17 = translated16.replace("con più marinatura", "in cui la ricetta è preparata tramite marinatura")
+    translated18 = translated17.replace("con più mantecatura", "in cui la ricetta è preparata tramite mantecatura")
+    translated19 = translated18.replace("con più forno", "in cui la ricetta è preparata tramite cottura al forno")
+    translated20 = translated19.replace("con più cottura a fiamma", "in cui la ricetta è preparata tramite cottura a fiamma")
+    translated21 = translated20.replace("con più stufato", "in cui la ricetta è preparata tramite stufato")
+    translated22 = translated21.replace(" con lo stesso livello di priorità", "")
+    translated23 = translated22.replace("è anche vero che questo non è vero", "ciò non è più vero")
+    translated24 = translated23.replace("ciò non è più vero quando la ricetta è", "ciò non è più vero quando quella stessa ricetta è")
+    translated25 = translated24.replace("ciò non è più vero quando c'è anche", "ciò non è più vero quando in quella stessa ricetta c'è anche")
+    translated26 = translated25.replace("primo piatto", "primo")
+    translated27 = translated26.replace("secondo piatto", "secondo")
+    translated28 = translated27.replace("e che è un antipasto", "ed è un antipasto")
+    translated29 = translated28.replace("e che è un pasto completo", "ed è un pasto completo")
+    translated30 = translated29.replace("e che è un primo", "ed è un primo")
+    translated31 = translated30.replace("e che è un secondo", "ed è un secondo")
+    translated32 = translated31.replace("e che è un torta salata", "ed è una torta salata")
+
+    return translated32
+
+
 def theoriesScoreCalculator(theory, user, scope):
     columns = ["dolcificanti", "farinacei", "erbe_spezie_e_condimenti", "carne", "cereali", "frutta", "funghi_e_tartufi", "latticini", "pasta", "pesce", "uova", "verdure_e_ortaggi", "bollitura", "cottura_a_fiamma", "cottura_a_vapore", "cottura_in_forno", "frittura", "mantecatura", "marinatura", "rosolatura", "stufato", "difficolta", "tempo_di_preparazione", "costo"]
     users_ground_truth = pd.DataFrame(columns=[*columns])
     for dirname, _, filenames in os.walk('./Answers_dataset/'):
+        if "answers-of-return" in dirname:
+            continue
         for index, filename in enumerate(filenames):
             path = os.path.join(dirname, filename)
             considered_survey = pd.read_csv(path, delimiter=";")
@@ -651,8 +713,8 @@ def theoriesScoreCalculator(theory, user, scope):
             if line_index <= 1:
                 continue
         counter_vars = 0
-        if "priorità" in line:
-            if "apprezzi di meno" in line:
+        if "priority" in line:
+            if "you appreciate less" in line:
                 sense_for_sentence[counter_values] = -1
             else:
                 sense_for_sentence[counter_values] = 1
@@ -662,7 +724,7 @@ def theoriesScoreCalculator(theory, user, scope):
             if "farinacei" in line:
                 values_for_sentence[counter_values, counter_vars] = users_ground_truth.loc[user]["farinacei"]
                 counter_vars += 1
-            if "erbe, spezie e condimenti" in line:
+            if "erbe_spezie_e_condimenti" in line:
                 values_for_sentence[counter_values, counter_vars] = users_ground_truth.loc[user]["erbe_spezie_e_condimenti"]
                 counter_vars += 1
             if "carne" in line:
@@ -674,7 +736,7 @@ def theoriesScoreCalculator(theory, user, scope):
             if "frutta" in line:
                 values_for_sentence[counter_values, counter_vars] = users_ground_truth.loc[user]["frutta"]
                 counter_vars += 1
-            if "funghi e tartufi" in line:
+            if "funghi_e_tartufi" in line:
                 values_for_sentence[counter_values, counter_vars] = users_ground_truth.loc[user]["funghi_e_tartufi"]
                 counter_vars += 1
             if "latticini" in line:
@@ -689,19 +751,19 @@ def theoriesScoreCalculator(theory, user, scope):
             if "uova" in line:
                 values_for_sentence[counter_values, counter_vars] = users_ground_truth.loc[user]["uova"]
                 counter_vars += 1
-            if "verdure ed ortaggi" in line:
+            if "verdure_e_ortaggi" in line:
                 values_for_sentence[counter_values, counter_vars] = users_ground_truth.loc[user]["verdure_e_ortaggi"]
                 counter_vars += 1
             if "bollitura" in line:
                 values_for_sentence[counter_values, counter_vars] = users_ground_truth.loc[user]["bollitura"]
                 counter_vars += 1
-            if "cottura a fiamma" in line:
+            if "cottura_a_fiamma" in line:
                 values_for_sentence[counter_values, counter_vars] = users_ground_truth.loc[user]["cottura_a_fiamma"]
                 counter_vars += 1
-            if "cottura a vapore" in line:
+            if "cottura_a_vapore" in line:
                 values_for_sentence[counter_values, counter_vars] = users_ground_truth.loc[user]["cottura_a_vapore"]
                 counter_vars += 1
-            if "cottura in forno" in line:
+            if "cottura_in_forno" in line:
                 values_for_sentence[counter_values, counter_vars] = users_ground_truth.loc[user]["cottura_in_forno"]
                 counter_vars += 1
             if "frittura" in line:
@@ -722,7 +784,7 @@ def theoriesScoreCalculator(theory, user, scope):
             if "difficola" in line:
                 values_for_sentence[counter_values, counter_vars] = users_ground_truth.loc[user]["difficolta"]
                 counter_vars += 1
-            if "tempo di preparazione" in line:
+            if "tempo_di_preparazione" in line:
                 values_for_sentence[counter_values, counter_vars] = users_ground_truth.loc[user]["tempo_di_preparazione"]
                 counter_vars += 1
             if "costo" in line:
@@ -731,24 +793,86 @@ def theoriesScoreCalculator(theory, user, scope):
         counter_values += 1
     list_sentences_wrong_sense = []
     list_index_wrong_position = []
+    list_index_uncertain_position = []
     for index_sentence, (sentence_value, sentence_sense) in enumerate(zip(values_for_sentence, sense_for_sentence)):
+        if sentence_sense == 0:
+            continue    # this means that both wc don't exist (we set empty wc to arrive to 5 wc)
+        all_zero = True
+        for value in sentence_value:
+            if value != 0:
+                all_zero = False
+        if all_zero:
+            continue    # this is a special case that could arise since in the ground-truth we don't have rating on categorical data (but we can retrieve sense in the theory)
         if (sentence_sense == 1 and np.nanmean(np.where(sentence_value != 0, sentence_value, np.nan)) < 6) or (sentence_sense == -1 and np.nanmean(np.where(sentence_value != 0, sentence_value, np.nan)) > 5):
             list_sentences_wrong_sense.append(index_sentence)
     for index_sentence_i, sentence_value_i in enumerate(values_for_sentence):
+        is_wrong = False
         for index_sentence_j, sentence_value_j in enumerate(values_for_sentence):
             if index_sentence_j <= index_sentence_i:
                 continue
-            if np.nanmean(np.where(sentence_value_i != 0, sentence_value_i, np.nan)) < np.nanmean(np.where(sentence_value_j != 0, sentence_value_j, np.nan)):
-                if (sense_for_sentence[index_sentence_i] == 1 and sense_for_sentence[index_sentence_i] == 1) or (sense_for_sentence[index_sentence_i] == 1 and sense_for_sentence[index_sentence_i] == -1):
-                    list_index_wrong_position.append(index_sentence_i)
-            if np.nanmean(np.where(sentence_value_i != 0, sentence_value_i, np.nan)) > np.nanmean(np.where(sentence_value_j != 0, sentence_value_j, np.nan)):
-                if (sense_for_sentence[index_sentence_i] == -1 and sense_for_sentence[index_sentence_i] == -1) or (sense_for_sentence[index_sentence_i] == -1 and sense_for_sentence[index_sentence_i] == 1):
-                    list_index_wrong_position.append(index_sentence_i)
-            if np.nanmean(np.where(sentence_value_i != 0, sentence_value_i, np.nan)) == np.nanmean(np.where(sentence_value_j != 0, sentence_value_j, np.nan)):
-                if sense_for_sentence[index_sentence_i] == -1 and sense_for_sentence[index_sentence_i] == 1:
-                    list_index_wrong_position.append(index_sentence_i)
+            all_zero_i = True
+            all_zero_j = True
+            for sentence_value_i_element in sentence_value_i:
+                if sentence_value_i_element != 0:
+                    all_zero_i = False
+                    break
+            for sentence_value_i_element in sentence_value_j:
+                if sentence_value_i_element != 0:
+                    all_zero_j = False
+                    break
+            if all_zero_i and (not all_zero_j):
+                if 0 < np.nanmean(np.where(sentence_value_j != 0, sentence_value_j, np.nan)):
+                    if sense_for_sentence[index_sentence_i] == 1 and sense_for_sentence[index_sentence_j] == -1:
+                        list_index_wrong_position.append(index_sentence_i)
+                        is_wrong = True
+                if 0 > np.nanmean(np.where(sentence_value_j != 0, sentence_value_j, np.nan)):
+                    if sense_for_sentence[index_sentence_i] == -1 and sense_for_sentence[index_sentence_j] == 1:
+                        list_index_wrong_position.append(index_sentence_i)
+                        is_wrong = True
+                if 0 == np.nanmean(np.where(sentence_value_j != 0, sentence_value_j, np.nan)):
+                    if (sense_for_sentence[index_sentence_i] == -1 and sense_for_sentence[index_sentence_j] == 1) or (sense_for_sentence[index_sentence_i] == 1 and sense_for_sentence[index_sentence_j] == -1):
+                        list_index_wrong_position.append(index_sentence_i)
+                        is_wrong = True
+            elif (not all_zero_i) and all_zero_j:
+                if np.nanmean(np.where(sentence_value_i != 0, sentence_value_i, np.nan)) < 0:
+                    if sense_for_sentence[index_sentence_i] == 1 and sense_for_sentence[index_sentence_j] == -1:
+                        list_index_wrong_position.append(index_sentence_i)
+                        is_wrong = True
+                if np.nanmean(np.where(sentence_value_i != 0, sentence_value_i, np.nan)) > 0:
+                    if sense_for_sentence[index_sentence_i] == -1 and sense_for_sentence[index_sentence_j] == 1:
+                        list_index_wrong_position.append(index_sentence_i)
+                        is_wrong = True
+                if np.nanmean(np.where(sentence_value_i != 0, sentence_value_i, np.nan)) == 0:
+                    if (sense_for_sentence[index_sentence_i] == -1 and sense_for_sentence[index_sentence_j] == 1) or (sense_for_sentence[index_sentence_i] == 1 and sense_for_sentence[index_sentence_j] == -1):
+                        list_index_wrong_position.append(index_sentence_i)
+                        is_wrong = True
+            elif all_zero_i and all_zero_j:
+                continue    # this means that both wc don't exist (we set empty wc to arrive to 5 wc)
+            else:
+                if np.nanmean(np.where(sentence_value_i != 0, sentence_value_i, np.nan)) < np.nanmean(np.where(sentence_value_j != 0, sentence_value_j, np.nan)):
+                    if sense_for_sentence[index_sentence_i] == 1 and sense_for_sentence[index_sentence_j] == -1:
+                        list_index_wrong_position.append(index_sentence_i)
+                        is_wrong = True
+                if np.nanmean(np.where(sentence_value_i != 0, sentence_value_i, np.nan)) > np.nanmean(np.where(sentence_value_j != 0, sentence_value_j, np.nan)):
+                    if sense_for_sentence[index_sentence_i] == -1 and sense_for_sentence[index_sentence_j] == 1:
+                        list_index_wrong_position.append(index_sentence_i)
+                        is_wrong = True
+                if np.nanmean(np.where(sentence_value_i != 0, sentence_value_i, np.nan)) == np.nanmean(np.where(sentence_value_j != 0, sentence_value_j, np.nan)):
+                    if (sense_for_sentence[index_sentence_i] == -1 and sense_for_sentence[index_sentence_j] == 1) or (sense_for_sentence[index_sentence_i] == 1 and sense_for_sentence[index_sentence_j] == -1):
+                        list_index_wrong_position.append(index_sentence_i)
+                        is_wrong = True
+        if is_wrong:
+            continue
+        for index_sentence_j, sentence_value_j in enumerate(values_for_sentence):
+            if index_sentence_j <= index_sentence_i:
+                continue
+            if sense_for_sentence[index_sentence_i] == 1 and sense_for_sentence[index_sentence_j] == 1:
+                list_index_uncertain_position.append(index_sentence_i)
+            if sense_for_sentence[index_sentence_i] == -1 and sense_for_sentence[index_sentence_j] == -1:
+                list_index_uncertain_position.append(index_sentence_i)
     list_index_wrong_position = list(set(list_index_wrong_position))
-    return len(list_sentences_wrong_sense), len(list_index_wrong_position)
+    list_index_uncertain_position = list(set(list_index_uncertain_position))
+    return len(list_sentences_wrong_sense), len(list_index_wrong_position), len(list_index_uncertain_position)
 
 
 
@@ -756,47 +880,83 @@ if __name__ == '__main__':
     columns = ["dolcificanti", "farinacei", "erbe_spezie_e_condimenti", "carne", "cereali", "frutta", "funghi_e_tartufi", "latticini", "pasta", "pesce", "uova", "verdure_e_ortaggi", "bollitura", "cottura_a_fiamma", "cottura_a_vapore", "cottura_in_forno", "frittura", "mantecatura", "marinatura", "rosolatura", "stufato", "difficolta", "tempo_di_preparazione", "costo", "antipasti", "piatto_unico", "primo", "secondo", "torta_salata"]
     collect_data = pd.DataFrame(np.zeros((50, len(columns)), dtype="float32"), columns=[*columns])
     counter_collector = 0
+    # GLOBAL PART
     # list_score_wrong_sense_45 = []
     # list_score_wrong_position_45 = []
+    # list_score_uncertain_position_45 = []
     # list_score_wrong_sense_105 = []
     # list_score_wrong_position_105 = []
+    # list_score_uncertain_position_105 = []
     # list_score_wrong_sense_210 = []
     # list_score_wrong_position_210 = []
+    # list_score_uncertain_position_210 = []
+    # list_score_wrong_sense_150 = []
+    # list_score_wrong_position_150 = []
+    # list_score_uncertain_position_150 = []
+    # list_number_weak_constraint_150 = []
     # users = [3, 4, 7, 11, 14, 15, 20, 29, 32, 36]
-    # couples = [45]
+    # couples = [157]
     # for user in users:
     #     for couple in couples:
     #         buffer = StringIO()
     #         sys.stdout = buffer
-    #         printTheory('ILASPcode/Data17Component2Std/testOutput/results_zero.csv', user=user, max_v=5, max_p=5, couple=couple, data_collector=collect_data, data_counter_collector = counter_collector)
+    #         # printTheory('ILASPcode/Data/testOutput_original/results_zero.csv', user=user, max_v=5, max_p=5, couple=couple, data_collector=collect_data, data_counter_collector = counter_collector)
+    #         printTheory('ILASPcode/PCAexperiment/testOutput_original20/results_zero.csv', user=user, max_v=5, max_p=5, couple=couple, data_collector=collect_data, data_counter_collector=counter_collector)
     #         counter_collector += 1
     #         sys.stdout = sys.__stdout__
-    #         translated_theory = translate_theory(buffer.getvalue())
-    #         # score_wrong_sense, score_wrong_position = theoriesScoreCalculator(translated_theory, user=user, scope="global")
+    #         not_translated_theory = buffer.getvalue()
+    #         score_wrong_sense, score_wrong_position, score_uncertain_position = theoriesScoreCalculator(not_translated_theory, user=user, scope="global")
+    #         # start only for ILASP as classsifier
+    #         counter_wc = 0
+    #         for i_line, line in enumerate(not_translated_theory.split("\n")):
+    #             if i_line <= 4:
+    #                 continue
+    #             if i_line > 9:
+    #                 break
+    #             if "Although" in line:
+    #                 continue
+    #             if "priority" in line:
+    #                 counter_wc+=1
+    #
+    #
+    #         # end part only for ILASP as classifier
     #         # if couple == 45:
     #         #     list_score_wrong_sense_45.append(score_wrong_sense)
     #         #     list_score_wrong_position_45.append(score_wrong_position)
+    #         #     list_score_uncertain_position_45.append(score_uncertain_position)
     #         # if couple == 105:
     #         #     list_score_wrong_sense_105.append(score_wrong_sense)
     #         #     list_score_wrong_position_105.append(score_wrong_position)
+    #         #     list_score_uncertain_position_105.append(score_uncertain_position)
     #         # if couple == 210:
     #         #     list_score_wrong_sense_210.append(score_wrong_sense)
     #         #     list_score_wrong_position_210.append(score_wrong_position)
+    #         #     list_score_uncertain_position_210.append(score_uncertain_position)
+    #         if couple == 157:
+    #             list_score_wrong_sense_150.append(score_wrong_sense)
+    #             list_score_wrong_position_150.append(score_wrong_position)
+    #             list_score_uncertain_position_150.append(score_uncertain_position)
+    #             list_number_weak_constraint_150.append(counter_wc)
     # collect_data.replace(0, np.nan, inplace=True)
     # collect_data.hist(bins=5, figsize=(20, 20), range=[1, 5])
     # plt.show()
-    # print("On dataset with 45 pairs: mean of WOS = " + str(np.mean(list_score_wrong_position_45)) + "; mean of WVS = " + str(np.mean(list_score_wrong_sense_45)))
-    # print("On dataset with 105 pairs: mean of WOS = " + str(np.mean(list_score_wrong_position_105)) + "; mean of WVS = " + str(np.mean(list_score_wrong_sense_105)))
-    # print("On dataset with 190 pairs: mean of WOS = " + str(np.mean(list_score_wrong_position_210)) + "; mean of WVS = " + str(np.mean(list_score_wrong_sense_210)))
+    # # print("On dataset with 45 pairs: mean of WSS = " + str(np.mean(list_score_wrong_sense_45)) + "; mean of WOS = " + str(np.mean(list_score_wrong_position_45)) + "; mean of UOS = " + str(np.mean(list_score_uncertain_position_45)))
+    # # print("On dataset with 105 pairs: mean of WSS = " + str(np.mean(list_score_wrong_sense_105)) + "; mean of WOS = " + str(np.mean(list_score_wrong_position_105)) + "; mean of UOS = " + str(np.mean(list_score_uncertain_position_105)))
+    # # print("On dataset with 190 pairs: mean of WSS = " + str(np.mean(list_score_wrong_sense_210)) + "; mean of WOS = " + str(np.mean(list_score_wrong_position_210)) + "; mean of UOS = " + str(np.mean(list_score_uncertain_position_210)))
+    # print("On dataset with 105 pairs (#wc = " + str(np.mean(list_number_weak_constraint_150)) + "): mean of WSS = " + str(np.mean(list_score_wrong_sense_150)) + "; mean of WOS = " + str(np.mean(list_score_wrong_position_150)) + "; mean of UOS = " + str(np.mean(list_score_uncertain_position_150)))
 
+    # LOCAL PART
     list_score_wrong_sense_45 = []
     list_score_wrong_position_45 = []
+    list_score_uncertain_position_45 = []
     list_score_wrong_sense_105 = []
     list_score_wrong_position_105 = []
+    list_score_uncertain_position_105 = []
     list_score_wrong_sense_210 = []
     list_score_wrong_position_210 = []
+    list_score_uncertain_position_210 = []
     users = [3, 4, 7, 11, 14, 15, 20, 29, 32, 36]
-    couples = [105]
+    couples = [45]
     for user in users:
         for couple in couples:
             buffer = StringIO()
@@ -806,39 +966,51 @@ if __name__ == '__main__':
             else:
                 printTheory('ILASPcode/local/local/Data/theories/results_zero_190_gauss_std0.1.csv', user=user, max_v=1, max_p=5, couple=couple, data_collector=collect_data, data_counter_collector = counter_collector)
             sys.stdout = sys.__stdout__
-            translated_theory = translate_theory(buffer.getvalue())
-            list_of_theories = list(translated_theory.split("Utente"))
+            # translated_theory = translate_theory(buffer.getvalue())
+            # list_of_theories = list(translated_theory.split("Utente"))
+            theory = buffer.getvalue()
+            list_of_theories = list(theory.split("User"))
             list_score_wrong_sense_45_single_user = []
             list_score_wrong_position_45_single_user = []
+            list_score_uncertain_position_45_single_user = []
             list_score_wrong_sense_105_single_user = []
             list_score_wrong_position_105_single_user = []
+            list_score_uncertain_position_105_single_user = []
             list_score_wrong_sense_210_single_user = []
             list_score_wrong_position_210_single_user = []
+            list_score_uncertain_position_210_single_user = []
             for single_theory_index, single_theory in enumerate(list_of_theories):
                 if single_theory_index == 0:
                     continue
-                score_wrong_sense, score_wrong_position = theoriesScoreCalculator(single_theory, user=user, scope="local")
+                score_wrong_sense, score_wrong_position, score_uncertain_position = theoriesScoreCalculator(single_theory, user=user, scope="local")
                 if couple == 45:
                     list_score_wrong_sense_45_single_user.append(score_wrong_sense)
                     list_score_wrong_position_45_single_user.append(score_wrong_position)
+                    list_score_uncertain_position_45_single_user.append(score_uncertain_position)
                 if couple == 105:
                     list_score_wrong_sense_105_single_user.append(score_wrong_sense)
                     list_score_wrong_position_105_single_user.append(score_wrong_position)
+                    list_score_uncertain_position_105_single_user.append(score_uncertain_position)
                 if couple == 210:
                     list_score_wrong_sense_210_single_user.append(score_wrong_sense)
                     list_score_wrong_position_210_single_user.append(score_wrong_position)
+                    list_score_uncertain_position_210_single_user.append(score_uncertain_position)
             if couple == 45:
                 list_score_wrong_sense_45.append(np.mean(list_score_wrong_sense_45_single_user))
                 list_score_wrong_position_45.append(np.mean(list_score_wrong_position_45_single_user))
+                list_score_uncertain_position_45.append(np.mean(list_score_uncertain_position_45_single_user))
             if couple == 105:
                 list_score_wrong_sense_105.append(np.mean(list_score_wrong_sense_105_single_user))
                 list_score_wrong_position_105.append(np.mean(list_score_wrong_position_105_single_user))
+                list_score_uncertain_position_105.append(np.mean(list_score_uncertain_position_105_single_user))
+
             if couple == 210:
                 list_score_wrong_sense_210.append(np.mean(list_score_wrong_sense_210_single_user))
                 list_score_wrong_position_210.append(np.mean(list_score_wrong_position_210_single_user))
-    print("On dataset with 45 pairs: mean of WOS = " + str(np.mean(list_score_wrong_position_45)) + "; mean of WVS = " + str(np.mean(list_score_wrong_sense_45)))
-    print("On dataset with 105 pairs: mean of WOS = " + str(np.mean(list_score_wrong_position_105)) + "; mean of WVS = " + str(np.mean(list_score_wrong_sense_105)))
-    print("On dataset with 190 pairs: mean of WOS = " + str(np.mean(list_score_wrong_position_210)) + "; mean of WVS = " + str(np.mean(list_score_wrong_sense_210)))
+                list_score_uncertain_position_210.append(np.mean(list_score_uncertain_position_210_single_user))
+    print("On dataset with 45 pairs: mean of WSS = " + str(np.mean(list_score_wrong_sense_45)) + "; mean of WOS = " + str(np.mean(list_score_wrong_position_45)) + "; mean of UOS = " + str(np.mean(list_score_uncertain_position_45)))
+    print("On dataset with 105 pairs: mean of WSS = " + str(np.mean(list_score_wrong_sense_105)) + "; mean of WOS = " + str(np.mean(list_score_wrong_position_105)) + "; mean of UOS = " + str(np.mean(list_score_uncertain_position_105)))
+    print("On dataset with 190 pairs: mean of WSS = " + str(np.mean(list_score_wrong_sense_210)) + "; mean of WOS = " + str(np.mean(list_score_wrong_position_210)) + "; mean of UOS = " + str(np.mean(list_score_uncertain_position_210)))
 
 
 

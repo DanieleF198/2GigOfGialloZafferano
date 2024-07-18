@@ -92,10 +92,10 @@ choices = [0, 1]
         #         if max_v != max_p:
         #             fileToCreate.write("ILASP --version=4 ./testFiles/test_max-v\(" + str(max_v) + "\)-max_p\(" + str(max_p) + "\).las > ./outputTest/outputTest_max-v\(" + str(max_v) + "\)-max_p\(" + str(max_p) + "\).txt;\n")
 
-second_list_of_user = [15, 3, 32, 7, 36, 4, 20, 29, 14, 11]
+second_list_of_user = [0, 10, 12, 13, 19, 21, 22, 23, 24, 25, 26, 28, 31, 41, 42, 43, 44] # 15, 3, 32, 7, 36, 4, 20, 29, 14, 11
 # second_list_of_user = [str(i) for i in range(0, 54)]
-no_zero_data_dir = "./Data17Component2Std/final/users/no_zero/train/105Couples/"
-zero_data_dir = "./Data17Component2Std/final/users/zero/train/105Couples/"
+no_zero_data_dir = "./Data17Component2Std/final/users/no_zero/train/210Couples/"
+zero_data_dir = "./Data17Component2Std/final/users/zero/train/210Couples/"
 # fileToCreate = open(no_zero_data_dir + "script_ilasp_for_test_users_commands_equals_until_three.sh", "w+")
 # for USER in second_list_of_user:
 #     for max_v in max_v_list:

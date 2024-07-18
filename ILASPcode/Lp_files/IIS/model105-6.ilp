@@ -1,0 +1,27 @@
+\ Model _copy
+\ LP format - for model browsing. Use MPS format to capture full model detail.
+Maximize multi-objectives
+  OBJ0: Priority=1 Weight=1 AbsTol=1e-06 RelTol=0
+  
+  OBJ1: Priority=0 Weight=1 AbsTol=1e-06 RelTol=0
+   - z[0] - z[1] - z[2] - z[3] - z[4]
+Subject To
+ R15: - 5 z[0] - 5 z[1] - 5 z[2] - 3 z[3] + z[4] >= 0.01
+ R27: 4 z[0] - 2 z[3] + q[8] = 0
+ R33: 3 z[0] - 5 z[2] - z[4] + q[14] = 0
+ R657: - t + q[8] - q[14] - 1e+07 z1[89] >= -9.9999999999998994e+06
+ R662: b1[89] - z1[89] = 0
+ R858: b1[89] - b2[89] + v[89] = 0
+ R1142: v[89] - 1e+07 zz1[89] <= -1
+ R1143: s[89] - zz1[89] = 0
+ GC89: s[89] = 1 -> v[89] = -1
+Bounds
+ z[3] free
+ q[8] free
+ q[14] free
+ v[89] free
+Binaries
+ s[89] b1[89] b2[89] z1[89] zz1[89]
+Generals
+ v[89]
+End

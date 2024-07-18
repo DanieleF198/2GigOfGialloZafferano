@@ -17,7 +17,7 @@ for choice in choices:
         for COUPLE in COUPLES:
             train_size = COUPLE
             for USER in USERS:
-                if USER not in [15, 3, 32, 7, 36, 4, 20, 29, 14, 11]:
+                if USER not in [0, 3, 4, 7, 10, 11, 12, 13, 14, 15, 19, 20, 21, 22, 23, 24, 25, 26, 28, 29, 31, 32, 36, 41, 42, 43, 44]:  # 15, 3, 32, 7, 36, 4, 20, 29, 14, 11
                     continue
                 if int(choice) == 0:
                     output_train_data_dir = "./Data17Component2Std/users_new_version_second/no_zero/train/" + str(COUPLE) + "Couples/"

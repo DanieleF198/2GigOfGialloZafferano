@@ -1,0 +1,19 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Pre-processing                          : 0.148s
+%% Hypothesis Space Generation             : 1.282s
+%% Conflict analysis                       : 58.301s
+%%   - Brave Orders                        : 58.301s
+%% Counterexample search                   : 11.783s
+%%   - CDOEs                               : 10.057s
+%%   - CDPIs                               : 1.732s
+%% Hypothesis Search                       : 32184.3s
+%% Propagation                             : 144.634s
+%%   - CDOEs                               : 144.634s
+%% Total                                   : 32402.6s
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+:~ value(latticini,V1).[V1@2, V1]
+:~ value(erbe_spezie_e_condimenti,V1).[-V1@3, V1]
+:~ value(stufato,V1).[-V1@5, V1]
+:~ value(rosolatura,V1).[V1@1, V1]
+:~ value(cereali,V1).[-V1@4, V1]
+

@@ -10,7 +10,7 @@ data_210_couples_no_zeros = np.zeros((54, 5, 5), dtype='float32')
 
 for choice in choices:
     if choice == 1:
-        path = './Data8Component2Std/testOutput/results_zero.csv'
+        path = './Data17Component2Std/testOutput/results_zero.csv'
     else:
         continue    # temporally
         # path = './Data8Component2Std/testOutput/results_no_zero(variant).csv'
@@ -57,7 +57,7 @@ for choice in choices:
             ax.set_ylabel('percentage')
             ax.set_title('user' + str(i) + "-45Couples-Zeros")
             ax.legend(loc="lower center", ncol=4, prop={'size': 8})
-            plt.savefig("./Data8Component2Std/plots/percentages/45Couple/user" + str(i) +".png", dpi=300)
+            plt.savefig("./Data17Component2Std/plots/percentages/45Couple/user" + str(i) +".png", dpi=300)
 
             fig, ax = plt.subplots()
             ax.plot(x, train_times, label="training time")
@@ -65,7 +65,7 @@ for choice in choices:
             ax.set_ylabel('time in second')
             ax.set_title('user' + str(i) + "-45Couples-Zeros")
             ax.legend(loc="lower right")
-            plt.savefig("./Data8Component2Std/plots/training_time/45Couple/user" + str(i) +".png", dpi=300)
+            plt.savefig("./Data17Component2Std/plots/training_time/45Couple/user" + str(i) +".png", dpi=300)
 
     for i, user_matrix in enumerate(data_105_couples_no_zeros):
         if np.all(user_matrix == 0):
@@ -84,7 +84,7 @@ for choice in choices:
             ax.set_ylabel('percentage')
             ax.set_title('user' + str(i) + "-105Couples-Zeros")
             ax.legend(loc="lower center", ncol=4, prop={'size': 8})
-            plt.savefig("./Data8Component2Std/plots/percentages/105Couple/user" + str(i) +".png", dpi=300)
+            plt.savefig("./Data17Component2Std/plots/percentages/105Couple/user" + str(i) +".png", dpi=300)
 
             fig, ax = plt.subplots()
             ax.plot(x, train_times, label="training time")
@@ -92,7 +92,7 @@ for choice in choices:
             ax.set_ylabel('time in second')
             ax.set_title('user' + str(i) + "-105Couples-Zeros")
             ax.legend(loc="lower right")
-            plt.savefig("./Data8Component2Std/plots/training_time/105Couple/user" + str(i) +".png", dpi=300)
+            plt.savefig("./Data17Component2Std/plots/training_time/105Couple/user" + str(i) +".png", dpi=300)
 
     for i, user_matrix in enumerate(data_210_couples_no_zeros):
         if np.all(user_matrix == 0):
@@ -111,7 +111,7 @@ for choice in choices:
             ax.set_ylabel('percentage')
             ax.set_title('user' + str(i) + "-190Couples-Zeros")
             ax.legend(loc="lower center", ncol=4, prop={'size': 8})
-            plt.savefig("./Data8Component2Std/plots/percentages/210Couple/user" + str(i) +".png", dpi=300)
+            plt.savefig("./Data17Component2Std/plots/percentages/210Couple/user" + str(i) +".png", dpi=300)
 
             fig, ax = plt.subplots()
             ax.plot(x, train_times, label="training time")
@@ -119,7 +119,7 @@ for choice in choices:
             ax.set_ylabel('time in second')
             ax.set_title('user' + str(i) + "-190Couples-Zeros")
             ax.legend(loc="lower right")
-            plt.savefig("./Data8Component2Std/plots/training_time/210Couple/user" + str(i) +".png", dpi=300)
+            plt.savefig("./Data17Component2Std/plots/training_time/210Couple/user" + str(i) +".png", dpi=300)
 
     user_counter = 0
     for user_matrix_45, user_matrix_105, user_matrix_210 in zip(data_45_couples_no_zeros, data_105_couples_no_zeros, data_210_couples_no_zeros):
@@ -161,7 +161,7 @@ for choice in choices:
         ax.set_ylabel('percentage')
         ax.set_title('user' + str(user_counter) + "-45Couples-105Couples-190Couples-Zeros")
         ax.legend(loc="lower center", ncol=4, prop={'size': 8})
-        plt.savefig("./Data8Component2Std/plots/percentages/AllCouple/user" + str(user_counter) + ".png", dpi=300)
+        plt.savefig("./Data17Component2Std/plots/percentages/AllCouple/user" + str(user_counter) + ".png", dpi=300)
         user_counter += 1
 
     user_counter = 0
@@ -187,5 +187,5 @@ for choice in choices:
         ax.set_ylabel('time in second')
         ax.set_title('user' + str(user_counter) + "-45Couples-105Couples-210Couples-Zeros")
         ax.legend(loc="lower right")
-        plt.savefig("./Data8Component2Std/plots/training_time/AllCouple/user" + str(user_counter) + ".png", dpi=300)
+        plt.savefig("./Data17Component2Std/plots/training_time/AllCouple/user" + str(user_counter) + ".png", dpi=300)
         user_counter += 1

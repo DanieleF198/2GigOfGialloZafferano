@@ -3,7 +3,7 @@ import ilaspReadWriteUtils as ilasp
 import re
 import numpy as np
 import sys
-TrainCouples = [105]
+TrainCouples = [45]
 stds = [0.1]
 max_v = 1
 max_p = 5
@@ -15,9 +15,9 @@ for TrainCouple in TrainCouples:
         if TrainCouple == 190 and std == 1:
             continue
         if no_zero:
-            path = './Data/theories/' + transferTestStr + '/results_no_zero_' + str(TrainCouple) + '_gauss_std' + str(std) + '.csv'
+            path = './Data17Component2Std/theories/' + transferTestStr + '/results_no_zero_' + str(TrainCouple) + '_gauss_std' + str(std) + '.csv'
         else:
-            path = './Data/theories/' + transferTestStr + '/results_zero_' + str(TrainCouple) + '_gauss_std' + str(std) + '.csv'
+            path = './Data17Component2Std/theories/' + transferTestStr + '/results_zero_' + str(TrainCouple) + '_gauss_std' + str(std) + '.csv'
         with open(path, 'w+', encoding='UTF8') as f_output:
             if no_zero:
                 f_output.write("USERID;MAXV;MAXP;MAXWC;TRAIN_SIZE;TEST_SIZE;TRAIN_TIME;TEMP1;TEMP2;TEMP3;THEORY\n")
@@ -28,9 +28,9 @@ for TrainCouple in TrainCouples:
             for DIR_COUPLE in DIR_COUPLES:
                 train_size = DIR_COUPLE
                 if no_zero:
-                    NNoutput_dir = "Data/sampled-recipes-no-zero/Train" + str(DIR_COUPLE) + "_gauss/std-" + str(std)
+                    NNoutput_dir = "Data17Component2Std/sampled-recipes-no-zero/Train" + str(DIR_COUPLE) + "_gauss/std-" + str(std)
                 else:
-                    NNoutput_dir = "Data/sampled-recipes-zero/Train" + str(DIR_COUPLE) + "_gauss/std-" + str(std)
+                    NNoutput_dir = "Data17Component2Std/sampled-recipes-zero/Train" + str(DIR_COUPLE) + "_gauss/std-" + str(std)
                     for_statistics = np.zeros((10, 5), dtype="float32")
                     for_microstatistics = np.zeros((10, 9), dtype="float32")
 
@@ -58,27 +58,27 @@ for TrainCouple in TrainCouples:
 
                     for c_counter, couple in enumerate(couples):
                         if no_zero:
-                            output_train_data_dir = "./Data/final/users/no_zero/train/" + transferTestStr + "/" + str(DIR_COUPLE) + "Couples_gauss_std" + str(std) + "/User" + str(USER) + "/trainFiles/"
-                            output_dir_for_train_data_dir = "./Data/final/users/no_zero/train/" + transferTestStr + "/" + str(DIR_COUPLE) + "Couples_gauss_std" + str(std) + "/User" + str(USER) + "/outputTrain/"
-                            output_test_data_dir = "./Data/final/users/no_zero/tes/" + transferTestStr + "/" + str(TrainCouple) + "CouplesForTrain" + str(TrainCouple) + "_gauss/User_std" + str(std) + "" + str(USER) + "/testFiles/"
+                            output_train_data_dir = "./Data17Component2Std/final/users/no_zero/train/" + transferTestStr + "/" + str(DIR_COUPLE) + "Couples_gauss_std" + str(std) + "/User" + str(USER) + "/trainFiles/"
+                            output_dir_for_train_data_dir = "./Data17Component2Std/final/users/no_zero/train/" + transferTestStr + "/" + str(DIR_COUPLE) + "Couples_gauss_std" + str(std) + "/User" + str(USER) + "/outputTrain/"
+                            output_test_data_dir = "./Data17Component2Std/final/users/no_zero/tes/" + transferTestStr + "/" + str(TrainCouple) + "CouplesForTrain" + str(TrainCouple) + "_gauss/User_std" + str(std) + "" + str(USER) + "/testFiles/"
                         else:
-                            output_train_data_dir = "./Data/final/users/zero/train/" + transferTestStr + "/" + str(DIR_COUPLE) + "Couples_gauss_std" + str(std) + "/User" + str(USER) + "/trainFiles/"
-                            output_dir_for_train_data_dir = "./Data/final/users/zero/train/" + transferTestStr + "/" + str(DIR_COUPLE) + "Couples_gauss_std" + str(std) + "/User" + str(USER) + "/outputTrain/"
-                            output_test_data_dir = "./Data/final/users/zero/test/" + transferTestStr + "/" + str(TrainCouple) + "CouplesForTrain" + str(TrainCouple) + "_gauss_std" + str(std) + "/User" + str(USER) + "/testFiles/"
+                            output_train_data_dir = "./Data17Component2Std/final/users/zero/train/" + transferTestStr + "/" + str(DIR_COUPLE) + "Couples_gauss_std" + str(std) + "/User" + str(USER) + "/trainFiles/"
+                            output_dir_for_train_data_dir = "./Data17Component2Std/final/users/zero/train/" + transferTestStr + "/" + str(DIR_COUPLE) + "Couples_gauss_std" + str(std) + "/User" + str(USER) + "/outputTrain/"
+                            output_test_data_dir = "./Data17Component2Std/final/users/zero/test/" + transferTestStr + "/" + str(TrainCouple) + "CouplesForTrain" + str(TrainCouple) + "_gauss_std" + str(std) + "/User" + str(USER) + "/testFiles/"
                         filename = output_dir_for_train_data_dir + 'Couple' + str(int(couple[0])) + '-' + str(int(couple[1])) + '-max_v=' + str(max_v) + '-max_p=' + str(max_p) + '.txt'
                         if int(max_v) > 0 and int(max_p) > 0:
-                            items = ilasp.itemsFromFile("Data/recipes/recipes_max_v(" + str(max_v) + ")-max_p(" + str(max_p) + ").las")
-                            language_bias = ilasp.languageBiasFromFile("Data/recipes/recipes_max_v(" + str(max_v) + ")-max_p(" + str(max_p) + ").las")
+                            items = ilasp.itemsFromFile("Data17Component2Std/recipes/recipes_max_v(" + str(max_v) + ")-max_p(" + str(max_p) + ").las")
+                            language_bias = ilasp.languageBiasFromFile("Data17Component2Std/recipes/recipes_max_v(" + str(max_v) + ")-max_p(" + str(max_p) + ").las")
                         elif int(max_v) > 0 or int(max_p) > 0:
                             if int(max_v) > 0:
-                                items = ilasp.itemsFromFile("Data/recipes/recipes_max_v(" + str(max_v) + ")-max_p(default).las")
-                                language_bias = ilasp.languageBiasFromFile("Data/recipes/recipes_max_v(" + str(max_v) + ")-max_p(default).las")
+                                items = ilasp.itemsFromFile("Data17Component2Std/recipes/recipes_max_v(" + str(max_v) + ")-max_p(default).las")
+                                language_bias = ilasp.languageBiasFromFile("Data17Component2Std/recipes/recipes_max_v(" + str(max_v) + ")-max_p(default).las")
                             else:
-                                items = ilasp.itemsFromFile("Data/recipes/recipes_max_v(default)-max_p(" + str(max_p) + ").las")
-                                language_bias = ilasp.languageBiasFromFile("Data/recipes/recipes_max_v(default)-max_p(" + str(max_p) + ").las")
+                                items = ilasp.itemsFromFile("Data17Component2Std/recipes/recipes_max_v(default)-max_p(" + str(max_p) + ").las")
+                                language_bias = ilasp.languageBiasFromFile("Data17Component2Std/recipes/recipes_max_v(default)-max_p(" + str(max_p) + ").las")
                         else:
-                            items = ilasp.itemsFromFile("Data/recipes/recipes_max_v(default)-max_p(default).las")
-                            language_bias = ilasp.languageBiasFromFile("Data/recipes/recipes_max_v(default)-max_p(default).las")
+                            items = ilasp.itemsFromFile("Data17Component2Std/recipes/recipes_max_v(default)-max_p(default).las")
+                            language_bias = ilasp.languageBiasFromFile("Data17Component2Std/recipes/recipes_max_v(default)-max_p(default).las")
 
                         f_train = filename
                         f_train_data = os.path.join(output_train_data_dir, 'Couple' + str(int(couple[0])) + '-' + str(int(couple[1])) + '-max_v=' + str(max_v) + '-max_p=' + str(max_p) + '.las')

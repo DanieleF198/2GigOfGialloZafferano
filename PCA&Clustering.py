@@ -126,8 +126,8 @@ for i, food in enumerate(final_data.index):
     final_data.loc[food] = all_data[i]
 
 # instantiate pca object, then fit on final data
-# pca = PCA()  # (we used this before to understand the number of component to use)
-pca = decomposition.PCA(n_components=17)
+pca = PCA()  # (we used this before to understand the number of component to use)
+# pca = decomposition.PCA(n_components=17)
 pca.fit(final_data)
 
 # apply pca on data in pandas_dataframe
@@ -188,27 +188,27 @@ labelsFeature = [str(i) for i in range(1, len(feature_weights[0])+1)]
 
 # COMMENTED TO NOT OVERWRITE
 
-# plot_ordered_weight_dir = "PCA_data/plots/weight_distr/"
-# for i in range(0, 47):
-#     data = sorted(feature_weights[i])
-#     mu = np.mean(data)
-#     sigma = np.std(data)
-#     sum = mu+sigma
-#     sum2 = mu+(sigma*2)
-#     fit = norm.pdf(data, mu, sigma)
-#     pl.hist(data, density=True, edgecolor="black", label='distribution')
-#     pl.plots(data, fit, '-o', color="orange", label='standardized distribution')
-#     plt.axvline(x=sum, color="green", label='mean+std')
-#     plt.axvline(x=sum2, color="red", label='mean+2*(std)')
-#     plt.ylabel('frequency')
-#     plt.xlabel('weight value')
-#     plt.title('weight distribution')
-#     plt.legend(loc="upper right")
-#     plt.savefig(plot_ordered_weight_dir + "PC" + str(i) + ".png", dpi=300)
-#     plt.clf()
+plot_ordered_weight_dir = "PCA_data/plots/weight_distr/"
+for i in range(0, 47):
+    data = sorted(feature_weights[i])
+    mu = np.mean(data)
+    sigma = np.std(data)
+    sum = mu+sigma
+    sum2 = mu+(sigma*2)
+    fit = norm.pdf(data, mu, sigma)
+    pl.hist(data, density=True, edgecolor="black", label='distribution')
+    # pl.plot(data, fit, '-o', color="orange", label='standardized distribution')
+    plt.axvline(x=sum, color="green", label='mean+std')
+    plt.axvline(x=sum2, color="red", label='mean+2*(std)')
+    plt.ylabel('frequency')
+    plt.xlabel('weight value')
+    plt.title('distribution of weights in PC' + str(i+1))
+    plt.legend(loc="upper right")
+    plt.savefig(plot_ordered_weight_dir + "PC" + str(i) + ".png", dpi=300)
+    plt.clf()
     # data = sorted(feature_weights[i])
     # fit = norm.pdf(data, np.mean(data), np.std(data))
-    # pl.plots(data, fit, '-o')
+    # pl.plot(data, fit, '-o')
     # pl.hist(data, density=True)
     # pl.show()
 # plot_weight_dir = "./PCA_data/plots/weight/"

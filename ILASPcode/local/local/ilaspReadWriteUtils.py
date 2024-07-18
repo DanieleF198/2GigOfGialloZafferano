@@ -73,10 +73,14 @@ def preferencesFromFileSpacesAndSignSampledCouplesTestCorrection(path, couples):
     with open(path) as f:
         for line in f:
             if "#brave_ordering" in line:
-                line = line.replace("sampled", "item")
-                line = line.replace("s"+ str(couples), "")
-                match = re.match('#brave_ordering\(.*,\s+([a-zA-Z]+\d+),\s+([a-zA-Z]+\d+),\s+([<>=]).*', line)
-                if match: preferences.append((match.groups()[0], match.groups()[1], match.groups()[2]))
+                if "sampled" in line:
+                    line = line.replace("sampled", "item")
+                    line = line.replace("s"+ str(couples), "")
+                    match = re.match('#brave_ordering\(.*,\s+([a-zA-Z]+\d+),\s+([a-zA-Z]+\d+),\s+([<>=]).*', line)
+                    if match: preferences.append((match.groups()[0], match.groups()[1], match.groups()[2]))
+                else:
+                    match = re.match('#brave_ordering\(.*,\s*([a-zA-Z]+\d+),\s*([a-zA-Z]+\d+),\s*([<>=]).*', line)
+                    if match: preferences.append((match.groups()[0], match.groups()[1], match.groups()[2]))
             else:
                 continue
 

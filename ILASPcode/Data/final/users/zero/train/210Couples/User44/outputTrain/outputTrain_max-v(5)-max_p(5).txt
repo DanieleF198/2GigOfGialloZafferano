@@ -1,0 +1,19 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Pre-processing                          : 0.089s
+%% Hypothesis Space Generation             : 0.85s
+%% Conflict analysis                       : 29.497s
+%%   - Brave Orders                        : 29.497s
+%% Counterexample search                   : 7.066s
+%%   - CDOEs                               : 5.894s
+%%   - CDPIs                               : 1.163s
+%% Hypothesis Search                       : 7157.69s
+%% Propagation                             : 89.058s
+%%   - CDOEs                               : 89.058s
+%% Total                                   : 7285.69s
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+:~ value(frutta,V1).[V1@4, V1]
+:~ value(verdure_e_ortaggi,V1).[-V1@1, V1]
+:~ value(cost,V1).[-V1@3, V1]
+:~ category(1).[1@5]
+:~ value(uova,V1).[V1@2, V1]
+

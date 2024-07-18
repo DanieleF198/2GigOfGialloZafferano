@@ -1,0 +1,19 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Pre-processing                          : 0.087s
+%% Hypothesis Space Generation             : 0.762s
+%% Conflict analysis                       : 55.537s
+%%   - Brave Orders                        : 55.537s
+%% Counterexample search                   : 13.22s
+%%   - CDOEs                               : 11.163s
+%%   - CDPIs                               : 2.056s
+%% Hypothesis Search                       : 30436.7s
+%% Propagation                             : 149.377s
+%%   - CDOEs                               : 149.377s
+%% Total                                   : 30657.1s
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+:~ value(latticini,V1).[V1@1, V1]
+:~ value(difficulty,V1).[V1@3, V1]
+:~ value(rosolatura,V1).[V1@2, V1]
+:~ category(1).[-1@4]
+:~ value(farinacei,V1), category(4).[-V1@5, V1]
+
